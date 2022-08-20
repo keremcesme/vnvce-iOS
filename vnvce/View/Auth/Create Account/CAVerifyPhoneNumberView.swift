@@ -48,6 +48,7 @@ struct CAVerifyPhoneNumberView: View {
             appState.accessToken = success.tokens.accessToken
             appState.currentUserID = success.user.id.uuidString
             sceneDelegate.accountIsCreated = true
+            
         }
     }
     

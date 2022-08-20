@@ -9,9 +9,13 @@ import Foundation
 import PhoneNumberKit
 import SwiftUI
 import KeychainAccess
+import Firebase
 
 class CreateAccountViewModel: ObservableObject {
     private let authAPI = AuthAPI.shared
+    
+    private let firAuth = Auth.auth()
+    private let firestore = Firestore.firestore()
     
     @Published public var show: Bool = false
     
@@ -106,8 +110,6 @@ class CreateAccountViewModel: ObservableObject {
         self.createAccountPhase = phase
         if case let .success(success) = self.createAccountPhase {
             try? await Task.sleep(seconds: 0.2)
-            
-            
             return success
         } else {
             return nil
@@ -308,6 +310,21 @@ private extension CreateAccountViewModel {
                             return .error(.otpNotVerified)
                     }
                 case let .success(success):
+                    try await firAuth.signInAnonymously()
+                    
+                    guard let firebaseID = firAuth.currentUser?.uid else {
+                        return .error(.unknown)
+                    }
+                    
+                    let userID = success.user.id.uuidString
+                    
+                    let firPayload: [String: Any] = [
+                        "userID": userID,
+                        "firebaseID": firebaseID
+                    ]
+                    
+                    try await firestore.collection("Users").document(userID).setData(firPayload)
+                    
                     return .success(success)
             }
         } catch {

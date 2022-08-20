@@ -9,6 +9,7 @@ import SwiftUI
 import AVFoundation
 import Firebase
 import KeychainAccess
+import FirebaseAuth
 
 class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     
@@ -55,6 +56,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
             userDefaults.removeObject(forKey: "notificationToken")
             try? Keychain().remove("refreshToken")
             try? Keychain().remove("accessToken")
+            try? Auth.auth().signOut()
         }
     }
 }
