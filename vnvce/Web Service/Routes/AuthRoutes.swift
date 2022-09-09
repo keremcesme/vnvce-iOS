@@ -14,9 +14,9 @@ enum AuthRoute {
     var raw: String {
         switch self {
             case .create(_):
-                return "auth/create"
+                return "\(MainRoute.auth)/create"
             case .login:
-                return "auth/login"
+                return "\(MainRoute.auth)/login"
         }
     }
 }
@@ -66,5 +66,3 @@ enum CAUsernameRoute {
         }
     }
 }
-
-

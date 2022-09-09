@@ -522,6 +522,8 @@ extension HTTPResponseStatus: Equatable {}
 
 extension HTTPResponseStatus: Hashable {}
 
+extension HTTPStatus: Error {}
+
 
 //public typealias HTTPStatus = HTTPResponseStatus
 //

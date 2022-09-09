@@ -7,92 +7,151 @@
 
 import Foundation
 import KeychainAccess
+import Alamofire
+import NIOCore
 
 struct AuthAPI {
     static let shared = AuthAPI()
     
     private init() {}
     
-    private let session = URLSession.shared
-    
     private let urlBuilder = URLBuilder.shared
-    private let urlRequestBuilder = URLRequestBuilder.shared
-    private let request = Request.shared
+    
+    private let encoder = JSONParameterEncoder.default
 }
 
 // MARK: Create Account Methods -
 extension AuthAPI {
     
     // Step 1 - Check phone number availability.
-    public func checkPhoneNumber(phoneNumber: String, clientID: String) async throws -> Response<CheckPhoneNumberResponse> {
+    public func checkPhoneNumber(phoneNumber: String, clientID: String) async throws -> PhoneNumberAvailability? {
         let route: AuthRoute = .create(.phone(.check(phoneNumber, clientID)))
         let url = urlBuilder.authURL(route: route, version: .v1)
-        let result = try await url.get(decode: Response<CheckPhoneNumberResponse>.self)
         
-        if result.response.code == .ok || result.response.code == .notFound {
-            return result.response
-        } else {
-            let code = result.httpResponse.httpResponse.statusCode == 401 ? 401 : 1
-            throw generateError(code: code,  description: result.response.message)
+        var headers = Alamofire.HTTPHeaders()
+        headers.add(.contentType("application/json"))
+        
+        let task = AF
+            .request(
+                url,
+                method: .get,
+                headers: headers)
+            .serializingDecodable(Response<PhoneNumberAvailability>.self)
+        
+        
+        let result = await task.result
+        
+        switch result {
+            case let .success(response):
+                return response.result
+            case let .failure(error):
+                throw error
         }
     }
     
     // Auto - Check username availabiltiy.
-    public func autoCheckUsername(username: String, clientID: String) async throws -> Response<AutoCheckUsernameResponse> {
+    public func autoCheckUsername(username: String, clientID: String) async throws -> UsernameAvailability? {
         let route: AuthRoute = .create(.username(.check(username, clientID)))
         let url = urlBuilder.authURL(route: route, version: .v1)
-        let result = try await url.get(decode: Response<AutoCheckUsernameResponse>.self)
         
-        if result.response.code == .ok || result.response.code == .notFound {
-            return result.response
-        } else {
-            let code = result.httpResponse.httpResponse.statusCode == 401 ? 401 : 1
-            throw generateError(code: code,  description: result.response.message)
+        var headers = Alamofire.HTTPHeaders()
+        headers.add(.contentType("application/json"))
+        
+        let task = AF
+            .request(
+                url,
+                method: .get,
+                headers: headers)
+            .serializingDecodable(Response<UsernameAvailability>.self)
+        
+        
+        let result = await task.result
+        
+        switch result {
+            case let .success(response):
+                return response.result
+            case let .failure(error):
+                throw error
         }
     }
     
     // Step 2 - Reserve Username and Send OTP code to phone number.
-    public func reserveUsernameAndSendSMSOTP(payload: ReserveUsernameAndSendSMSOTPPayload) async throws -> Response<ReserveUsernameAndSendSMSOTPResponse> {
+    public func reserveUsernameAndSendSMSOTP(payload: ReserveUsernameAndSendSMSOTPPayload) async throws -> ReserveUsernameAndSendSMSOTPResponse? {
         let route: AuthRoute = .create(.reserveUsernameAndSendOTP)
         let url = urlBuilder.authURL(route: route, version: .v1)
-        let data = try payload.encode()
-        let result = try await url.post(data: data, authorization: false, decode: Response<ReserveUsernameAndSendSMSOTPResponse>.self)
         
-        if result.response.code == .ok || result.response.code == .notFound {
-            return result.response
-        } else {
-            let code = result.httpResponse.httpResponse.statusCode == 401 ? 401 : 1
-            throw generateError(code: code,  description: result.response.message)
+        var headers = Alamofire.HTTPHeaders()
+        headers.add(.contentType("application/json"))
+        
+        let task = AF.request(
+            url,
+            method: .post,
+            parameters: payload,
+            encoder: encoder,
+            headers: headers)
+            .serializingDecodable(Response<ReserveUsernameAndSendSMSOTPResponse>.self)
+        
+        
+        let result = await task.result
+        
+        switch result {
+            case let .success(response):
+                return response.result
+            case let .failure(error):
+                throw error
         }
     }
     
     // Resend SMS OTP
-    public func resendSMSOTP(payload: ResendSMSOTPPayload) async throws -> Response<ResendSMSOTPResponse> {
+    public func resendSMSOTP(payload: SendSMSOTPPayload) async throws -> SMSOTPAttempt? {
         let route: AuthRoute = .create(.phone(.resendOTP))
         let url = urlBuilder.authURL(route: route, version: .v1)
-        let data = try payload.encode()
-        let result = try await url.post(data: data, authorization: false, decode: Response<ResendSMSOTPResponse>.self)
         
-        if result.response.code == .ok || result.response.code == .notFound {
-            return result.response
-        } else {
-            let code = result.httpResponse.httpResponse.statusCode == 401 ? 401 : 1
-            throw generateError(code: code,  description: result.response.message)
+        var headers = Alamofire.HTTPHeaders()
+        headers.add(.contentType("application/json"))
+        
+        let task = AF.request(
+            url,
+            method: .post,
+            parameters: payload,
+            encoder: encoder,
+            headers: headers)
+            .serializingDecodable(Response<SMSOTPAttempt>.self)
+        
+        
+        let result = await task.result
+        
+        switch result {
+            case let .success(response):
+                return response.result
+            case let .failure(error):
+                throw error
         }
     }
     
     // Step 3 - Verify OTP and create account.
-    public func createAccount(payload: CreateAccountPayload) async throws -> Response<CreateAccountResponse> {
+    public func createAccount(payload: CreateAccountPayload) async throws -> CreateAccountResponse? {
         let route: AuthRoute = .create(.newAccount)
         let url = urlBuilder.authURL(route: route, version: .v1)
-        let payload = try payload.encode()
-        let result = try await url.post(data: payload, authorization: false, decode: Response<CreateAccountResponse>.self)
         
-        if result.response.code == .ok || result.response.code == .notFound {
-            return result.response
-        } else {
-            let code = result.httpResponse.httpResponse.statusCode == 401 ? 401 : 1
-            throw generateError(code: code,  description: result.response.message)
+        var headers = Alamofire.HTTPHeaders()
+        headers.add(.contentType("application/json"))
+        
+        let task = AF.request(
+            url,
+            method: .post,
+            parameters: payload,
+            encoder: encoder,
+            headers: headers)
+            .serializingDecodable(Response<CreateAccountResponse>.self)
+        
+        let result = await task.result
+        
+        switch result {
+            case let .success(response):
+                return response.result
+            case let .failure(error):
+                throw error
         }
     }
     

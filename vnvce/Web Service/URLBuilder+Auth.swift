@@ -21,10 +21,10 @@ private extension URLBuilder {
         var urlString = WebConstants.url
         urlString += "/api/"
         urlString += "\(version.rawValue)/"
+        urlString += "\(auth.raw)/"
         
         switch auth {
-            case let .create(create):
-                urlString += "\(auth.raw)/"
+            case let .create(create):        
                 urlString += "\(create.raw)/"
                 switch create {
                     case let .phone(phone):

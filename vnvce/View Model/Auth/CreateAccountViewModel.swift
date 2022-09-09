@@ -9,14 +9,13 @@ import Foundation
 import PhoneNumberKit
 import SwiftUI
 import KeychainAccess
-import Firebase
 
 class CreateAccountViewModel: ObservableObject {
     private let authAPI = AuthAPI.shared
+    private let storageAPI = StorageAPI.shared
+    private let meAPI = MeAPI.shared
     
-    private let firAuth = Auth.auth()
-    private let firestore = Firestore.firestore()
-    
+    // MARK: Show Create Account View
     @Published public var show: Bool = false
     
     // MARK: Phone Number
@@ -24,24 +23,39 @@ class CreateAccountViewModel: ObservableObject {
     @Published public var phoneNumber: String? = nil
     @Published public var regionCode: String? = nil
     
-    @Published public var phoneNumberPhase: CheckPhoneNumberPhase = .none
-    
     // MARK: Username
     @Published public var showUsernameView: Bool = false
     @Published public var usernameField: String = ""
-    @Published public var checkUsernamePhase: CAUsernamePhase = .none
-    
-    @Published public var reserveUsernameAndSendOTPPhase: ReserveUsernameAndSendOTPPhase = .none
     
     // MARK: OTP
     @Published public var showVerifyView: Bool = false
     @Published public var otpField: String = ""
-    
-    @Published public var resendSMSOTPPhase: ResendSMSOTPPhase = .none
-    
     @Published public var smsAttempt: SMSOTPAttempt? = nil
     
+    
+    // MARK: Profile Picture
+    @Published public var showProfilePictureView: Bool = false
+    @Published public var profilePicture: UIImage? = nil
+    @Published public var profilePictureAlignment: Alignment = .center
+    
+    // MARK: Display Name
+    @Published public var showDisplayNameView: Bool = false
+    @Published public var displayNameField: String = ""
+    
+    // MARK: Biography
+    @Published public var showBiographyView: Bool = false
+    @Published public var biographyField: String = ""
+    
+    // MARK: Phases
+    @Published public var phoneNumberPhase: CheckPhoneNumberPhase = .none
+    @Published public var checkUsernamePhase: CAUsernamePhase = .none
+    @Published public var reserveUsernameAndSendOTPPhase: ReserveUsernameAndSendOTPPhase = .none
+    @Published public var resendSMSOTPPhase: ResendSMSOTPPhase = .none
     @Published public var createAccountPhase: CreateAccountPhase = .none
+    @Published public var editProfilePicturePhase: CAOptionalPhase = .none
+    @Published public var editDisplayNamePhase: CAOptionalPhase = .none
+    @Published public var editBiographyPhase: CAOptionalPhase = .none
+    
     
     init() {}
     
@@ -104,7 +118,7 @@ class CreateAccountViewModel: ObservableObject {
     }
     
     @MainActor @Sendable
-    public func createAccount() async -> CreateAccountSuccess? {
+    public func createAccount() async -> LoginAccountResponse? {
         let phase = await createAccountTask()
         try? await Task.sleep(seconds: 0.5)
         self.createAccountPhase = phase
@@ -115,6 +129,39 @@ class CreateAccountViewModel: ObservableObject {
             return nil
         }
         
+    }
+    
+    @MainActor @Sendable
+    public func editProfilePicture() async {
+        let phase = await editProfilePictureTask()
+        self.editProfilePicturePhase = phase
+        if self.editProfilePicturePhase == .success {
+            self.showDisplayNameView = true
+        }
+    }
+    
+    @MainActor @Sendable
+    public func editDisplayName() async {
+        if displayNameField == "" {
+            self.showBiographyView = true
+        } else {
+            let phase = await editDisplayNameTask()
+            self.editDisplayNamePhase = phase
+            if self.editDisplayNamePhase == .success {
+                self.showBiographyView = true
+            } else {
+                self.editDisplayNamePhase = .none
+            }
+        }
+    }
+    
+    @MainActor @Sendable
+    public func editBiography(finish: @MainActor @escaping () -> ()) async {
+        let phase = await editBiographyTask()
+        self.editBiographyPhase = phase
+        if self.editBiographyPhase == .success {
+            finish()
+        }
     }
 }
 
@@ -134,9 +181,12 @@ private extension CreateAccountViewModel {
         }
         
         do {
-            let result = try await authAPI.checkPhoneNumber(phoneNumber: phoneNumber, clientID: clientID)
+            guard let result = try await authAPI.checkPhoneNumber(phoneNumber: phoneNumber, clientID: clientID) else {
+                return .error(.unknown)
+            }
             if Task.isCancelled { return .error(.taskCancelled) }
-            switch result.result.status {
+            
+            switch result {
                 case .available:
                     return .success
                 case .alreadyTaken:
@@ -144,6 +194,7 @@ private extension CreateAccountViewModel {
                 case .otpExist:
                     return .error(.otpExist)
             }
+            
         } catch {
             if Task.isCancelled { return .error(.taskCancelled) }
             print(error.localizedDescription)
@@ -168,10 +219,12 @@ private extension CreateAccountViewModel {
         }
         
         do {
-            let result = try await authAPI.autoCheckUsername(username: usernameField, clientID: clientID)
+            guard let result = try await authAPI.autoCheckUsername(username: usernameField, clientID: clientID) else {
+                return .error(.unknown)
+            }
             if Task.isCancelled { return .error(.taskCancelled) }
             
-            switch result.result.status {
+            switch result {
                 case .available:
                     return .success
                 case .alreadyTaken:
@@ -207,30 +260,32 @@ private extension CreateAccountViewModel {
                 clientID: clientID,
                 type: .createAccount)
             
-            let result = try await authAPI.reserveUsernameAndSendSMSOTP(payload: payload)
+            guard let result = try await authAPI.reserveUsernameAndSendSMSOTP(payload: payload) else {
+                return .error(.unknown)
+            }
             if Task.isCancelled { return .error(.taskCancelled) }
             
-            switch result.result.status {
-                case let .failure(failure):
-                    switch failure {
-                        case let .phone(smsOTPFailure):
-                            switch smsOTPFailure {
+            switch result {
+                case let .success(attempt):
+                    self.smsAttempt = attempt
+                    return .success
+                case let .failure(error):
+                    switch error {
+                        case let .phone(phoneError):
+                            switch phoneError {
                                 case .alreadyTaken:
                                     return .error(.numberAlreadyTaken)
                                 case .otpExist:
                                     return .error(.otpExist)
                             }
-                        case let .username( usernameFailure):
-                            switch usernameFailure {
+                        case let .username(usernameError):
+                            switch usernameError {
                                 case .alreadyTaken:
                                     return .error(.usernameAlreadyTaken)
                                 case .reserved:
                                     return .error(.usernameIsReserved)
                             }
                     }
-                case let .success(success):
-                    self.smsAttempt = success
-                    return .success
             }
             
         } catch {
@@ -240,6 +295,7 @@ private extension CreateAccountViewModel {
         }
     }
     
+    // Resend SMS OTP.
     @MainActor
     private func resendSMSOTPTask() async -> ResendSMSOTPPhase {
         if Task.isCancelled { return .error(.taskCancelled) }
@@ -254,14 +310,16 @@ private extension CreateAccountViewModel {
         }
         
         do {
-            let payload = ResendSMSOTPPayload(
+            let payload = SendSMSOTPPayload(
                 phoneNumber: phoneNumber,
                 clientID: clientID,
                 type: .createAccount)
          
-            let result = try await authAPI.resendSMSOTP(payload: payload)
+            guard let result = try await authAPI.resendSMSOTP(payload: payload) else {
+                return .error(.unknown)
+            }
             if Task.isCancelled { return .error(.taskCancelled) }
-            self.smsAttempt = result.result.status
+            self.smsAttempt = result
             return .success
         } catch {
             if Task.isCancelled { return .error(.taskCancelled) }
@@ -271,7 +329,7 @@ private extension CreateAccountViewModel {
     }
     
     // Step 3 - Verify OTP and create account.
-    private func createAccountTask() async -> CreateAccountPhase{
+    private func createAccountTask() async -> CreateAccountPhase {
         if Task.isCancelled { return .error(.taskCancelled) }
         
         self.createAccountPhase = .running
@@ -299,9 +357,12 @@ private extension CreateAccountViewModel {
                 otp: otp,
                 username: usernameField)
             
-            let result = try await authAPI.createAccount(payload: payload)
+            guard let result = try await authAPI.createAccount(payload: payload) else {
+                return .error(.unknown)
+            }
             if Task.isCancelled { return .error(.taskCancelled) }
-            switch result.result.status {
+            
+            switch result {
                 case let .failure(failure):
                     switch failure {
                         case .expired:
@@ -310,23 +371,67 @@ private extension CreateAccountViewModel {
                             return .error(.otpNotVerified)
                     }
                 case let .success(success):
-                    try await firAuth.signInAnonymously()
-                    
-                    guard let firebaseID = firAuth.currentUser?.uid else {
-                        return .error(.unknown)
-                    }
-                    
-                    let userID = success.user.id.uuidString
-                    
-                    let firPayload: [String: Any] = [
-                        "userID": userID,
-                        "firebaseID": firebaseID
-                    ]
-                    
-                    try await firestore.collection("Users").document(userID).setData(firPayload)
-                    
+                    print(success)
                     return .success(success)
             }
+        } catch {
+            if Task.isCancelled { return .error(.taskCancelled) }
+            print(error.localizedDescription)
+            return .error(.unknown)
+        }
+    }
+    
+    // Optional Steps
+    // Step 4 - Edit Profile Picture Image
+    @MainActor
+    private func editProfilePictureTask() async -> CAOptionalPhase {
+        if Task.isCancelled { return .error(.taskCancelled) }
+        self.editProfilePicturePhase = .running
+        guard let image = self.profilePicture else {
+            return .error(.unknown)
+        }
+        do {
+            let uploadResult = try await storageAPI.uploadProfilePicture(image: image)
+            if Task.isCancelled { return .error(.taskCancelled) }
+            let payload = EditProfilePicturePayload(
+                url: uploadResult.url,
+                name: uploadResult.name,
+                alignment: profilePictureAlignment.convert)
+            try await meAPI.editProfilePicture(payload: payload)
+            if Task.isCancelled { return .error(.taskCancelled) }
+            return .success
+        } catch {
+            if Task.isCancelled { return .error(.taskCancelled) }
+            print(error.localizedDescription)
+            return .error(.unknown)
+        }
+    }
+    
+    @MainActor
+    private func editDisplayNameTask() async -> CAOptionalPhase {
+        if Task.isCancelled { return .error(.taskCancelled) }
+        self.editDisplayNamePhase = .running
+        
+        do {
+            try await meAPI.editDisplayName(displayName: self.displayNameField)
+            if Task.isCancelled { return .error(.taskCancelled) }
+            return .success
+        } catch {
+            if Task.isCancelled { return .error(.taskCancelled) }
+            print(error.localizedDescription)
+            return .error(.unknown)
+        }
+    }
+    
+    @MainActor
+    private func editBiographyTask() async -> CAOptionalPhase {
+        if Task.isCancelled { return .error(.taskCancelled) }
+        self.editBiographyPhase = .running
+        
+        do {
+            try await meAPI.editBiography(biography: self.biographyField)
+            if Task.isCancelled { return .error(.taskCancelled) }
+            return .success
         } catch {
             if Task.isCancelled { return .error(.taskCancelled) }
             print(error.localizedDescription)

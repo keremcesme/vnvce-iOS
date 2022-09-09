@@ -9,6 +9,7 @@ import Foundation
 
 protocol URLBuilderProtocol {
     func authURL(route auth: AuthRoute, version: APIVersion) -> URL
+    func tokenURL(route token: TokenRoute, version: APIVersion) -> URL
 }
 
 struct URLBuilder {
@@ -21,5 +22,9 @@ struct URLBuilder {
 extension URLBuilder: URLBuilderProtocol {
     func authURL(route auth: AuthRoute, version: APIVersion) -> URL {
         generateAuthURL(route: auth, version: version)
+    }
+    
+    func tokenURL(route token: TokenRoute, version: APIVersion) -> URL {
+        generateTokenURL(route: token, version: version)
     }
 }

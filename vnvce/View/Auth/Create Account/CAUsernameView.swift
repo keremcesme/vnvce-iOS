@@ -22,6 +22,7 @@ struct CAUsernameView: View {
     private func reserveUsername() {
         hideKeyboard()
         Task(operation: vm.reserveUsernameAndSendOTP)
+//        vm.showVerifyView = true
     }
     
     var body: some View {

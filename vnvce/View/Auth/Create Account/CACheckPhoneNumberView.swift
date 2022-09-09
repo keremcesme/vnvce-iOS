@@ -12,10 +12,9 @@ import iPhoneNumberField
 
 struct CACheckPhoneNumberView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var createAccountVM: CreateAccountViewModel
     
     @State var navigation = NavigationCoordinator()
-    
-    @EnvironmentObject var createAccountVM: CreateAccountViewModel
     
     @Sendable
     private func continueButton() {
@@ -23,6 +22,7 @@ struct CACheckPhoneNumberView: View {
             hideKeyboard()
             await createAccountVM.checkPhoneNumber()
         }
+//        createAccountVM.showUsernameView = true
     }
     
     var body: some View {

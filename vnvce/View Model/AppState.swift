@@ -18,6 +18,5 @@ class AppState: ObservableObject {
     @KeychainStorage("accessToken") var accessToken
     @KeychainStorage("refreshToken") var refreshToken
     
-    
     init() {}
 }

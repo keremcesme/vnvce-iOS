@@ -7,16 +7,7 @@
 
 import Foundation
 
-struct CreateAccountSuccess: Decodable, Equatable {
-    let user: User
-    let tokens: Tokens
-}
-
-enum CreateAccountStatus: Decodable {
-    case success(CreateAccountSuccess)
-    case failure(SMSVerificationResult)
-}
-
-struct CreateAccountResponse: Decodable {
-    let status: CreateAccountStatus
+enum CreateAccountResponse: Codable {
+    case success(LoginAccountResponse)
+    case failure(SMSVerificationError)
 }

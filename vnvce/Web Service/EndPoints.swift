@@ -9,5 +9,7 @@ import Foundation
 
 enum MainRoute {
     static let auth = "auth"
+    static let token = "token"
+    static let me = "me"
 }
 

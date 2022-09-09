@@ -9,18 +9,21 @@ import SwiftUI
 import Focuser
 
 struct CAVerifyPhoneNumberView: View {
+    @KeychainStorage("accessToken") var accessToken
+    @KeychainStorage("refreshToken") var refreshToken
+    
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject private var sceneDelegate: SceneDelegate
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var vm: CreateAccountViewModel
     
-    @StateObject private var timer: SMSTimerController = .init()
+    @StateObject private var timer = SMSTimerController()
     
     @Sendable
     private func timerInit() {
         guard let attempt = vm.smsAttempt else {
-            dismiss()
+//            dismiss()
             return
         }
         timer.commonInit(start: attempt.startTime, expire: attempt.expiryTime)
@@ -44,11 +47,15 @@ struct CAVerifyPhoneNumberView: View {
             guard let success = await vm.createAccount() else {
                 return
             }
-            appState.refreshToken = success.tokens.refreshToken
-            appState.accessToken = success.tokens.accessToken
+            timer.stop()
+            refreshToken = success.tokens.refreshToken
+            accessToken = success.tokens.accessToken
             appState.currentUserID = success.user.id.uuidString
             sceneDelegate.accountIsCreated = true
-            
+            vm.showProfilePictureView = true
+            print("Refresh Token: \(refreshToken)")
+            print("Access Token: \(accessToken)")
+            print("Current User ID: \(appState.currentUserID)")
         }
     }
     
@@ -61,14 +68,20 @@ struct CAVerifyPhoneNumberView: View {
                 Description
                 ErrorMessage
                 OTPTextField()
+                    .onChange(of: vm.otpField) { _ in
+                        vm.createAccountPhase = .none
+                    }
                 ContinueButton
             }
             .padding(.horizontal, 18)
         }
-        .navigationTitle("Verify")
+        .navigationTitle("Verify Phone")
         .navigationBarBackButtonHidden(true)
         .toolbar(ToolBar)
         .taskInit(timerInit)
+        .fullScreenCover(isPresented: $vm.showProfilePictureView) {
+            CAProfilePictureView()
+        }
     }
     
     @ViewBuilder
@@ -138,7 +151,7 @@ struct CAVerifyPhoneNumberView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: .primary))
                         .opacity(0.4)
                 } else {
-                    Text("Continue")
+                    Text("Create Account")
                         .colorInvert()
                         .foregroundColor(.primary)
                         .font(.system(size: 22, weight: .semibold, design: .default))
@@ -157,6 +170,16 @@ struct CAVerifyPhoneNumberView: View {
             return false
         }
     }
+    
+//    private var Navigation: some View {
+//        NavigationLink(isActive: $vm.showProfilePictureView) {
+//            CAProfilePictureView()
+//        } label: {
+//            EmptyView()
+//        }
+//        .isDetailLink(false)
+//
+//    }
     
 }
 

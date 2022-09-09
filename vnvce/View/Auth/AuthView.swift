@@ -27,6 +27,13 @@ struct AuthView: View {
                 Color.init("AuthBG")
                     .ignoresSafeArea()
                 VStack(alignment: .leading, spacing: 0){
+                    Button {
+                        
+                    } label: {
+                        Text("TEST")
+                            .padding()
+                    }
+
                     Logo
                     CreateAccount
                 }

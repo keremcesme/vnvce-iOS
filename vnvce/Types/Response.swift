@@ -8,17 +8,27 @@
 import Foundation
 
 struct Response<T: Decodable>: Decodable {
-    var result: T
+    var result: T?
     var message: String
-    var code: HTTPStatus
     
     init(
-        result: T,
-        message: String,
-        code: HTTPStatus
+        result: T? = nil,
+        message: String
     ) {
         self.result = result
         self.message = message
-        self.code = code
+    }
+}
+
+struct ResponseWithStatus<T: Decodable>: Decodable {
+    let response: Response<T>?
+    let status: HTTPStatus
+    
+    init(
+        response: Response<T>? = nil,
+        status: HTTPStatus
+    ) {
+        self.response = response
+        self.status = status
     }
 }
