@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NotificationCenter: NSObject, ObservableObject {
+class NotificationController: NSObject, ObservableObject {
     @Published var dumbData: UNNotificationResponse?
     
     override init() {
@@ -16,7 +16,7 @@ class NotificationCenter: NSObject, ObservableObject {
     }
 }
 
-extension NotificationCenter: UNUserNotificationCenterDelegate  {
+extension NotificationController: UNUserNotificationCenterDelegate  {
     // Receive
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo

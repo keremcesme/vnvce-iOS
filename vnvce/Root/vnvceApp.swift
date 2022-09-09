@@ -15,7 +15,7 @@ struct vnvceApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
     @StateObject private var appState = AppState()
-    @StateObject var notificationCenter = NotificationCenter()
+    @StateObject var notificationCenter = NotificationController()
     
     init() { }
     
