@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftUIX
 
 struct SearchView: View {
-    @EnvironmentObject private var keybaordController: KeyboardController
+    @EnvironmentObject private var keyboardController: KeyboardController
     @EnvironmentObject private var searchVM: SearchViewModel
     
     @FocusState private var isFocused: Bool
@@ -28,22 +28,31 @@ struct SearchView: View {
     
     @ViewBuilder
     private var Root: some View {
-        ZStack(alignment: .top){
+        ZStack {
             if searchVM.show {
-                SearchBody.transition(.move(edge: .bottom))
+                BlurView(style: .regular)
+                    .cornerRadius(UIDevice.current.screenCornerRadius(), style: .continuous)
+                    .onTapGesture(perform: hideKeyboard)
+                    .transition(.move(edge: .bottom))
             }
-            if searchVM.show {
-                SearchField
+            
+            VStack(spacing: 10){
+                if searchVM.show {
+                    SearchField
+                }
+                if searchVM.show {
+                    SearchBody
+                        .transition(.move(edge: .bottom))
+                }
             }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
     
     @ViewBuilder
     private var SearchBody: some View {
-        ZStack {
-            BlurView(style: .regular)
-                .cornerRadius(UIDevice.current.screenCornerRadius(), style: .continuous)
-                .onTapGesture(perform: hideKeyboard)
+        VStack(spacing:0) {
+            Divider()
             ScrollView {
                 LazyVStack {
                     ForEach((1...30), id: \.self){ item in
@@ -56,11 +65,20 @@ struct SearchView: View {
                     }
                 }
                 .padding(.horizontal, 18)
-                .padding(.top, UIDevice.current.statusBarHeight() + 65)
-                .padding(.bottom, UIDevice.current.bottomSafeAreaHeight() + 15 + keybaordController.keyboardHeight)
+                .padding(.top, 10)
+                .padding(.bottom, bottomPadding)
             }
+            .padding(.bottom, keyboardController.keyboardHeight)
+            .onTapGesture(perform: hideKeyboard)
         }
-        
+    }
+    
+    private var bottomPadding: CGFloat {
+        if keyboardController.keyboardHeight != 0 {
+            return 15
+        } else {
+            return UIDevice.current.bottomSafeAreaHeight()
+        }
     }
 }
 
@@ -92,7 +110,7 @@ extension SearchView {
             .textFieldFocusableArea()
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.31) {
-//                    isFocused = true
+                    isFocused = true
                 }
             }
             Button {
