@@ -10,6 +10,8 @@ import Foundation
 protocol URLBuilderProtocol {
     func authURL(route auth: AuthRoute, version: APIVersion) -> URL
     func tokenURL(route token: TokenRoute, version: APIVersion) -> URL
+    func meURL(route me: MeRoute, version: APIVersion) -> URL
+    func searchURL(route search: SearchRoute, version: APIVersion, page: Int, per: Int) -> URL
 }
 
 struct URLBuilder {
@@ -26,5 +28,20 @@ extension URLBuilder: URLBuilderProtocol {
     
     func tokenURL(route token: TokenRoute, version: APIVersion) -> URL {
         generateTokenURL(route: token, version: version)
+    }
+    
+    func meURL(route me: MeRoute, version: APIVersion) -> URL {
+        generateMeURL(route: me, version: version)
+    }
+    
+    func searchURL(route search: SearchRoute, version: APIVersion, page: Int, per: Int) -> URL {
+        generateSearchURL(route: search, version: version, page: page, per: per)
+    }
+}
+
+// MARK: Pagination Params -
+extension URLBuilder {
+    func paginationParams(page: Int, per: Int) -> String {
+        return "/?page=\(page)&per=\(per)"
     }
 }

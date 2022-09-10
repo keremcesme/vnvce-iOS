@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: 'Me' URL Builder -
 extension URLBuilder {
-    public func meURL(route me: MeRoute, version: APIVersion) -> URL {
+    public func generateMeURL(route me: MeRoute, version: APIVersion) -> URL {
         let url = generateMeURLString(route: me, version: version)
         
         return URL(string: url)!

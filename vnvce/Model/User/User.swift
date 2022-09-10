@@ -16,7 +16,7 @@ struct User: Codable, Equatable {
     let biography: String?
     let profilePicture: ProfilePicture?
     
-    struct Public: Codable {
+    struct Public: Codable, Equatable {
         let id: UUID
         let username: String
         let displayName: String?

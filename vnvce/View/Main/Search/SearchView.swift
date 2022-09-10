@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftUIX
+import Nuke
+import NukeUI
 
 struct SearchView: View {
     @EnvironmentObject private var keyboardController: KeyboardController
@@ -51,17 +53,30 @@ struct SearchView: View {
     
     @ViewBuilder
     private var SearchBody: some View {
+        let trimmedQueryValue = self.searchVM.searchField.trimmingCharacters(in: .whitespaces)
         VStack(spacing:0) {
             Divider()
             ScrollView {
-                LazyVStack {
-                    ForEach((1...30), id: \.self){ item in
-                        RoundedRectangle(10)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 70)
-                            .foregroundColor(.primary)
-                            .opacity(0.05)
-                            .shimmering()
+                VStack {
+                    LazyVStack {
+                        if !trimmedQueryValue.isEmpty {
+                            ForEach(searchVM.searchResults, id: \.id) { user in
+                                if user == searchVM.searchResults.last {
+                                    UserCell(user)
+                                        .task(searchVM.loadNextPage)
+                                } else {
+                                    UserCell(user)
+                                }
+                            }
+                            if searchVM.isRunning {
+                                RedactedResults
+                            }
+                        }
+                    }
+                    if searchVM.searchResults.count < searchVM.metadata.total {
+                        ProgressView()
+                            .opacity(searchVM.isRunning ? 1 : 0.000001)
+                            .padding(.top, 15)
                     }
                 }
                 .padding(.horizontal, 18)
@@ -79,6 +94,88 @@ struct SearchView: View {
         } else {
             return UIDevice.current.bottomSafeAreaHeight()
         }
+    }
+    
+    @ViewBuilder
+    private func UserCell(_ user: User.Public) -> some View {
+        NavigationLink {
+            UserProfileView(user: user)
+        } label: {
+            HStack(spacing: 10) {
+                if let profilepicture = user.profilePicture {
+                    LazyImage(source: URL(string: profilepicture.url)) { state in
+                        if let uiImage = state.imageContainer?.image {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50, alignment: .center)
+                                .cornerRadius(10, style: .continuous)
+                        }
+                    }
+                    .pipeline(.shared)
+                    .processors([ImageProcessors.Resize(width: 50)])
+                    .priority(.normal)
+                }
+                VStack(alignment: .leading) {
+                    Text(user.displayName ?? "")
+                        .font(.system(size: 16, weight: .semibold, design: .default))
+                        .foregroundColor(.primary)
+                    Text(user.username)
+                        .font(.system(size: 14, weight: .regular, design: .default))
+                        .foregroundColor(.secondary)
+                }
+                .foregroundColor(Color.primary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color(.systemGray2))
+                    .font(.system(size: 11, weight: .semibold, design: .default))
+            }
+            .padding(10)
+            .background{
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .foregroundColor(.primary)
+                    .opacity(0.05)
+            }
+        }.isDetailLink(false)
+
+//        Button {
+//
+//        } label: {
+//
+//        }
+
+    }
+    
+    @ViewBuilder
+    private var RedactedResults: some View {
+        ForEach((1...15).reversed(), id: \.self) {_ in
+            HStack(spacing:10){
+                RoundedRectangle(cornerRadius: 7.5)
+                    .foregroundColor(Color.primary)
+                    .frame(width: 50, height: 50, alignment: .center)
+                VStack(alignment:.leading){
+                    VStack(alignment: .leading){
+                        Capsule()
+                            .frame(width: 175, height:5 , alignment: .center)
+                        Capsule()
+                            .frame(width: 100, height: 5, alignment: .center)
+                    }
+                    .foregroundColor(Color.primary)
+                }
+                Spacer()
+            }
+            .opacity(0.1)
+            .padding(10)
+            .background({
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .foregroundColor(.primary)
+                    .opacity(0.05)
+            })
+            .onTapGesture {
+                self.hideKeyboard()
+            }
+        }
+        .shimmering()
     }
 }
 
@@ -100,19 +197,34 @@ extension SearchView {
                     .accentColor(.blue)
                     .disableAutocorrection(true)
                     .onSubmit {
-                        Task{
-                            
-                        }
+                        Task(operation: searchVM.loadFirstPage)
                     }
             }
             .padding(.horizontal, 15)
             .background(SearchFieldBackground)
             .textFieldFocusableArea()
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.31) {
-                    isFocused = true
+            .overlay(alignment: .trailing) {
+                if searchVM.isRunning {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.secondary))
+                        .padding(.trailing, 15)
+                } else {
+                    if !searchVM.searchField.isEmpty {
+                        Button {
+                            searchVM.searchField = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.secondary)
+                                .font(.system(size: 18, weight: .medium, design: .default))
+                                .frame(width: 18, height: 18, alignment: .center)
+                                .padding(.trailing, 15)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
             }
+            
             Button {
                 DispatchQueue.main.async {
                     isFocused = false
@@ -129,7 +241,22 @@ extension SearchView {
         .padding(.leading, 18)
         .transition(.scale.combined(with: .opacity))
         .padding(.top, UIDevice.current.statusBarHeight())
-        
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.31) {
+                isFocused = true
+            }
+        }
+        .onChange(of: searchVM.searchField) {
+            if $0.isEmpty {
+                searchVM.isRunning = false
+            } else {
+                searchVM.isRunning = true
+            }
+            
+        }
+        .onReceive(searchVM.$searchField.delay(for: 0.8, scheduler: RunLoop.main)) { value in
+            Task(operation: searchVM.loadFirstPage)
+        }
     }
     
     @ViewBuilder

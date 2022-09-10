@@ -11,5 +11,6 @@ enum MainRoute {
     static let auth = "auth"
     static let token = "token"
     static let me = "me"
+    static let search = "search"
 }
 
