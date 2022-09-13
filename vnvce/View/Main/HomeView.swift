@@ -17,9 +17,19 @@ struct HomeView: View {
     @StateObject private var searchVM = SearchViewModel()
     @StateObject private var currentUserVM = CurrentUserViewModel()
     
+    @StateObject private var uploadPostVM = UploadPostViewModel()
+    
     @Sendable
     private func commonInit() async {
         await currentUserVM.fetchProfile()
+        do {
+            let result = try await PostAPI.shared.fetchPosts(params: PaginationParams(page: 1, per: 20))
+            print(result)
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+        
     }
     
     var body: some View {
@@ -49,6 +59,7 @@ struct HomeView: View {
             .environmentObject(tabBarVM)
             .environmentObject(currentUserVM)
             .environmentObject(searchVM)
+            .environmentObject(uploadPostVM)
             .taskInit(commonInit)
         }
     }

@@ -20,7 +20,6 @@ struct CAVerifyPhoneNumberView: View {
     
     @StateObject private var timer = SMSTimerController()
     
-    @Sendable
     private func timerInit() {
         guard let attempt = vm.smsAttempt else {
 //            dismiss()
@@ -29,7 +28,6 @@ struct CAVerifyPhoneNumberView: View {
         timer.commonInit(start: attempt.startTime, expire: attempt.expiryTime)
     }
     
-    @Sendable
     private func resendSMSOTP() {
         Task {
             await vm.resendSMSOTP()
@@ -40,7 +38,6 @@ struct CAVerifyPhoneNumberView: View {
         }
     }
     
-    @Sendable
     private func createAccount() {
         Task {
             hideKeyboard()

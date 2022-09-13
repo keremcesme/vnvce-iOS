@@ -28,6 +28,14 @@ struct TokenAPI {
 
 // MARK: Public Methods -
 extension TokenAPI {
+    
+    public func retryTask<T: Decodable>(
+        to: T.Type, task: @escaping () async throws -> T
+    ) async throws -> T {
+        try await generateTokens()
+        return try await task()
+    }
+    
     public func generateTokens(task: @escaping () async throws -> ()) async throws {
         switch try await generateTokensTask() {
             case .ok:
@@ -38,6 +46,18 @@ extension TokenAPI {
                 }
         }
     }
+    
+    public func generateTokens() async throws {
+        switch try await generateTokensTask() {
+            case .ok:
+                return
+            case .logout:
+                DispatchQueue.main.async {
+                    userDefaults.set(false, forKey: "loggedIn")
+                }
+        }
+    }
+    
 }
 
 

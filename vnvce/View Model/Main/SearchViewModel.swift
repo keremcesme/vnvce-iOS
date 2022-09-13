@@ -14,9 +14,7 @@ class SearchViewModel: ObservableObject {
     
     @Published public var searchField: String = ""
     
-
-    @Published public var searchResults = [User.Public]()
-    @Published private(set) var metadata = PageMetadata(page: 0, per: 40, total: 0)
+    @Published private(set) public var searchResults: Pagination<User.Public> = Pagination()
     
     @Published public var isRunning = false
     
@@ -31,7 +29,7 @@ class SearchViewModel: ObservableObject {
         let currentSearchField = searchField.trimmingCharacters(in: .whitespaces)
         if currentSearchField.isEmpty {
             isRunning = false
-            searchResults.removeAll()
+            searchResults.items.removeAll()
         } else {
             searchTask = Task {
                 isRunning = true
@@ -61,10 +59,11 @@ extension SearchViewModel: PaginationProtocol {
                 return
             }
             if Task.isCancelled { return }
-            DispatchQueue.main.async {
-                self.metadata = result.metadata
-                self.searchResults = result.items
+            await MainActor.run {
+                self.searchResults.metadata = result.metadata
+                self.searchResults.items = result.items
             }
+            
         } catch {
             if Task.isCancelled { return }
             print(error.localizedDescription)
@@ -73,18 +72,15 @@ extension SearchViewModel: PaginationProtocol {
     
     func loadNextPageTask() async {
         if Task.isCancelled { return }
-        if searchResults.count < metadata.total {
+        if searchResults.items.count < searchResults.metadata.total {
             do {
                 try await Task.sleep(seconds: 0.5)
                 guard let result = try await pagingData.loadNextPage(dataFetchProvider: search) else {
                     return
                 }
                 if Task.isCancelled { return }
-                
-                DispatchQueue.main.async {
-                    self.metadata = result.metadata
-                    self.searchResults += result.items
-                }
+                self.searchResults.metadata = result.metadata
+                self.searchResults.items += result.items
             } catch {
                 if Task.isCancelled { return }
                 print(error.localizedDescription)
@@ -95,10 +91,8 @@ extension SearchViewModel: PaginationProtocol {
     }
     
     @Sendable
-    private func search(page: Int) async throws-> PaginationResult<User.Public>? {
-        guard let result = try await searchAPI.searchUser(searchField, page: page, per: 40) else {
-            return nil
-        }
+    private func search(page: Int) async throws -> Pagination<User.Public>? {
+        let result = try await searchAPI.searchUser(searchField, page: page, per: 40)
         if Task.isCancelled { return nil}
         return result
     }

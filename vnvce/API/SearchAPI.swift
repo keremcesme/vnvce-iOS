@@ -22,29 +22,25 @@ struct SearchAPI {
 
 // MARK: Public Methods -
 extension SearchAPI {
-    public func searchUser(_ searchTerm: String, page: Int, per: Int) async throws -> PaginationResult<User.Public>? {
+    public func searchUser(_ searchTerm: String, page: Int, per: Int) async throws -> Pagination<User.Public> {
+        
         let result = try await searchUserTask(searchTerm, page: page, per: per)
         
         switch result {
             case let .success(response):
-                return (response.users, response.metadata)
+                return response
             case let .failure(statusCode):
                 if statusCode == .unauthorized {
-                    var response: SearchUserResponse?
-                    try await TokenAPI.shared.generateTokens {
-                        let result = try await searchUserTask(searchTerm, page: page, per: per)
-                        switch result {
-                            case let .success(rsp):
-                                response = rsp
+                    let response = try await TokenAPI.shared.retryTask(to: Pagination<User.Public>.self) {
+                        switch try await searchUserTask(searchTerm, page: page, per: per) {
+                            case let .success(response):
+                                return response
                             case let .failure(statusCode):
                                 throw generateError(code: Int(statusCode.code), description: statusCode.localizedDescription)
                         }
                     }
-                    guard let response = response else {
-                        throw generateError(code: 1, description: "Unknows error")
-                    }
-
-                    return PaginationResult(response.users, response.metadata)
+                    
+                    return response
                 } else {
                     throw generateError(code: Int(statusCode.code), description: statusCode.localizedDescription)
                 }
@@ -55,30 +51,40 @@ extension SearchAPI {
 // MARK: Private Methods -
 private extension SearchAPI {
     
-    private func searchUserTask(_ searchTerm: String, page: Int, per: Int) async throws -> Result<SearchUserResponse, HTTPStatus>{
+    private func searchUserTask(
+        _ searchTerm: String, page: Int, per: Int
+    ) async throws -> Result<Pagination<User.Public>, HTTPStatus>{
         guard let token = try Keychain().get("accessToken") else {
             fatalError()
         }
         
-        let route: SearchRoute = .user(searchTerm)
-        let url = urlBuilder.searchURL(route: route, version: .v1, page: page, per: per)
+        let url = urlBuilder.searchURL(route: .user, version: .v1, page: page, per: per)
         
         var headers = HTTPHeaders()
         headers.add(.authorization(bearerToken: token))
+        headers.add(.contentType(MIMEType.appJSON))
         
         let task = AF
-            .request(url, method: .get, headers: headers)
-            .serializingDecodable(Response<SearchUserResponse>.self)
+            .request(
+                url,
+                method: .post,
+                parameters: searchTerm,
+                encoder: encoder,
+                headers: headers)
+            .serializingDecodable(PaginationResponse<User.Public>.self)
         
-        let response = await task.response
+        let taskResponse = await task.response
         
-        guard let statusCode = response.response?.statusCode else {
+        guard let statusCode = taskResponse.response?.statusCode else {
             throw NSError(domain: "Status Code not Available", code: 1)
         }
         
-        switch response.result {
+        switch taskResponse.result {
             case let .success(response):
-                return .success(response.result!)
+                guard let result = response.result else {
+                    throw NSError(domain: "Result is not available", code: 1)
+                }
+                return .success(result)
             case .failure(_):
                 return .failure(HTTPStatus(statusCode: statusCode))
         }

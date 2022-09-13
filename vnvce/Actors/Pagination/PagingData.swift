@@ -7,8 +7,8 @@
 
 import Foundation
 
-typealias PaginateArguments = (page: Int, per: Int)
-typealias PaginationResult<T> = (items: [T], metadata: PageMetadata)
+//typealias PaginateArguments = (page: Int, per: Int)
+//typealias PaginationResult<T> = (items: [T], metadata: PageMetadata)
 
 protocol PaginationProtocol {
     
@@ -35,8 +35,8 @@ actor PagingData {
     }
     
     func loadNextPage<T>(
-        dataFetchProvider: @escaping (Int) async throws -> PaginationResult<T>?
-    ) async throws -> PaginationResult<T>? {
+        dataFetchProvider: @escaping (Int) async throws -> Pagination<T>?
+    ) async throws -> Pagination<T>? {
         
         if Task.isCancelled { return nil }
 //        print("PAGING: Current Page \(currentPage), nextPage: \(nextPage)")

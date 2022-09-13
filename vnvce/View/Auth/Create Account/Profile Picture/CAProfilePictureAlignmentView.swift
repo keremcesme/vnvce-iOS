@@ -23,7 +23,6 @@ struct CAProfilePictureAlignmentView: View {
         self.alignment = alignment
     }
     
-    @Sendable
     private func tapAction() {
         DispatchQueue.main.async {
             vm.profilePictureAlignment = alignment

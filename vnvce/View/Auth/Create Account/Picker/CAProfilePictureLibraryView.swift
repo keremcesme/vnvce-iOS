@@ -132,7 +132,6 @@ extension CAProfilePictureLibraryView {
         let item: LibraryAsset
         let dismiss: () -> ()
         
-        @Sendable
         private func tapAction() {
             DispatchQueue.global().async {
                 let manager = PHImageManager.default()
@@ -162,7 +161,6 @@ extension CAProfilePictureLibraryView {
             }
         }
         
-        @Sendable
         private func fetchAsset() {
             fetchAssetTask()
         }

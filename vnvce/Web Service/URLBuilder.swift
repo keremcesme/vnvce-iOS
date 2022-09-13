@@ -12,6 +12,7 @@ protocol URLBuilderProtocol {
     func tokenURL(route token: TokenRoute, version: APIVersion) -> URL
     func meURL(route me: MeRoute, version: APIVersion) -> URL
     func searchURL(route search: SearchRoute, version: APIVersion, page: Int, per: Int) -> URL
+    func postURL(route post: PostRoute, version: APIVersion) -> URL
 }
 
 struct URLBuilder {
@@ -36,6 +37,10 @@ extension URLBuilder: URLBuilderProtocol {
     
     func searchURL(route search: SearchRoute, version: APIVersion, page: Int, per: Int) -> URL {
         generateSearchURL(route: search, version: version, page: page, per: per)
+    }
+    
+    func postURL(route post: PostRoute, version: APIVersion) -> URL {
+        generatePostURL(route: post, version: version)
     }
 }
 

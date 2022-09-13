@@ -11,6 +11,7 @@ import Nuke
 import NukeUI
 
 struct SearchView: View {
+    
     @EnvironmentObject private var keyboardController: KeyboardController
     @EnvironmentObject private var searchVM: SearchViewModel
     
@@ -60,8 +61,8 @@ struct SearchView: View {
                 VStack {
                     LazyVStack {
                         if !trimmedQueryValue.isEmpty {
-                            ForEach(searchVM.searchResults, id: \.id) { user in
-                                if user == searchVM.searchResults.last {
+                            ForEach(searchVM.searchResults.items, id: \.id) { user in
+                                if user == searchVM.searchResults.items.last {
                                     UserCell(user)
                                         .task(searchVM.loadNextPage)
                                 } else {
@@ -73,7 +74,7 @@ struct SearchView: View {
                             }
                         }
                     }
-                    if searchVM.searchResults.count < searchVM.metadata.total {
+                    if searchVM.searchResults.items.count < searchVM.searchResults.metadata.total {
                         ProgressView()
                             .opacity(searchVM.isRunning ? 1 : 0.000001)
                             .padding(.top, 15)
@@ -254,7 +255,7 @@ extension SearchView {
             }
             
         }
-        .onReceive(searchVM.$searchField.delay(for: 0.8, scheduler: RunLoop.main)) { value in
+        .onReceive(searchVM.$searchField.debounce(for: 0.8, scheduler: RunLoop.main)) { _ in
             Task(operation: searchVM.loadFirstPage)
         }
     }

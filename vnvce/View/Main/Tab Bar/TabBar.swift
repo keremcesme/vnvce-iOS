@@ -11,6 +11,7 @@ import PureSwiftUI
 
 struct TabBar: View {
     @EnvironmentObject var tabBarVM: TabBarViewModel
+    @EnvironmentObject var uploadPostVM: UploadPostViewModel
     
     var body: some View {
         VStack {
@@ -70,7 +71,7 @@ struct TabBar: View {
     @ViewBuilder
     private func ShareButton(height: CGFloat) -> some View {
         Button {
-            
+            uploadPostVM.showUploadPostView = true
         } label: {
             GeometryReader{g in
                 ZStack{
@@ -92,6 +93,9 @@ struct TabBar: View {
             .frame(width: height, height: height, alignment: .center)
         }
         .buttonStyle(PlainButtonStyle())
+        .fullScreenCover(isPresented: $uploadPostVM.showUploadPostView) {
+            PostImagePickerView()
+        }
     }
             
     

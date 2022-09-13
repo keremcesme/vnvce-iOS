@@ -14,7 +14,6 @@ struct CABiographyView: View {
     @EnvironmentObject var vm: CreateAccountViewModel
     @EnvironmentObject private var appState: AppState
     
-    @Sendable
     private func finishTask() {
         hideKeyboard()
         Task {

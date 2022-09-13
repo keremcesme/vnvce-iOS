@@ -16,7 +16,6 @@ struct CACheckPhoneNumberView: View {
     
     @State var navigation = NavigationCoordinator()
     
-    @Sendable
     private func continueButton() {
         Task {
             hideKeyboard()

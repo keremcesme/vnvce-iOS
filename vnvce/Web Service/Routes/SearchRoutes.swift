@@ -8,12 +8,12 @@
 import Foundation
 
 enum SearchRoute {
-    case user(String)
+    case user
     
     var raw: String {
         switch self {
-            case let .user(term):
-                return "\(MainRoute.search)/user/\(term)"
+            case .user:
+                return "\(MainRoute.search)/user/"
         }
     }
 }

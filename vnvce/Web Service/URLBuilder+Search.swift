@@ -24,7 +24,7 @@ private extension URLBuilder {
         urlString += "\(search.raw)"
         
         switch search {
-            case .user(_):
+            case .user:
                 urlString += paginationParams(page: page, per: per)
                 return urlString
         }

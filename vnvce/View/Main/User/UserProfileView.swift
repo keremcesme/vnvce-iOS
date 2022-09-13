@@ -41,7 +41,7 @@ extension UserProfileView {
         Button {
             dismiss()
         } label: {
-            Image(systemName: "chevron.back").font(.headline)
+            Image(systemName: "chevron.backward").font(.headline)
                 .foregroundColor(.primary)
         }
     }

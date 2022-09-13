@@ -22,7 +22,6 @@ struct CAProfilePictureView: View {
     @State private var showPicker: Bool = false
     @State private var showAlert: Bool = false
     
-    @Sendable
     private func showPickerTask() {
         if vm.profilePicture == nil {
             showPicker = true
@@ -33,7 +32,6 @@ struct CAProfilePictureView: View {
         
     }
     
-    @Sendable
     private func continueTask() {
         if vm.profilePicture == nil {
             vm.showDisplayNameView = true

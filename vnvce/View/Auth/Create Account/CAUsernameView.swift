@@ -13,12 +13,10 @@ struct CAUsernameView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: CreateAccountViewModel
     
-    @Sendable
     private func autoCheckUsername(_ username: String) {
         Task(operation: vm.autoCheckUsername)
     }
     
-    @Sendable
     private func reserveUsername() {
         hideKeyboard()
         Task(operation: vm.reserveUsernameAndSendOTP)
@@ -195,7 +193,6 @@ extension CAUsernameView {
         
         init() {}
         
-        @Sendable
         private func task() {
             
         }

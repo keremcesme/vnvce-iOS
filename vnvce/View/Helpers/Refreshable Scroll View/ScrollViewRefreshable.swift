@@ -61,7 +61,6 @@ struct ScrollViewRefreshable<Content: View>: View {
             .offset(y: yOffset)
     }
     
-    @Sendable
     private func offsetTask(offset: CGFloat) {
         // MARK: Storing Content Offset
         scrollDelegate.contentOffset = offset
@@ -82,7 +81,6 @@ struct ScrollViewRefreshable<Content: View>: View {
         }
     }
     
-    @Sendable
     private func onChangeIsRefreshingTask(newValue: Bool) {
         // MARK: Calling Async Method
         if newValue {

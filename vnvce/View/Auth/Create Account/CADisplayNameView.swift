@@ -14,7 +14,6 @@ struct CADisplayNameView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: CreateAccountViewModel
     
-    @Sendable
     private func editDisplayName() {
         hideKeyboard()
         Task(operation: vm.editDisplayName)
@@ -156,7 +155,6 @@ extension CADisplayNameView {
         
         init() {}
         
-        @Sendable
         private func task() {
             
         }
