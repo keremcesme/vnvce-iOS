@@ -16,13 +16,15 @@ struct ProfileView: View {
     @EnvironmentObject private var currentUserVM: CurrentUserViewModel
     @EnvironmentObject private var postsVM: PostsViewModel
     
+    @StateObject var scrollDelegate: ScrollViewModel = .init()
+    
     @State private var showEditProfileView: Bool = false
     
     var body: some View {
         NavigationView {
             ZStack {
                 CurrentUserBackground()
-                ScrollViewRefreshable {
+                ScrollViewRefreshable(scrollDelegate: scrollDelegate) {
                     LazyVStack {
                         DetailsView
                         PostsView(vm: postsVM)
@@ -31,6 +33,13 @@ struct ProfileView: View {
                 } onRefresh: {
                     await currentUserVM.fetchProfile()
                     await postsVM.loadFirstPage()
+                }
+                .onChange(of: postsVM.selectedPost.didAppear) {
+                    if !$0 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            scrollDelegate.addGesture()
+                        }
+                    } 
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

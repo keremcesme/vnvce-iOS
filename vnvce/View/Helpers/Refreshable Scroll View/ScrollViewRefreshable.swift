@@ -12,6 +12,8 @@ import PureSwiftUI
 struct ScrollViewRefreshable<Content: View>: View {
     typealias Action = (CGPoint) -> Void
     
+    @StateObject var scrollDelegate: ScrollViewModel
+    
     var content: Content
     var showsIndicator: Bool
     var topPadding: CGFloat
@@ -21,6 +23,7 @@ struct ScrollViewRefreshable<Content: View>: View {
     var onRefresh: () async -> Void
     
     init(
+        scrollDelegate: ScrollViewModel,
         showsIndicator: Bool = true,
         topPadding: CGFloat = 0,
         offset: Action? = nil,
@@ -32,9 +35,10 @@ struct ScrollViewRefreshable<Content: View>: View {
         self.content = content()
         self.offset = offset
         self.onRefresh = onRefresh
+        self._scrollDelegate = StateObject(wrappedValue: scrollDelegate)
     }
     
-    @StateObject var scrollDelegate: ScrollViewModel = .init()
+    
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: showsIndicator) {

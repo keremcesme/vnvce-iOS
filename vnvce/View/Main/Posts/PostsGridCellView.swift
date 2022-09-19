@@ -61,7 +61,7 @@ struct PostsGridCellView: View {
                     BlurView(style: .regular)
                 }
                 .contentShape(Rectangle())
-                .onPress {
+                .onTapGesture {
                     let rect = CGRect(frame, size)
                     let value = PostsViewModel.TappedPost(self.post, self.image, rect)
                     Task {
