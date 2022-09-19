@@ -1,49 +1,51 @@
 //
-//  ScrollViewRefreshable.swift
+//  PostScrollView.swift
 //  vnvce
 //
-//  Created by Kerem Cesme on 9.09.2022.
+//  Created by Kerem Cesme on 19.09.2022.
 //
 
 import SwiftUI
 import PureSwiftUI
+import Introspect
 
 // MARK: Custom View Modifier
-struct ScrollViewRefreshable<Content: View>: View {
-    typealias Action = (CGPoint) -> Void
+struct PostScrollView<Content: View>: View {
+//    typealias Action = (CGPoint) -> Void
+//    typealias ContentOffset = (CGSize) -> Void
+    
+    @StateObject var scrollDelegate: PostScrollViewModel
     
     var content: Content
-    var showsIndicator: Bool
-    var topPadding: CGFloat
-    
-    let offset: Action?
     
     var onRefresh: () async -> Void
     
     init(
-        showsIndicator: Bool = true,
-        topPadding: CGFloat = 0,
-        offset: Action? = nil,
+        scrollDelegate: PostScrollViewModel,
         @ViewBuilder content: @escaping () -> Content,
         onRefresh: @escaping () async -> Void
     ) {
-        self.showsIndicator = showsIndicator
-        self.topPadding = topPadding
+        self._scrollDelegate = StateObject(wrappedValue: scrollDelegate)
         self.content = content()
-        self.offset = offset
         self.onRefresh = onRefresh
     }
     
-    @StateObject var scrollDelegate: ScrollViewModel = .init()
-    
     var body: some View {
-        ScrollView(.vertical, showsIndicators: showsIndicator) {
+        
+        ScrollView(.vertical, showsIndicators: true) {
             VStack(spacing:0) {
                 IndicatorView
                 content
             }
-            .padding(.top, topPadding)
+            .padding(.top, UIDevice.current.statusAndNavigationBarHeight)
             .offset(coordinateSpace: "SCROLL", offset: offsetTask)
+            .introspectScrollView{ scrollView in
+                if scrollDelegate.scrollDisabled {
+                    scrollView.isScrollEnabled = false
+                } else {
+                    scrollView.isScrollEnabled = true
+                }
+            }
         }
         .coordinateSpace(name: "SCROLL")
         .onAppear(perform: scrollDelegate.addGesture)
@@ -74,9 +76,9 @@ struct ScrollViewRefreshable<Content: View>: View {
     private func offsetTask(offset: CGFloat) {
         // MARK: Storing Content Offset
         scrollDelegate.contentOffset = offset
-        if let action = self.offset {
-            action(scrollDelegate.scrollOffset)
-        }
+//        if let action = self.offset {
+//            action(scrollDelegate.scrollOffset)
+//        }
         
         // MARK: Stopping The Progress When Its Elgible For Refresh
         if !scrollDelegate.isEligible {
@@ -128,86 +130,4 @@ struct ScrollViewRefreshable<Content: View>: View {
         }
     }
 }
-
-// MARK: For Simultanous Pan Gesture
-class ScrollViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
-    // MARK: Properties
-    @Published var isEligible: Bool = false
-    @Published var isRefreshing: Bool = false
-    
-    // MARK: Ofsets and Progress
-    @Published var scrollOffset: CGPoint = .zero
-    @Published var contentOffset: CGFloat = 0
-    @Published var progress: CGFloat = 0
-    
-    // Adding Pan Gesture To UI Main Application Window
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    // MARK: Adding Gesture
-    func addGesture() {
-        let pangGesture = UIPanGestureRecognizer(target: self, action: #selector(onGestureChange(gesture:)))
-        pangGesture.delegate = self
-        rootController().view.addGestureRecognizer(pangGesture)
-    }
-    
-    // MARK: Removing When Leaving The View
-    func removeGesture() {
-        rootController().view.gestureRecognizers?.removeAll()
-    }
-    
-    // MARK: Finding Root Controller
-    func rootController() -> UIViewController {
-        guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let root = screen.windows.first?.rootViewController
-        else {
-            return .init()
-        }
-        
-        return root
-    }
-    
-    @objc
-    func onGestureChange(gesture: UIPanGestureRecognizer) {
-        if gesture.state == .cancelled || gesture.state == .ended {
-            print("User Released Touch")
-            if !isRefreshing {
-                if scrollOffset.y > 100 {
-                    isEligible = true
-                } else {
-                    isEligible = false
-                }
-            }
-        }
-    }
-}
-
-// MARK: Offset Modifier
-extension View {
-    @ViewBuilder
-    func offset(coordinateSpace: String, offset: @escaping (CGFloat) -> Void) -> some View {
-        self
-            .overlay {
-                GeometryReader{ proxy in
-                    let minY = proxy.frame(in: .named(coordinateSpace)).minY
-                    
-                    Color.clear
-                        .preference(key: ScrollOffsetKey.self, value: minY)
-                        .onPreferenceChange(ScrollOffsetKey.self, perform: offset)
-                }
-            }
-    }
-}
-
-// MARK: Offset Preference Key
-struct ScrollOffsetKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
-
-
 

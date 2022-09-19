@@ -16,19 +16,21 @@ struct HomeView: View {
     
     @StateObject private var searchVM = SearchViewModel()
     @StateObject private var currentUserVM = CurrentUserViewModel()
+    @StateObject private var postsVM = PostsViewModel()
     
     @StateObject private var uploadPostVM = UploadPostViewModel()
     
     @Sendable
     private func commonInit() async {
         await currentUserVM.fetchProfile()
-        do {
-            let result = try await PostAPI.shared.fetchPosts(params: PaginationParams(page: 1, per: 20))
-            print(result)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
+        await postsVM.loadFirstPage()
+//        do {
+//            let result = try await PostAPI.shared.fetchPosts(params: PaginationParams(page: 1, per: 20))
+//            print(result)
+//        } catch {
+//            print(error.localizedDescription)
+//            return
+//        }
         
     }
     
@@ -48,6 +50,7 @@ struct HomeView: View {
                 // MARK: Other Views
                 // ...
                 SearchView()
+                PostView(postsVM: postsVM)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
@@ -56,8 +59,10 @@ struct HomeView: View {
                 navigationController.properties(controller)
             }
             .environmentObject(keyboardController)
+            .environmentObject(navigationController)
             .environmentObject(tabBarVM)
             .environmentObject(currentUserVM)
+            .environmentObject(postsVM)
             .environmentObject(searchVM)
             .environmentObject(uploadPostVM)
             .taskInit(commonInit)

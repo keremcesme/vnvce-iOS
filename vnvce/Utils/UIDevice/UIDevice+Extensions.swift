@@ -98,4 +98,8 @@ extension UIDevice {
         return radius
     }
     
+    var statusAndNavigationBarHeight: CGFloat {
+        return 44 + UIDevice.current.statusBarHeight()
+    }
+    
 }

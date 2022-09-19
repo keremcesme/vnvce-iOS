@@ -36,7 +36,6 @@ struct TabBar: View {
         .background(Background)
         .padding(.horizontal, 20)
         .padding(.bottom, UIDevice.current.hasNotch() ? 0 : 15)
-        
     }
     
     @ViewBuilder

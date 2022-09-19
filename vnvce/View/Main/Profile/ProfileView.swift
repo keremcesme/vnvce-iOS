@@ -14,6 +14,7 @@ import SwiftUIX
 
 struct ProfileView: View {
     @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var postsVM: PostsViewModel
     
     @State private var showEditProfileView: Bool = false
     
@@ -22,9 +23,14 @@ struct ProfileView: View {
             ZStack {
                 CurrentUserBackground()
                 ScrollViewRefreshable {
-                    DetailsView
+                    LazyVStack {
+                        DetailsView
+                        PostsView(vm: postsVM)
+                    }
+                    .padding(.bottom, 75)
                 } onRefresh: {
                     await currentUserVM.fetchProfile()
+                    await postsVM.loadFirstPage()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -56,6 +62,9 @@ struct ProfileView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
+        } else {
+            ProgressView()
+                .frame(maxWidth: .infinity)
         }
     }
     
@@ -123,11 +132,9 @@ extension ProfileView {
     
     @ViewBuilder
     private var UsernameLabel: some View {
-        if let username = currentUserVM.user?.username {
-            Text(username)
-                .font(.headline)
-                .frame(width: 150, alignment: .center)
-        }
+        Text(currentUserVM.user?.username ?? "")
+            .font(.headline)
+            .frame(width: 150, alignment: .center)
         
     }
 }

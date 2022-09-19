@@ -1,5 +1,5 @@
 //
-//  Grid.swift
+//  GridLayout.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 23.08.2022.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: Building Custom View like ForEach -
-struct Grid<Content, Item, ID>: View
+struct GridLayout<Content, Item, ID>: View
 where Content: View,
       ID: Hashable,
       Item: RandomAccessCollection,
@@ -47,7 +47,7 @@ where Content: View,
     }
 }
 
-extension Grid {
+extension GridLayout {
     
     //MARK: Row View -
     @ViewBuilder

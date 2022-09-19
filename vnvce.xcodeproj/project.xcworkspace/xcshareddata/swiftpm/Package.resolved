@@ -208,6 +208,15 @@
       }
     },
     {
+      "identity" : "scrollviewprefetcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/ScrollViewPrefetcher",
+      "state" : {
+        "revision" : "36cdfa3e5c11423511c21cd7e4ddb5a27536d89d",
+        "version" : "0.1.2"
+      }
+    },
+    {
       "identity" : "stevia",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/freshOS/Stevia",

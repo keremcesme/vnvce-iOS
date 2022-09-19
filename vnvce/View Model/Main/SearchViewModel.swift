@@ -91,9 +91,8 @@ extension SearchViewModel: PaginationProtocol {
     }
     
     @Sendable
-    private func search(page: Int) async throws -> Pagination<User.Public>? {
+    private func search(page: Int) async throws -> Pagination<User.Public> {
         let result = try await searchAPI.searchUser(searchField, page: page, per: 40)
-        if Task.isCancelled { return nil}
         return result
     }
 }

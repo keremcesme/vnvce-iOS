@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Codable, Equatable {
+struct User: Codable, Equatable, Hashable {
     
     let id: UUID
     let username: String
@@ -16,7 +16,7 @@ struct User: Codable, Equatable {
     let biography: String?
     let profilePicture: ProfilePicture?
     
-    struct Public: Codable, Equatable {
+    struct Public: Codable, Equatable, Hashable {
         let id: UUID
         let username: String
         let displayName: String?

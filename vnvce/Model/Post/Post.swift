@@ -7,28 +7,56 @@
 
 import Foundation
 
-struct Post: Decodable {
+struct Post: Decodable, Hashable {
     let id: UUID
     let description: String?
-    let owner: PostOwner
-    let media: PostMedia
+    let owner: Owner
+    let media: Media
     let type: PostType
     let archived: Bool
     let createdAt: TimeInterval
     let modifiedAt: TimeInterval
+    
+    struct Owner: Decodable, Hashable {
+        let owner: User.Public
+        let coOwner: User.Public?
+        let approvalStatus: CoPostApprovalStatus?
+    }
+    
+    struct Media: Decodable, Hashable {
+        let mediaType: MediaType
+        let sensitiveContent: Bool
+        let name: String
+        let url: String
+        let thumbnailURL: String?
+        let storageLocation: UUID
+    }
 }
 
-struct PostOwner: Decodable {
-    let owner: User.Public
-    let coOwner: User.Public?
-    let approvalStatus: CoPostApprovalStatus?
+extension Post.Media {
+    var returnURL: URL {
+        switch mediaType {
+        case .image:
+            return URL(string: url)!
+        case .movie:
+            return URL(string: thumbnailURL!)!
+        }
+    }
 }
 
-struct PostMedia: Decodable {
-    let mediaType: MediaType
-    let sensitiveContent: Bool
-    let name: String
-    let url: String
-    let thumbnailURL: String?
-    let storageLocation: UUID
-}
+//struct PostOwner: Decodable, Hashable {
+//    let owner: User.Public
+//    let coOwner: User.Public?
+//    let approvalStatus: CoPostApprovalStatus?
+//}
+//
+//struct PostMedia: Decodable, Hashable {
+//    let mediaType: MediaType
+//    let sensitiveContent: Bool
+//    let name: String
+//    let url: String
+//    let thumbnailURL: String?
+//    let storageLocation: UUID
+//}
+
+

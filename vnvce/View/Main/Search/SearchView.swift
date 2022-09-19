@@ -138,13 +138,6 @@ struct SearchView: View {
                     .opacity(0.05)
             }
         }.isDetailLink(false)
-
-//        Button {
-//
-//        } label: {
-//
-//        }
-
     }
     
     @ViewBuilder

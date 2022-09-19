@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProfilePicture: Codable, Equatable {
+struct ProfilePicture: Codable, Equatable, Hashable {
     let alignment: ProfilePictureAlignmentType
     let url: String
     let name: String

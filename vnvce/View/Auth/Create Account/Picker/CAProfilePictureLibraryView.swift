@@ -29,7 +29,7 @@ struct CAProfilePictureLibraryView: View {
                                 .id("TOP")
                             LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                                 Section {
-                                    GridView
+                                    GridLayoutView
                                 } header: {
                                     HeaderView
                                 }
@@ -55,10 +55,10 @@ struct CAProfilePictureLibraryView: View {
 
 extension CAProfilePictureLibraryView {
     @ViewBuilder
-    private var GridView: some View {
+    private var GridLayoutView: some View {
         switch picker.currentAlbum {
             case .all:
-                Grid(items: picker.assets,
+                GridLayout(items: picker.assets,
                      id: \.id,
                      spacing: 1,
                      columnCount: 4,
@@ -66,7 +66,7 @@ extension CAProfilePictureLibraryView {
                     Cell(item: item, dismiss: dismiss)
                 }
             case .favorites:
-                Grid(items: picker.favoriteAssets,
+                GridLayout(items: picker.favoriteAssets,
                      id: \.id,
                      spacing: 1,
                      columnCount: 4,
