@@ -100,7 +100,7 @@ class PostScrollViewModel: NSObject, ObservableObject, UIGestureRecognizerDelega
             
             let angle = atan2(y, x) * 180 / 3.14159
             
-            if angle <= 40 && angle >= -40 {
+            if angle <= 50 && angle >= -50 {
                 scrollDisabled = true
             }
         } else {
