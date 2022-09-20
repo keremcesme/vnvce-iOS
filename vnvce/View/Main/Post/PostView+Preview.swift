@@ -22,7 +22,7 @@ extension PostRootView {
                         .greedyWidth()
                         .scaleEffect(previewScale())
                         .overlay {
-                            BlurView(style: .regular)
+                            BlurView(style: .light)
                                 .opacity(postsVM.selectedPost.show ? 0.000001 : 1)
                         }
                         .padding(.top, postsVM.selectedPost.show ? UIDevice.current.statusAndNavigationBarHeight : 0)

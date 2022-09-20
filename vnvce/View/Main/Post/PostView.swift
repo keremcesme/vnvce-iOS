@@ -83,7 +83,7 @@ struct PostRootView: View {
                         VStack {
                             MediaView
                                 .overlay {
-                                    BlurView(style: .regular)
+                                    BlurView(style: .light)
                                         .opacity(postsVM.selectedPost.show ? 0.000001 : 1)
                                 }
                             Rectangle().foregroundColor(.primary).opacity(0.1)

@@ -58,7 +58,7 @@ struct PostsGridCellView: View {
             
             ImageContainer(size: size)
                 .overlay {
-                    BlurView(style: .regular)
+                    BlurView(style: .light)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
