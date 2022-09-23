@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftUIX
 import PureSwiftUI
 
-extension PostRootView {
+extension PostView {
     
     @ViewBuilder
     public var Preview: some View {

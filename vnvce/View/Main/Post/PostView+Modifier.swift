@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftUIX
 import PureSwiftUI
 
-extension PostRootView {
+extension PostView {
     struct Modifier: ViewModifier {
         private let width = UIScreen.main.bounds.width
         private let height = UIScreen.main.bounds.height
@@ -39,11 +39,11 @@ extension PostRootView {
 //                        .onEnded(onEnded))
             
             content
-                .cornerRadius(UIDevice.current.screenCornerRadius(), style: .continuous)
+                .cornerRadius(UIDevice.current.screenCornerRadius, style: .continuous)
                 .scaleEffect(scaleAmount)
                 .mask(Mask)
                 .offset(scrollDelegate.offset)
-                .offsetToPositionIf(!postsVM.selectedPost.show, postsVM.selectedPost.rect.origin)
+//                .offsetToPositionIf(!postsVM.selectedPost.show, postsVM.selectedPost.rect.origin)
                 .ignoresSafeArea()
 //                .onTapGesture { }
 //                .gesture(gesture)
@@ -52,9 +52,9 @@ extension PostRootView {
         @ViewBuilder
         var Mask: some View {
             RoundedRectangle(postsVM.selectedPost.show ? 6.5 : 0, style: .continuous)
-                .frame(
-                    postsVM.selectedPost.show ? CGSize(width, height) : postsVM.selectedPost.rect.size
-                )
+//                .frame(
+//                    postsVM.selectedPost.show ? CGSize(width, height) : postsVM.selectedPost.rect.size
+//                )
         }
         
         private var scaleAmount: CGFloat {

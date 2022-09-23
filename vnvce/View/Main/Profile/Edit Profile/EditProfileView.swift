@@ -29,7 +29,7 @@ struct EditProfileView: View {
                                     CurrentUserBackground()
                                 } label: {
                                     if let profilePicture = currentUserVM.user?.profilePicture {
-                                        LazyImage(source: URL(string: profilePicture.url)) { state in
+                                        LazyImage(url: URL(string: profilePicture.url)) { state in
                                             if let uiImage = state.imageContainer?.image {
                                                 Image(uiImage: uiImage)
                                                     .resizable()

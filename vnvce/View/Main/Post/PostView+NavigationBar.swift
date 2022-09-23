@@ -7,13 +7,16 @@
 
 import SwiftUI
 import ActionOver
+import Nuke
+import NukeUI
 
-extension PostRootView {
+extension PostView {
     
     @ViewBuilder
-    func NavigationBar(width: CGFloat) -> some View {
+    var NavigationBar: some View {
         BlurView(style: .systemMaterial)
-            .frame(width: width, height: UIDevice.current.statusAndNavigationBarHeight)
+            .frame(maxWidth: .infinity)
+            .frame(height: UIDevice.current.statusAndNavigationBarHeight)
             .overlay(alignment: .bottom) {
                 Divider()
             }
@@ -24,11 +27,28 @@ extension PostRootView {
     @ViewBuilder
     private var BackButton: some View {
         Button(action: dismiss) {
-            Image(systemName: "chevron.backward")
-                .foregroundColor(.primary)
-                .font(.system(size: 24, weight: .medium, design: .default))
-                .frame(height: 44)
-                .padding(.leading, 17)
+            HStack {
+                Image(systemName: "chevron.backward")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                    .frame(height: 44)
+                    .padding(.leading, 17)
+                if let url = URL(string: postsVM.selectedPost.post!.owner.owner.profilePicture!.url) {
+                    LazyImage(url: url) { state in
+                        if let uiImage = state.imageContainer?.image {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 25, height: 25)
+                                .mask(RoundedRectangle(cornerRadius: 6))
+                        }
+                    }
+                    .pipeline(.shared)
+                    .processors([ImageProcessors.Resize(width: 25)])
+                    .priority(.normal)
+                }
+            }
+            
         }
     }
 }

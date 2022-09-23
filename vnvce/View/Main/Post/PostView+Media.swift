@@ -11,7 +11,7 @@ import PureSwiftUI
 import Nuke
 import NukeUI
 
-extension PostRootView {
+extension PostView {
     @ViewBuilder
     public var MediaView: some View {
         Image(uiImage: postsVM.selectedPost.previewImage)
@@ -31,16 +31,16 @@ extension PostRootView {
     
     @ViewBuilder
     private func ImageMedia(_ url: URL) -> some View {
-        LazyImage(source: url){
+        LazyImage(url: url){
             if let uiImage = $0.imageContainer?.image {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .greedyWidth()
             } else {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .shadow(3)
+//                ProgressView()
+//                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+//                    .shadow(3)
             }
         }
         .pipeline(.shared)

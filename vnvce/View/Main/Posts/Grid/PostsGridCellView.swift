@@ -16,15 +16,11 @@ struct PostsGridCellView: View {
     
     @StateObject private var postsVM: PostsViewModel
     
-    @State var image = UIImage()
+    @State var selectedPost = PostsViewModel.SelectedPost()
     
-//    let url: URL
-    let post: Post
+    private var post: Post
     
-    init(
-        post: Post,
-        vm: PostsViewModel
-    ) {
+    init(post: Post, vm: PostsViewModel) {
         self._postsVM = StateObject(wrappedValue: vm)
         self.post = post
     }
@@ -38,9 +34,12 @@ struct PostsGridCellView: View {
     }
     
     @MainActor
-    private func tapAction(_ value: PostsViewModel.TappedPost) async {
+    private func tapAction(_ value: PostsViewModel.SelectPost) {
 //        navigationController.navigation.enabled = false
-        await postsVM.tapPostAction(value)
+        Task {
+            await postsVM.tapPostAction(value)
+        }
+        
     }
     
     
@@ -53,49 +52,53 @@ struct PostsGridCellView: View {
     @ViewBuilder
     private var CellView: some View {
         GeometryReader{
-            let frame = $0.frame(in: .global).center
+            let frame = $0.frame(in: .global)
             let size = $0.size
             
-            ImageContainer(size: size)
-                .overlay {
-                    BlurView(style: .light)
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    let rect = CGRect(frame, size)
-                    let value = PostsViewModel.TappedPost(self.post, self.image, rect)
-                    Task {
-                        await self.tapAction(value)
-                    }
-                    
-                }
+            ImageContainer(size: size, frame: frame)
+                .opacity(opacity())
         }
-        
     }
     
     @ViewBuilder
-    private func ImageContainer(size: CGSize) -> some View {
-        LazyImage(source: post.media.returnURL) {
+    private func ImageContainer(size: CGSize, frame: CGRect) -> some View {
+        LazyImage(url: post.media.returnURL) {
             if let uiImage = $0.imageContainer?.image {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(size)
                     .clipped()
-                    .opacity(opacity)
+                    .overlay {
+                        BlurView(style: .light)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        let value = PostsViewModel.SelectPost(post: post,
+                                                              previewImage: uiImage,
+                                                              frame: frame,
+                                                              size: size)
+                        self.tapAction(value)
+                    }
                     .onAppear {
-                        self.image = uiImage
+                        guard let index = postsVM.postResults.items.firstIndex(where: {$0 == post}) else {
+                            return
+                        }
+                        
+                        postsVM.postResults.items[index].previewImage = CodableImage(image: uiImage)
                     }
             } else {
                 Color.primary.opacity(0.05)
+                    .shimmering()
             }
         }
+        .animation(nil)
         .pipeline(.shared)
         .processors([ImageProcessors.Resize(width: 100)])
         .priority(.veryHigh)
     }
     
-    private var opacity: Double {
+    private func opacity() -> Double {
         return postsVM.selectedPost.post?.id == self.post.id && postsVM.selectedPost.didAppear ? 0 : 1
     }
 }

@@ -16,7 +16,7 @@ enum PostRoute {
         case .upload:
             return "\(MainRoute.post)/upload"
         case let .posts(params):
-            return "\(MainRoute.post)/posts/\(params.raw)"
+            return "\(MainRoute.post)/fetch_posts/\(params.raw)"
         }
     
         

@@ -51,16 +51,7 @@
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
         "branch" : "master",
-        "revision" : "879d0b47334282c611c917f8cee7c8c2468da772"
-      }
-    },
-    {
-      "identity" : "gifu",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kaishin/Gifu",
-      "state" : {
-        "revision" : "51f2eab32903e336f590c013267cfa4d7f8b06c4",
-        "version" : "3.3.1"
+        "revision" : "3d51280713332af3f023abc7e305541871c1e005"
       }
     },
     {
@@ -68,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "f54f60d0164d887e1174fa51ab2efe48a8e9d178",
-        "version" : "9.3.0"
+        "revision" : "c1cfde8067668027b23a42c29d11c246152fe046",
+        "version" : "9.6.0"
       }
     },
     {
@@ -86,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "f4abe56ce62a779e64b525eb133c8fc2a84bbc1f",
-        "version" : "7.7.1"
+        "revision" : "22907832079d808e82f1182b21af58ef3880666f",
+        "version" : "7.8.0"
       }
     },
     {
@@ -104,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "19605024d59eaefdb1f6a2cb11ebe75df4421126",
-        "version" : "2.0.0"
+        "revision" : "d4289da23e978f37c344ea6a386e5546e2466294",
+        "version" : "2.1.0"
       }
     },
     {
@@ -147,19 +138,10 @@
     {
       "identity" : "nuke",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kean/Nuke.git",
+      "location" : "https://github.com/kean/Nuke",
       "state" : {
-        "revision" : "a002b7fd786f2df2ed4333fe73a9727499fd9d97",
-        "version" : "10.11.2"
-      }
-    },
-    {
-      "identity" : "nukeui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kean/NukeUI",
-      "state" : {
-        "revision" : "db55022a8e483774ebbf3568727071477546d9ea",
-        "version" : "0.8.3"
+        "branch" : "master",
+        "revision" : "0d8a0dc3cca7432a6772ec546a7e5e1b20103bda"
       }
     },
     {
@@ -167,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "104a53d62c55aa5794faf30b29ccad319653b552",
-        "version" : "3.4.5"
+        "revision" : "449c80b4c539cfd439a4efddd4c920bf0368bb1c",
+        "version" : "3.4.9"
       }
     },
     {
@@ -257,8 +239,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "fa0fcd43f272a260e7f734f23e6dc55e16fcae0a",
-        "version" : "1.19.1"
+        "revision" : "b8230909dedc640294d7324d37f4c91ad3dcf177",
+        "version" : "1.20.1"
       }
     },
     {
@@ -267,7 +249,16 @@
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7ef0df639079491ee1aaf6b83b6fd4d08df80393"
+        "revision" : "d3cbf32788250741d397cfb5bcd532c37aa1096d"
+      }
+    },
+    {
+      "identity" : "swiftuipager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fermoya/SwiftUIPager",
+      "state" : {
+        "revision" : "4ddc04c801aac143090bb14cf26603a3bf9c74cb",
+        "version" : "2.5.0"
       }
     },
     {

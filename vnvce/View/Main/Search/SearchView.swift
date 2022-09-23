@@ -34,7 +34,7 @@ struct SearchView: View {
         ZStack {
             if searchVM.show {
                 BlurView(style: .regular)
-                    .cornerRadius(UIDevice.current.screenCornerRadius(), style: .continuous)
+                    .cornerRadius(UIDevice.current.screenCornerRadius, style: .continuous)
                     .onTapGesture(perform: hideKeyboard)
                     .transition(.move(edge: .bottom))
             }
@@ -104,7 +104,7 @@ struct SearchView: View {
         } label: {
             HStack(spacing: 10) {
                 if let profilepicture = user.profilePicture {
-                    LazyImage(source: URL(string: profilepicture.url)) { state in
+                    LazyImage(url: URL(string: profilepicture.url)) { state in
                         if let uiImage = state.imageContainer?.image {
                             Image(uiImage: uiImage)
                                 .resizable()

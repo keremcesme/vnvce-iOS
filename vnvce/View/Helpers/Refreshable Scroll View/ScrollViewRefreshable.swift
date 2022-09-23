@@ -151,7 +151,7 @@ class ScrollViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     
     // MARK: Adding Gesture
     func addGesture() {
-        let pangGesture = UIPanGestureRecognizer(target: self, action: #selector(onGestureChange(gesture:)))
+        let pangGesture = UIPanGestureRecognizer(target: self, action: #selector(onGestureChange))
         pangGesture.delegate = self
         rootController().view.addGestureRecognizer(pangGesture)
     }
@@ -175,7 +175,7 @@ class ScrollViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     @objc
     func onGestureChange(gesture: UIPanGestureRecognizer) {
         if gesture.state == .cancelled || gesture.state == .ended {
-            print("User Released Touch")
+//            print("User Released Touch")
             if !isRefreshing {
                 if scrollOffset.y > 100 {
                     isEligible = true

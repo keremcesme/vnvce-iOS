@@ -92,7 +92,8 @@ private extension StorageAPI {
         task.observe(.success) { _ in
             ref.downloadURL { url, error in
                 guard error == nil, let url = url?.absoluteString else { return }
-                let media = PostMediaPayload(type: .image, name: name, url: url)
+                let ratio: Float = Float(image.size.height / image.size.width)
+                let media = PostMediaPayload(type: .image, name: name, ratio: ratio, url: url)
                 return completion(.success(media), 95)
             }
         }

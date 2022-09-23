@@ -70,7 +70,9 @@ struct TabBar: View {
     @ViewBuilder
     private func ShareButton(height: CGFloat) -> some View {
         Button {
-            uploadPostVM.showUploadPostView = true
+            DispatchQueue.main.async {
+                uploadPostVM.showUploadPostView = true
+            }
         } label: {
             GeometryReader{g in
                 ZStack{

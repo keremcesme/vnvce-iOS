@@ -13,16 +13,13 @@ struct CurrentUserBackground: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        Background
-    }
-    
-    @ViewBuilder
-    private var Background: some View {
+//        Background
         if let url = UserDefaults.standard.value(forKey: "profilePictureURL") as? String {
             
             GeometryReader { g in
                 ZStack {
-                    LazyImage(source: URL(string: url)) { state in
+                    
+                    LazyImage(url: URL(string: url)) { state in
                         if let uiImage = state.imageContainer?.image {
                             Image(uiImage: uiImage)
                                 .resizable()
@@ -39,12 +36,6 @@ struct CurrentUserBackground: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .ignoresSafeArea()
-            
-            
-            
-            
-            
-            
         }
     }
     

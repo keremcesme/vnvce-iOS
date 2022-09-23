@@ -11,9 +11,6 @@ import Introspect
 
 // MARK: Custom View Modifier
 struct PostScrollView<Content: View>: View {
-//    typealias Action = (CGPoint) -> Void
-//    typealias ContentOffset = (CGSize) -> Void
-    
     @StateObject var scrollDelegate: PostScrollViewModel
     
     var content: Content
@@ -38,19 +35,12 @@ struct PostScrollView<Content: View>: View {
                 content
             }
             .padding(.top, UIDevice.current.statusAndNavigationBarHeight)
+            .introspectScrollView(customize: scrollDelegate.scrollViewConnector)
             .offset(coordinateSpace: "SCROLL", offset: offsetTask)
-            .introspectScrollView{ scrollView in
-                if scrollDelegate.scrollDisabled {
-                    scrollView.isScrollEnabled = false
-                } else {
-                    scrollView.isScrollEnabled = true
-                }
-            }
         }
         .coordinateSpace(name: "SCROLL")
-        .onAppear(perform: scrollDelegate.addGesture)
-        .onDisappear(perform: scrollDelegate.removeGesture)
         .onChange(of: scrollDelegate.isRefreshing, perform: onChangeIsRefreshingTask)
+        .onChange(of: scrollDelegate.isScrollEnabled, perform: scrollDelegate.onChangeIsScrollEnabled)
     }
     
     @ViewBuilder

@@ -24,22 +24,34 @@ struct ProfileView: View {
         NavigationView {
             ZStack {
                 CurrentUserBackground()
-                ScrollViewRefreshable(scrollDelegate: scrollDelegate) {
-                    LazyVStack {
-                        DetailsView
-                        PostsView(vm: postsVM)
+                ScrollViewReader { proxy in
+                    ScrollViewRefreshable(scrollDelegate: scrollDelegate) {
+                        LazyVStack {
+                            DetailsView
+                            PostsGridView(vm: postsVM)
+                        }
+                        .padding(.bottom, 75)
+                    } onRefresh: {
+                        await currentUserVM.fetchProfile()
+                        await postsVM.loadFirstPage()
                     }
-                    .padding(.bottom, 75)
-                } onRefresh: {
-                    await currentUserVM.fetchProfile()
-                    await postsVM.loadFirstPage()
+                    .onChange(of: postsVM.scrollToPostID) { id in
+                        if (postsVM.selectedPost.frame.top.height < UIDevice.current.statusAndNavigationBarHeight) || (postsVM.selectedPost.frame.bottom.height > UIScreen.main.bounds.height - UIDevice.current.bottomSafeAreaHeight() - 60) {
+                            proxy.scrollTo(id, anchor: .center)
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            postsVM.updateCurrentPostRectAfterScroll = true
+                        }
+                    }
                 }
                 .onChange(of: postsVM.selectedPost.didAppear) {
                     if !$0 {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             scrollDelegate.addGesture()
                         }
-                    } 
+                    } else {
+                        scrollDelegate.removeGesture()
+                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -81,7 +93,7 @@ struct ProfileView: View {
     private func ProfilePictureView(_ url: String) -> some View {
         GeometryReader { g in
             ZStack {
-                LazyImage(source: URL(string: url)) { state in
+                LazyImage(url: URL(string: url)) { state in
                     if let uiImage = state.imageContainer?.image {
                         Image(uiImage: uiImage)
                             .resizable()

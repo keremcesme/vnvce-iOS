@@ -18,7 +18,7 @@ class PostsViewModel: ObservableObject {
     private let imagePrefetcher: ImagePrefetcher
     private let scrollViewPrefetcher: ScrollViewPrefetcher
     
-    @Published private(set) public var postResults: Pagination<Post> = Pagination()
+    @Published public var postResults: Pagination<Post> = Pagination()
     
     @Published private(set) public var prefetcherImageURLs: [URL] = []
     
@@ -28,7 +28,12 @@ class PostsViewModel: ObservableObject {
     
     private var fetchTask: Task<Void, Never>?
     
+    @Published public var scrollToPostID = UUID()
+    @Published public var updateCurrentPostRectAfterScroll: Bool = false
+    
     @Published public var selectedPost = SelectedPost()
+    @Published public var currentPostIndex: Int = 0
+    
     
     init() {
         self.imagePrefetcher = .init()
@@ -67,21 +72,47 @@ class PostsViewModel: ObservableObject {
     
     @MainActor
     @Sendable
-    public func tapPostAction(_ value: TappedPost) async {
+    public func tapPostAction(_ value: SelectPost) async {
         if !selectedPost.didAppear {
-            selectedPost.rect = value.rect
+            selectedPost.frame = value.frame
+            selectedPost.size = value.size
             selectedPost.post = value.post
-            selectedPost.previewImage = value.image
+//            selectedPost.index = value.index
+            selectedPost.previewImage = value.previewImage
             selectedPost.didAppear = true
-            try? await Task.sleep(seconds: 0.01)
+            
+            if let index = postResults.items.firstIndex(where: {$0 == value.post}) {
+                currentPostIndex = index
+            }
+            
+//            selectedPostIndex = value.index
+            
+            
+//            print("POST ORIGIN POSITION: \(value.rect.origin.height)")
+//            let origin = value.rect.origin.height
+//            print("POST TOP POSITION: \(origin - value.rect.size.height / 2)")
+//            print("POST BOTTOM POSITION: \(value.rect.bottom.height)")
+            
+            try? await Task.sleep(seconds: 0.001)
             withAnimation(response: 0.25) {
                 self.selectedPost.show = true
             } after: {
                 self.selectedPost.ready = true
+                self.scrollToPostID = value.post.id
             }
 
         }
     }
+    
+//    @MainActor
+//    func updateCurrentPostRect(_ value: Bool, post: Post, rect: CGRect, image: UIImage) {
+//        if value && scrollToPostID == post.id {
+//            selectedPost.rect = rect
+//            selectedPost.post = post
+//            selectedPost.previewImage = image
+//            updateCurrentPostRectAfterScroll = false
+//        }
+//    }
 }
 
 // MARK: FETCH
@@ -172,13 +203,22 @@ extension PostsViewModel: ScrollViewPrefetcherDelegate {
 }
 
 extension PostsViewModel {
-    
-    typealias TappedPost = (post: Post, image: UIImage, rect: CGRect)
+    struct SelectPost {
+        var post: Post
+        var previewImage: UIImage
+        var frame: CGRect
+        var size: CGSize
+//        var topFrame: CGFloat
+//        var bottomFrame: CGFloat
+    }
     
     struct SelectedPost: Equatable {
         var post: Post? = nil
         var previewImage: UIImage = UIImage()
-        var rect: CGRect = .zero
+        var frame: CGRect = .zero
+        var size: CGSize = .zero
+        var index: Int = 0
+        
         var didAppear: Bool = false
         var show: Bool = false
         var ready: Bool = false
