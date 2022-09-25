@@ -1,31 +1,44 @@
 //
-//  PostView+NavigationBar.swift
+//  PostView+Properties+NavigationBar.swift
 //  vnvce
 //
-//  Created by Kerem Cesme on 19.09.2022.
+//  Created by Kerem Cesme on 24.09.2022.
 //
 
 import SwiftUI
-import ActionOver
 import Nuke
 import NukeUI
 
-extension PostView {
+extension PostView.PostProperties {
     
-    @ViewBuilder
-    var NavigationBar: some View {
-        BlurView(style: .systemMaterial)
-            .frame(maxWidth: .infinity)
-            .frame(height: UIDevice.current.statusAndNavigationBarHeight)
-            .overlay(alignment: .bottom) {
-                Divider()
-            }
-            .opacity(-scrollDelegate.scrollOffset.y / 10)
-            .overlay(BackButton, alignment: .bottomLeading)
+    public var navigationBarAlignment: Alignment {
+        switch postsVM.selectedPost.show {
+        case true:
+            return .top
+        case false:
+            return .center
+        }
+    }
+    
+    private func dismiss() {
+        guard let dismiss = postVM.dismiss else {
+            return
+        }
+        dismiss()
     }
     
     @ViewBuilder
-    private var BackButton: some View {
+    public var NavigationBar: some View {
+        BlurView(style: .systemMaterial)
+            .frame(maxWidth: .infinity)
+            .frame(height: UIDevice.current.statusAndNavigationBarHeight)
+            .overlay(Divider(), alignment: .bottom)
+            .opacity(-postVM.scrollOffset.y / 10)
+            .overlay(NavigationBar_Leading, alignment: .bottomLeading)
+    }
+    
+    @ViewBuilder
+    private var NavigationBar_Leading: some View {
         Button(action: dismiss) {
             HStack {
                 Image(systemName: "chevron.backward")
@@ -33,7 +46,7 @@ extension PostView {
                     .font(.system(size: 20, weight: .medium, design: .default))
                     .frame(height: 44)
                     .padding(.leading, 17)
-                if let url = URL(string: postsVM.selectedPost.post!.owner.owner.profilePicture!.url) {
+                if let url = currentUserVM.user?.profilePicture?.returnURL {
                     LazyImage(url: url) { state in
                         if let uiImage = state.imageContainer?.image {
                             Image(uiImage: uiImage)
@@ -48,7 +61,7 @@ extension PostView {
                     .priority(.normal)
                 }
             }
-            
         }
     }
+    
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PureSwiftUIDesign
 
 struct Post: Decodable, Hashable {
     let id: UUID
@@ -35,6 +36,7 @@ struct Post: Decodable, Hashable {
         let storageLocation: UUID
     }
 }
+
 extension Post.Media {
     var returnURL: URL {
         switch mediaType {
@@ -43,6 +45,14 @@ extension Post.Media {
         case .movie:
             return URL(string: thumbnailURL!)!
         }
+    }
+}
+
+extension Post.Media {
+    var returnSize: CGSize {
+        let screenWidth = UIScreen.main.bounds.width
+        
+        return CGSize(screenWidth, screenWidth * ratio.asCGFloat)
     }
 }
 

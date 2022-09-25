@@ -24,3 +24,4 @@ struct User: Codable, Equatable, Hashable {
         let profilePicture: ProfilePicture?
     }
 }
+

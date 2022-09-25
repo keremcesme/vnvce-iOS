@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C0D3EB528D8DFE9008BDC81 /* WithAnimation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB428D8DFE9008BDC81 /* WithAnimation+Extensions.swift */; };
 		0C0D3EB728D8E022008BDC81 /* CustomAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB628D8E022008BDC81 /* CustomAnimations.swift */; };
-		0C0D3EB928D8E2B7008BDC81 /* PostView+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB828D8E2B7008BDC81 /* PostView+Modifier.swift */; };
-		0C0D3EBB28D8E592008BDC81 /* PostView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EBA28D8E592008BDC81 /* PostView+Preview.swift */; };
-		0C0D3EBD28D8F78B008BDC81 /* PostView+NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EBC28D8F78B008BDC81 /* PostView+NavigationBar.swift */; };
+		0C0D3EB928D8E2B7008BDC81 /* PostView+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */; };
 		0C0D3EBF28D907E2008BDC81 /* PostScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EBE28D907E2008BDC81 /* PostScrollView.swift */; };
 		0C12E7C128AEB657006FE3E7 /* URLBuilder+Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12E7C028AEB657006FE3E7 /* URLBuilder+Auth.swift */; };
 		0C12E7C928AEB9BD006FE3E7 /* PhoneNumberAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12E7C828AEB9BD006FE3E7 /* PhoneNumberAvailability.swift */; };
@@ -41,7 +39,6 @@
 		0C3A492128D0A345005FBB80 /* URLBuilder+Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3A492028D0A345005FBB80 /* URLBuilder+Post.swift */; };
 		0C43382228D8B076003C48B6 /* TaskIf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382128D8B076003C48B6 /* TaskIf.swift */; };
 		0C43382528D8B1B7003C48B6 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382428D8B1B7003C48B6 /* PostView.swift */; };
-		0C43382728D8B1C6003C48B6 /* PostScrollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382628D8B1C6003C48B6 /* PostScrollViewModel.swift */; };
 		0C43382A28D8D121003C48B6 /* CustomTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382928D8D121003C48B6 /* CustomTransitions.swift */; };
 		0C48CE2D28CD119B00D95BF1 /* SearchRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C48CE2C28CD119B00D95BF1 /* SearchRoutes.swift */; };
 		0C48CE2F28CD124700D95BF1 /* URLBuilder+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C48CE2E28CD124700D95BF1 /* URLBuilder+Search.swift */; };
@@ -49,6 +46,11 @@
 		0C48CE3528CD1A3200D95BF1 /* SearchUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C48CE3428CD1A3200D95BF1 /* SearchUserResponse.swift */; };
 		0C48CE3728CD1A5600D95BF1 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C48CE3628CD1A5600D95BF1 /* PageMetadata.swift */; };
 		0C5002A428CD3B3D009E6C9A /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5002A328CD3B3D009E6C9A /* UserProfileView.swift */; };
+		0C5A45A828DF183D009D2CF9 /* PostView+TimerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A45A728DF183D009D2CF9 /* PostView+TimerBar.swift */; };
+		0C5A45AC28DF39B0009D2CF9 /* PostViewModel+Scroll+Refresh+Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A45AB28DF39B0009D2CF9 /* PostViewModel+Scroll+Refresh+Gesture.swift */; };
+		0C5A45AE28DF39DF009D2CF9 /* PostViewModel+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A45AD28DF39DF009D2CF9 /* PostViewModel+Timer.swift */; };
+		0C5A45B128DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A45B028DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift */; };
+		0C5A45B328DF40E9009D2CF9 /* PostView+Properties+PreviewImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A45B228DF40E9009D2CF9 /* PostView+Properties+PreviewImage.swift */; };
 		0C5FA01028A6EF86000BB20F /* OTPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5FA00F28A6EF86000BB20F /* OTPViewModel.swift */; };
 		0C5FA01328A6F6BB000BB20F /* Focuser in Frameworks */ = {isa = PBXBuildFile; productRef = 0C5FA01228A6F6BB000BB20F /* Focuser */; };
 		0C607EAE28CB56E50078D351 /* ScrollViewRefreshable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C607EAD28CB56E40078D351 /* ScrollViewRefreshable.swift */; };
@@ -232,7 +234,6 @@
 		0CCE6A4D28A3CAC100D65D56 /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCE6A4C28A3CAC100D65D56 /* NotificationCenter.swift */; };
 		0CCE6A4F28A3CB9400D65D56 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCE6A4E28A3CB9400D65D56 /* AppState.swift */; };
 		0CCEC4E428DE27FC00BE1C6C /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEC4E328DE27FC00BE1C6C /* PostViewModel.swift */; };
-		0CD1521C28D9095E00C6E3D3 /* PostScrollViewModelOLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1521B28D9095E00C6E3D3 /* PostScrollViewModelOLD.swift */; };
 		0CD1521E28D9157A00C6E3D3 /* PostView+Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1521D28D9157900C6E3D3 /* PostView+Media.swift */; };
 		0CD614F428AE72B400734002 /* TextFieldFocusBool+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD614F328AE72B400734002 /* TextFieldFocusBool+Extension.swift */; };
 		0CD614F628AE74C100734002 /* SMSTimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD614F528AE74C100734002 /* SMSTimerController.swift */; };
@@ -294,9 +295,7 @@
 /* Begin PBXFileReference section */
 		0C0D3EB428D8DFE9008BDC81 /* WithAnimation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WithAnimation+Extensions.swift"; sourceTree = "<group>"; };
 		0C0D3EB628D8E022008BDC81 /* CustomAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimations.swift; sourceTree = "<group>"; };
-		0C0D3EB828D8E2B7008BDC81 /* PostView+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Modifier.swift"; sourceTree = "<group>"; };
-		0C0D3EBA28D8E592008BDC81 /* PostView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Preview.swift"; sourceTree = "<group>"; };
-		0C0D3EBC28D8F78B008BDC81 /* PostView+NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+NavigationBar.swift"; sourceTree = "<group>"; };
+		0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Properties.swift"; sourceTree = "<group>"; };
 		0C0D3EBE28D907E2008BDC81 /* PostScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScrollView.swift; sourceTree = "<group>"; };
 		0C12E7C028AEB657006FE3E7 /* URLBuilder+Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+Auth.swift"; sourceTree = "<group>"; };
 		0C12E7C828AEB9BD006FE3E7 /* PhoneNumberAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberAvailability.swift; sourceTree = "<group>"; };
@@ -324,7 +323,6 @@
 		0C3A492028D0A345005FBB80 /* URLBuilder+Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+Post.swift"; sourceTree = "<group>"; };
 		0C43382128D8B076003C48B6 /* TaskIf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskIf.swift; sourceTree = "<group>"; };
 		0C43382428D8B1B7003C48B6 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
-		0C43382628D8B1C6003C48B6 /* PostScrollViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScrollViewModel.swift; sourceTree = "<group>"; };
 		0C43382928D8D121003C48B6 /* CustomTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitions.swift; sourceTree = "<group>"; };
 		0C48CE2C28CD119B00D95BF1 /* SearchRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRoutes.swift; sourceTree = "<group>"; };
 		0C48CE2E28CD124700D95BF1 /* URLBuilder+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+Search.swift"; sourceTree = "<group>"; };
@@ -332,6 +330,11 @@
 		0C48CE3428CD1A3200D95BF1 /* SearchUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserResponse.swift; sourceTree = "<group>"; };
 		0C48CE3628CD1A5600D95BF1 /* PageMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		0C5002A328CD3B3D009E6C9A /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		0C5A45A728DF183D009D2CF9 /* PostView+TimerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+TimerBar.swift"; sourceTree = "<group>"; };
+		0C5A45AB28DF39B0009D2CF9 /* PostViewModel+Scroll+Refresh+Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostViewModel+Scroll+Refresh+Gesture.swift"; sourceTree = "<group>"; };
+		0C5A45AD28DF39DF009D2CF9 /* PostViewModel+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostViewModel+Timer.swift"; sourceTree = "<group>"; };
+		0C5A45B028DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Properties+NavigationBar.swift"; sourceTree = "<group>"; };
+		0C5A45B228DF40E9009D2CF9 /* PostView+Properties+PreviewImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Properties+PreviewImage.swift"; sourceTree = "<group>"; };
 		0C5FA00F28A6EF86000BB20F /* OTPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPViewModel.swift; sourceTree = "<group>"; };
 		0C607EAD28CB56E40078D351 /* ScrollViewRefreshable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewRefreshable.swift; sourceTree = "<group>"; };
 		0C607EAF28CB8CBA0078D351 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -550,7 +553,6 @@
 		0CCE6A4C28A3CAC100D65D56 /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		0CCE6A4E28A3CB9400D65D56 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		0CCEC4E328DE27FC00BE1C6C /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
-		0CD1521B28D9095E00C6E3D3 /* PostScrollViewModelOLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScrollViewModelOLD.swift; sourceTree = "<group>"; };
 		0CD1521D28D9157900C6E3D3 /* PostView+Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Media.swift"; sourceTree = "<group>"; };
 		0CD614F328AE72B400734002 /* TextFieldFocusBool+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextFieldFocusBool+Extension.swift"; sourceTree = "<group>"; };
 		0CD614F528AE74C100734002 /* SMSTimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSTimerController.swift; sourceTree = "<group>"; };
@@ -800,10 +802,9 @@
 			isa = PBXGroup;
 			children = (
 				0C43382428D8B1B7003C48B6 /* PostView.swift */,
+				0C5A45AF28DF3DC3009D2CF9 /* PostView+Properties */,
 				0CD1521D28D9157900C6E3D3 /* PostView+Media.swift */,
-				0C0D3EB828D8E2B7008BDC81 /* PostView+Modifier.swift */,
-				0C0D3EBA28D8E592008BDC81 /* PostView+Preview.swift */,
-				0C0D3EBC28D8F78B008BDC81 /* PostView+NavigationBar.swift */,
+				0C5A45A728DF183D009D2CF9 /* PostView+TimerBar.swift */,
 				0C0D3EBE28D907E2008BDC81 /* PostScrollView.swift */,
 			);
 			path = Post;
@@ -849,6 +850,34 @@
 				0C5002A328CD3B3D009E6C9A /* UserProfileView.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		0C5A45A928DF38E3009D2CF9 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				0CCEC4E328DE27FC00BE1C6C /* PostViewModel.swift */,
+				0C5A45AB28DF39B0009D2CF9 /* PostViewModel+Scroll+Refresh+Gesture.swift */,
+				0C5A45AD28DF39DF009D2CF9 /* PostViewModel+Timer.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		0C5A45AA28DF38EA009D2CF9 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+				0C8089FA28D88E36000E5DEC /* PostsViewModel.swift */,
+			);
+			path = Posts;
+			sourceTree = "<group>";
+		};
+		0C5A45AF28DF3DC3009D2CF9 /* PostView+Properties */ = {
+			isa = PBXGroup;
+			children = (
+				0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */,
+				0C5A45B028DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift */,
+				0C5A45B228DF40E9009D2CF9 /* PostView+Properties+PreviewImage.swift */,
+			);
+			path = "PostView+Properties";
 			sourceTree = "<group>";
 		};
 		0C607EB128CB8D450078D351 /* Search */ = {
@@ -1153,11 +1182,9 @@
 		0C92CEEF28DB511600C781E0 /* Post */ = {
 			isa = PBXGroup;
 			children = (
-				0C8089FA28D88E36000E5DEC /* PostsViewModel.swift */,
-				0CCEC4E328DE27FC00BE1C6C /* PostViewModel.swift */,
+				0C5A45AA28DF38EA009D2CF9 /* Posts */,
+				0C5A45A928DF38E3009D2CF9 /* Post */,
 				0CFC50BF28DC8FB2008730A5 /* PostsScrollViewModel.swift */,
-				0C43382628D8B1C6003C48B6 /* PostScrollViewModel.swift */,
-				0CD1521B28D9095E00C6E3D3 /* PostScrollViewModelOLD.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1964,6 +1991,7 @@
 				0CCE6A4D28A3CAC100D65D56 /* NotificationCenter.swift in Sources */,
 				0C80CB9C28CE209F00D79D94 /* YPPermissionManager.swift in Sources */,
 				0C80CBB828CE209F00D79D94 /* YPLoaders.swift in Sources */,
+				0C5A45AC28DF39B0009D2CF9 /* PostViewModel+Scroll+Refresh+Gesture.swift in Sources */,
 				0CBA650628A6BCA6006DCD9B /* CreateAccountViewModel.swift in Sources */,
 				0C80CB7C28CE209F00D79D94 /* YPSelectionsGalleryVC.swift in Sources */,
 				0CC1493228B3AAFD00AB724D /* VerifySMSPayload.swift in Sources */,
@@ -1972,6 +2000,7 @@
 				0C80CB8D28CE209F00D79D94 /* YPAssetViewContainer.swift in Sources */,
 				0C80CBA628CE209F00D79D94 /* PHCachingImageManager+Extensions.swift in Sources */,
 				0C80CB7B28CE209F00D79D94 /* YPTrimError.swift in Sources */,
+				0C5A45B328DF40E9009D2CF9 /* PostView+Properties+PreviewImage.swift in Sources */,
 				0C80CBB328CE209F00D79D94 /* IndexSet+Extensions.swift in Sources */,
 				0C12EF4C28AFCEC5007C314E /* ReserveUsernamePayload.swift in Sources */,
 				0C80CB6928CE209F00D79D94 /* YPFilter.swift in Sources */,
@@ -2018,7 +2047,7 @@
 				0C2D154128B45FBC00690C6D /* CAProfilePictureView.swift in Sources */,
 				0C7CB61328D0A52C00034F14 /* PostMediaPayload.swift in Sources */,
 				0CD9E7BB28C8F3E6007E25F9 /* RefreshableScrollView.swift in Sources */,
-				0C0D3EB928D8E2B7008BDC81 /* PostView+Modifier.swift in Sources */,
+				0C0D3EB928D8E2B7008BDC81 /* PostView+Properties.swift in Sources */,
 				0C80CBA528CE209F00D79D94 /* UINavigationBar+Extensions.swift in Sources */,
 				0CBA651F28A6ED4F006DCD9B /* CAVerifyPhoneNumberView.swift in Sources */,
 				0C80CB6C28CE209F00D79D94 /* YPImageSize.swift in Sources */,
@@ -2053,7 +2082,6 @@
 				0CD9E7B828C8E96C007E25F9 /* CurrentUserBackground.swift in Sources */,
 				0C80CB8328CE209F00D79D94 /* YPLibraryViewDelegate.swift in Sources */,
 				0C80CB6228CE209F00D79D94 /* YPVideoFiltersVC.swift in Sources */,
-				0CD1521C28D9095E00C6E3D3 /* PostScrollViewModelOLD.swift in Sources */,
 				0C80CB9328CE209F00D79D94 /* YPAlbum.swift in Sources */,
 				0CBA650A28A6BFE9006DCD9B /* NavigationController.swift in Sources */,
 				0C80CB9B28CE209F00D79D94 /* YPPermissionCheckable.swift in Sources */,
@@ -2102,6 +2130,7 @@
 				0C80CBBB28CE216000D79D94 /* PostImagePickerView.swift in Sources */,
 				0C12EF7728B01B27007C314E /* SMSOTPAttempt.swift in Sources */,
 				0CC1494328B3B7C000AB724D /* TaskIsCancelled.swift in Sources */,
+				0C5A45B128DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift in Sources */,
 				0CC1495528B3F6A600AB724D /* URLBuilder+Me.swift in Sources */,
 				0C80CB9028CE209F00D79D94 /* YPAlbumView.swift in Sources */,
 				0C80CB7528CE209F00D79D94 /* YPLibrarySelection.swift in Sources */,
@@ -2116,9 +2145,9 @@
 				0C80CB9728CE209F00D79D94 /* YPPhotoCaptureHelper.swift in Sources */,
 				0C80CBA028CE209F00D79D94 /* AVMutableComposition+Extensions.swift in Sources */,
 				0C7CB61728D0A57300034F14 /* PostType.swift in Sources */,
+				0C5A45AE28DF39DF009D2CF9 /* PostViewModel+Timer.swift in Sources */,
 				0C607EAE28CB56E50078D351 /* ScrollViewRefreshable.swift in Sources */,
 				0CB6004528B471DC008849BB /* Grid.swift in Sources */,
-				0C0D3EBD28D8F78B008BDC81 /* PostView+NavigationBar.swift in Sources */,
 				0C3A491F28D0A30D005FBB80 /* PostRoutes.swift in Sources */,
 				0CD614F628AE74C100734002 /* SMSTimerController.swift in Sources */,
 				0C2D154928B46C1300690C6D /* LibraryAsset.swift in Sources */,
@@ -2131,7 +2160,6 @@
 				0C80CBB628CE209F00D79D94 /* YPPhotoSaver.swift in Sources */,
 				0C80CB6D28CE209F00D79D94 /* YPImagePickerConfiguration.swift in Sources */,
 				0C2D154428B469AF00690C6D /* ProfilePictureLibraryViewModel.swift in Sources */,
-				0C0D3EBB28D8E592008BDC81 /* PostView+Preview.swift in Sources */,
 				0CD6150828AE92C300734002 /* HTTPStatus.swift in Sources */,
 				0C5002A428CD3B3D009E6C9A /* UserProfileView.swift in Sources */,
 				0C80CBA128CE209F00D79D94 /* AVAsset+Extensions.swift in Sources */,
@@ -2145,12 +2173,12 @@
 				0CEC89AC28B558910036E939 /* FirebaseStoragePathBuilder.swift in Sources */,
 				0CC1493928B3ABE500AB724D /* ReserveUsernameResult.swift in Sources */,
 				0CCE69EA28A3C3A500D65D56 /* vnvceApp.swift in Sources */,
-				0C43382728D8B1C6003C48B6 /* PostScrollViewModel.swift in Sources */,
 				0CC1493728B3ABD100AB724D /* ReserveUsernameError.swift in Sources */,
 				0C80CBB428CE209F00D79D94 /* YPHelper.swift in Sources */,
 				0C48CE3728CD1A5600D95BF1 /* PageMetadata.swift in Sources */,
 				0CC1492D28B3AA6300AB724D /* SendSMSOTPError.swift in Sources */,
 				0C80CB9128CE209F00D79D94 /* YPAlbumVC.swift in Sources */,
+				0C5A45A828DF183D009D2CF9 /* PostView+TimerBar.swift in Sources */,
 				0CD9E7B228C8DE0F007E25F9 /* CurrentUserViewModel.swift in Sources */,
 				0C80CBA328CE209F00D79D94 /* UIColor+Extensions.swift in Sources */,
 				0CBA651828A6D652006DCD9B /* UsernameRegex.swift in Sources */,

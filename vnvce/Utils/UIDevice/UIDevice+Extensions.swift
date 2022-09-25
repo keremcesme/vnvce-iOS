@@ -108,4 +108,13 @@ extension UIDevice {
         return 44 + UIDevice.current.statusBarHeight()
     }
     
+    var postTimerBarBottomPadding: CGFloat {
+        if UIDevice.current.hasNotch() {
+            return UIDevice.current.bottomSafeAreaHeight()
+        } else {
+            return UIDevice.current.bottomSafeAreaHeight() + 15
+        }
+        
+    }
+    
 }

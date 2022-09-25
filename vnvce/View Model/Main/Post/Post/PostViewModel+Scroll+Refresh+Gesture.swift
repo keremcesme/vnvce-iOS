@@ -1,40 +1,13 @@
 //
-//  PostScrollViewModel.swift
+//  PostViewModel+Scroll+Refresh+Gesture.swift
 //  vnvce
 //
-//  Created by Kerem Cesme on 19.09.2022.
+//  Created by Kerem Cesme on 24.09.2022.
 //
 
 import SwiftUI
 
-typealias DismissPostViewAction = () -> Void
-
-class PostScrollViewModel: NSObject, ObservableObject {
-    @Published public var scrollView: UIScrollView!
-    
-    // MARK: Properties
-    @Published var isEligible: Bool = false
-    @Published var isRefreshing: Bool = false
-    
-    // MARK: Ofsets and Progress
-    @Published public var scrollOffset: CGPoint = .zero
-    @Published private var scrollStartOffset: CGFloat = 0
-    
-    @Published var isScrollEnabled: Bool = true
-    
-    @Published public var contentOffset: CGFloat = 0
-    @Published public var progress: CGFloat = 0
-    
-    @Published public var offset: CGSize = .zero
-    
-    @Published private(set) public var onDragging: Bool = false
-    
-    private var dismiss: DismissPostViewAction!
-    
-}
-
-extension PostScrollViewModel: UIGestureRecognizerDelegate {
-    
+extension PostViewModel: UIGestureRecognizerDelegate {
     public func scrollViewConnector(_ scrollView: UIScrollView) {
         self.scrollView = scrollView
     }
@@ -106,7 +79,9 @@ extension PostScrollViewModel: UIGestureRecognizerDelegate {
             DispatchQueue.main.async {
                 if self.onDragging {
                     if width >= 50 || height >= 50 {
-                        self.dismiss()
+                        if let dismiss = self.dismiss {
+                            dismiss()
+                        }
                     } else {
                         let animation: Animation = .spring(response: 0.25, dampingFraction: 1, blendDuration: 0)
                         withAnimation(animation) {

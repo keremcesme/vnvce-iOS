@@ -11,18 +11,18 @@ import Introspect
 
 // MARK: Custom View Modifier
 struct PostScrollView<Content: View>: View {
-    @StateObject var scrollDelegate: PostScrollViewModel
+    @StateObject var postVM: PostViewModel
     
     var content: Content
     
     var onRefresh: () async -> Void
     
     init(
-        scrollDelegate: PostScrollViewModel,
+        _ postVM: PostViewModel,
         @ViewBuilder content: @escaping () -> Content,
         onRefresh: @escaping () async -> Void
     ) {
-        self._scrollDelegate = StateObject(wrappedValue: scrollDelegate)
+        self._postVM = StateObject(wrappedValue: postVM)
         self.content = content()
         self.onRefresh = onRefresh
     }
@@ -35,52 +35,52 @@ struct PostScrollView<Content: View>: View {
                 content
             }
             .padding(.top, UIDevice.current.statusAndNavigationBarHeight)
-            .introspectScrollView(customize: scrollDelegate.scrollViewConnector)
+            .introspectScrollView(customize: postVM.scrollViewConnector)
             .offset(coordinateSpace: "SCROLL", offset: offsetTask)
         }
         .coordinateSpace(name: "SCROLL")
-        .onChange(of: scrollDelegate.isRefreshing, perform: onChangeIsRefreshingTask)
-        .onChange(of: scrollDelegate.isScrollEnabled, perform: scrollDelegate.onChangeIsScrollEnabled)
+        .onChange(of: postVM.isRefreshing, perform: onChangeIsRefreshingTask)
+        .onChange(of: postVM.isScrollEnabled, perform: postVM.onChangeIsScrollEnabled)
     }
     
     @ViewBuilder
     private var IndicatorView: some View {
         ProgressView()
-            .scaleEffect(scrollDelegate.isEligible ? 1.5 : 0.001)
-            .animation(.easeInOut(duration: 0.2), value: scrollDelegate.isEligible)
+            .scaleEffect(postVM.isEligible ? 1.5 : 0.001)
+            .animation(.easeInOut(duration: 0.2), value: postVM.isEligible)
             .overlay{
                 Image("pointingDownEmoji")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 24, height: 24, alignment: .center)
-                    .scaleEffect(scrollDelegate.progress)
-                    .scaleEffect(scrollDelegate.isEligible ? 0.001 : 1)
-                    .opacity(scrollDelegate.isEligible ? 0 : 1)
-                    .animation(.easeInOut(duration: 0.25), value: scrollDelegate.isEligible)
+                    .scaleEffect(postVM.progress)
+                    .scaleEffect(postVM.isEligible ? 0.001 : 1)
+                    .opacity(postVM.isEligible ? 0 : 1)
+                    .animation(.easeInOut(duration: 0.25), value: postVM.isEligible)
             }
-            .frame(height: 50 * scrollDelegate.progress)
-            .opacity(scrollDelegate.progress)
+            .frame(height: 50 * postVM.progress)
+            .opacity(postVM.progress)
             .offset(y: yOffset)
     }
     
     private func offsetTask(offset: CGFloat) {
         // MARK: Storing Content Offset
-        scrollDelegate.contentOffset = offset
+        postVM.contentOffset = offset
 //        if let action = self.offset {
 //            action(scrollDelegate.scrollOffset)
 //        }
         
         // MARK: Stopping The Progress When Its Elgible For Refresh
-        if !scrollDelegate.isEligible {
+        if !postVM.isEligible {
             var progress = offset / 100
             progress = (progress < 0 ? 0 : progress)
             progress = (progress > 1 ? 1 : progress)
-            scrollDelegate.scrollOffset.y = offset
-            scrollDelegate.progress = progress
+            postVM.scrollOffset.y = offset
+            postVM.progress = progress
         }
         
-        if scrollDelegate.isEligible && !scrollDelegate.isRefreshing {
-            scrollDelegate.isRefreshing = true
+        if postVM.isEligible && !postVM.isRefreshing {
+            postVM.isRefreshing = true
             // MARK: Haptic Feedback
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         }
@@ -93,25 +93,25 @@ struct PostScrollView<Content: View>: View {
                 await onRefresh()
                 try? await Task.sleep(seconds: 0.5)
                 withAnimation(.easeInOut(duration: 0.25)) {
-                    scrollDelegate.progress = 0
-                    scrollDelegate.isEligible = false
-                    scrollDelegate.isRefreshing = false
-                    scrollDelegate.scrollOffset.y = 0
+                    postVM.progress = 0
+                    postVM.isEligible = false
+                    postVM.isRefreshing = false
+                    postVM.scrollOffset.y = 0
                 }
             }
         }
     }
     
     private var yOffset: CGFloat {
-        if scrollDelegate.isEligible {
-            let contentOffset = scrollDelegate.contentOffset
+        if postVM.isEligible {
+            let contentOffset = postVM.contentOffset
             if contentOffset < 0 {
                 return 0
             } else {
                 return -contentOffset
             }
         } else {
-            let scrollOffset = scrollDelegate.scrollOffset.y
+            let scrollOffset = postVM.scrollOffset.y
             if scrollOffset < 0 {
                 return 0
             } else {

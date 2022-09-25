@@ -12,3 +12,9 @@ struct ProfilePicture: Codable, Equatable, Hashable {
     let url: String
     let name: String
 }
+
+extension ProfilePicture {
+    var returnURL: URL {
+        return URL(string: url)!
+    }
+}

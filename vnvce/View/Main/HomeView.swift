@@ -50,10 +50,7 @@ struct HomeView: View {
                 // MARK: Other Views
                 // ...
                 SearchView()
-//                PostView3(postsVM: postsVM)
-//                PostsPaginationRootView(postsVM: postsVM)
-                PostRootView(postsVM: postsVM)
-//                PostsRootView(postsVM: postsVM)
+                PostRootView(postsVM)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
