@@ -191,7 +191,7 @@ extension SearchView {
                     .accentColor(.blue)
                     .disableAutocorrection(true)
                     .onSubmit {
-                        Task(operation: searchVM.loadFirstPage)
+//                        Task(operation: searchVM.loadFirstPage)
                     }
             }
             .padding(.horizontal, 15)
@@ -241,14 +241,14 @@ extension SearchView {
             }
         }
         .onChange(of: searchVM.searchField) {
+            searchVM.searchTerm = $0
             if $0.isEmpty {
                 searchVM.isRunning = false
             } else {
                 searchVM.isRunning = true
             }
-            
         }
-        .onReceive(searchVM.$searchField.debounce(for: 0.8, scheduler: RunLoop.main)) { _ in
+        .onReceive(searchVM.$searchTerm.debounce(for: 0.5, scheduler: RunLoop.main)) { _ in
             Task(operation: searchVM.loadFirstPage)
         }
     }

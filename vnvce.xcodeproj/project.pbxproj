@@ -11,6 +11,7 @@
 		0C0D3EB728D8E022008BDC81 /* CustomAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB628D8E022008BDC81 /* CustomAnimations.swift */; };
 		0C0D3EB928D8E2B7008BDC81 /* PostView+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */; };
 		0C0D3EBF28D907E2008BDC81 /* PostScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EBE28D907E2008BDC81 /* PostScrollView.swift */; };
+		0C0FC42828E2F33100179723 /* AsyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0FC42728E2F33100179723 /* AsyncButton.swift */; };
 		0C12E7C128AEB657006FE3E7 /* URLBuilder+Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12E7C028AEB657006FE3E7 /* URLBuilder+Auth.swift */; };
 		0C12E7C928AEB9BD006FE3E7 /* PhoneNumberAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12E7C828AEB9BD006FE3E7 /* PhoneNumberAvailability.swift */; };
 		0C12E7CC28AEC258006FE3E7 /* NIO in Frameworks */ = {isa = PBXBuildFile; productRef = 0C12E7CB28AEC258006FE3E7 /* NIO */; };
@@ -57,6 +58,8 @@
 		0C607EB028CB8CBA0078D351 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C607EAF28CB8CBA0078D351 /* SearchViewModel.swift */; };
 		0C607EB328CB8D530078D351 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C607EB228CB8D530078D351 /* SearchView.swift */; };
 		0C607EB728CBAD420078D351 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C607EB628CBAD420078D351 /* KeyboardController.swift */; };
+		0C79A4EB28E071320055EDD7 /* RelationshipRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C79A4EA28E071320055EDD7 /* RelationshipRoutes.swift */; };
+		0C79A4ED28E0758C0055EDD7 /* URLBuilder+Relationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C79A4EC28E0758C0055EDD7 /* URLBuilder+Relationship.swift */; };
 		0C7CB60C28D0A44A00034F14 /* PostAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7CB60B28D0A44A00034F14 /* PostAPI.swift */; };
 		0C7CB61128D0A4FF00034F14 /* UploadPostPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7CB61028D0A4FF00034F14 /* UploadPostPayload.swift */; };
 		0C7CB61328D0A52C00034F14 /* PostMediaPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7CB61228D0A52C00034F14 /* PostMediaPayload.swift */; };
@@ -235,6 +238,11 @@
 		0CCE6A4F28A3CB9400D65D56 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCE6A4E28A3CB9400D65D56 /* AppState.swift */; };
 		0CCEC4E428DE27FC00BE1C6C /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEC4E328DE27FC00BE1C6C /* PostViewModel.swift */; };
 		0CD1521E28D9157A00C6E3D3 /* PostView+Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1521D28D9157900C6E3D3 /* PostView+Media.swift */; };
+		0CD5960028E0769E00550E2D /* RelationshipAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD595FF28E0769E00550E2D /* RelationshipAPI.swift */; };
+		0CD5960328E0776500550E2D /* Relationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD5960228E0776500550E2D /* Relationship.swift */; };
+		0CD5960528E0CACB00550E2D /* UserProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD5960428E0CACB00550E2D /* UserProfileViewModel.swift */; };
+		0CD5960928E0CC3500550E2D /* UserProfileBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD5960828E0CC3500550E2D /* UserProfileBackground.swift */; };
+		0CD5960B28E0D0FD00550E2D /* UserProfileRelationshipButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD5960A28E0D0FD00550E2D /* UserProfileRelationshipButton.swift */; };
 		0CD614F428AE72B400734002 /* TextFieldFocusBool+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD614F328AE72B400734002 /* TextFieldFocusBool+Extension.swift */; };
 		0CD614F628AE74C100734002 /* SMSTimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD614F528AE74C100734002 /* SMSTimerController.swift */; };
 		0CD614F828AE773A00734002 /* WebConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD614F728AE773A00734002 /* WebConstants.swift */; };
@@ -297,6 +305,7 @@
 		0C0D3EB628D8E022008BDC81 /* CustomAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimations.swift; sourceTree = "<group>"; };
 		0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Properties.swift"; sourceTree = "<group>"; };
 		0C0D3EBE28D907E2008BDC81 /* PostScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScrollView.swift; sourceTree = "<group>"; };
+		0C0FC42728E2F33100179723 /* AsyncButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButton.swift; sourceTree = "<group>"; };
 		0C12E7C028AEB657006FE3E7 /* URLBuilder+Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+Auth.swift"; sourceTree = "<group>"; };
 		0C12E7C828AEB9BD006FE3E7 /* PhoneNumberAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberAvailability.swift; sourceTree = "<group>"; };
 		0C12EF4728AFCE80007C314E /* ReserveUsernameResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReserveUsernameResponse.swift; sourceTree = "<group>"; };
@@ -340,6 +349,8 @@
 		0C607EAF28CB8CBA0078D351 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		0C607EB228CB8D530078D351 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		0C607EB628CBAD420078D351 /* KeyboardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
+		0C79A4EA28E071320055EDD7 /* RelationshipRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipRoutes.swift; sourceTree = "<group>"; };
+		0C79A4EC28E0758C0055EDD7 /* URLBuilder+Relationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+Relationship.swift"; sourceTree = "<group>"; };
 		0C7CB60B28D0A44A00034F14 /* PostAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAPI.swift; sourceTree = "<group>"; };
 		0C7CB61028D0A4FF00034F14 /* UploadPostPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostPayload.swift; sourceTree = "<group>"; };
 		0C7CB61228D0A52C00034F14 /* PostMediaPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMediaPayload.swift; sourceTree = "<group>"; };
@@ -554,6 +565,11 @@
 		0CCE6A4E28A3CB9400D65D56 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		0CCEC4E328DE27FC00BE1C6C /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		0CD1521D28D9157900C6E3D3 /* PostView+Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Media.swift"; sourceTree = "<group>"; };
+		0CD595FF28E0769E00550E2D /* RelationshipAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipAPI.swift; sourceTree = "<group>"; };
+		0CD5960228E0776500550E2D /* Relationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relationship.swift; sourceTree = "<group>"; };
+		0CD5960428E0CACB00550E2D /* UserProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewModel.swift; sourceTree = "<group>"; };
+		0CD5960828E0CC3500550E2D /* UserProfileBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileBackground.swift; sourceTree = "<group>"; };
+		0CD5960A28E0D0FD00550E2D /* UserProfileRelationshipButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileRelationshipButton.swift; sourceTree = "<group>"; };
 		0CD614F328AE72B400734002 /* TextFieldFocusBool+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextFieldFocusBool+Extension.swift"; sourceTree = "<group>"; };
 		0CD614F528AE74C100734002 /* SMSTimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSTimerController.swift; sourceTree = "<group>"; };
 		0CD614F728AE773A00734002 /* WebConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebConstants.swift; sourceTree = "<group>"; };
@@ -644,6 +660,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C0FC42628E2F31900179723 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				0C0FC42728E2F33100179723 /* AsyncButton.swift */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
 		0C12E7BE28AEB620006FE3E7 /* URL Builder */ = {
 			isa = PBXGroup;
 			children = (
@@ -662,6 +686,7 @@
 				0CC1495428B3F6A600AB724D /* URLBuilder+Me.swift */,
 				0C48CE2E28CD124700D95BF1 /* URLBuilder+Search.swift */,
 				0C3A492028D0A345005FBB80 /* URLBuilder+Post.swift */,
+				0C79A4EC28E0758C0055EDD7 /* URLBuilder+Relationship.swift */,
 			);
 			name = Routes;
 			sourceTree = "<group>";
@@ -848,6 +873,8 @@
 			isa = PBXGroup;
 			children = (
 				0C5002A328CD3B3D009E6C9A /* UserProfileView.swift */,
+				0CD5960A28E0D0FD00550E2D /* UserProfileRelationshipButton.swift */,
+				0CD5960728E0CC2200550E2D /* Subviews */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -1199,9 +1226,9 @@
 				0CD9E79A28C8BBE9007E25F9 /* Feed */,
 				0C607EB128CB8D450078D351 /* Search */,
 				0CD9E79B28C8BBF2007E25F9 /* Profile */,
+				0C5002A228CD3B30009E6C9A /* User */,
 				0C8089FF28D897FB000E5DEC /* Posts */,
 				0C43382328D8B1A7003C48B6 /* Post */,
-				0C5002A228CD3B30009E6C9A /* User */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -1485,6 +1512,7 @@
 		0CCE6A4028A3C9A000D65D56 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0CD5960128E0775700550E2D /* Relationship */,
 				0C7CB60D28D0A4E200034F14 /* Post */,
 				0C48CE3228CD1A1C00D95BF1 /* Search */,
 				0CEC89B128B572080036E939 /* Me */,
@@ -1515,6 +1543,7 @@
 		0CCE6A4228A3C9B000D65D56 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0C0FC42628E2F31900179723 /* Button */,
 				0C95B07928DB8A55002FF65D /* View */,
 				0C43382B28D8DFAA003C48B6 /* Animation */,
 				0C43382828D8D101003C48B6 /* Transition */,
@@ -1560,6 +1589,22 @@
 			path = Keychain;
 			sourceTree = "<group>";
 		};
+		0CD5960128E0775700550E2D /* Relationship */ = {
+			isa = PBXGroup;
+			children = (
+				0CD5960228E0776500550E2D /* Relationship.swift */,
+			);
+			path = Relationship;
+			sourceTree = "<group>";
+		};
+		0CD5960728E0CC2200550E2D /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				0CD5960828E0CC3500550E2D /* UserProfileBackground.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		0CD614F928AE779500734002 /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -1569,6 +1614,7 @@
 				0C48CE3028CD19B900D95BF1 /* SearchAPI.swift */,
 				0CEC89A928B557BB0036E939 /* StorageAPI.swift */,
 				0C7CB60B28D0A44A00034F14 /* PostAPI.swift */,
+				0CD595FF28E0769E00550E2D /* RelationshipAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -1582,6 +1628,7 @@
 				0C48CE2C28CD119B00D95BF1 /* SearchRoutes.swift */,
 				0CEC89AD28B5592F0036E939 /* StorageRoutes.swift */,
 				0C3A491E28D0A30D005FBB80 /* PostRoutes.swift */,
+				0C79A4EA28E071320055EDD7 /* RelationshipRoutes.swift */,
 			);
 			path = Routes;
 			sourceTree = "<group>";
@@ -1616,6 +1663,7 @@
 			children = (
 				0CD9E7A228C8BC57007E25F9 /* TabBarViewModel.swift */,
 				0CD9E7B128C8DE0F007E25F9 /* CurrentUserViewModel.swift */,
+				0CD5960428E0CACB00550E2D /* UserProfileViewModel.swift */,
 				0C92CEEF28DB511600C781E0 /* Post */,
 				0C607EAF28CB8CBA0078D351 /* SearchViewModel.swift */,
 				0C7CB61D28D0AFC700034F14 /* UploadPostViewModel.swift */,
@@ -1972,6 +2020,7 @@
 				0C3A492128D0A345005FBB80 /* URLBuilder+Post.swift in Sources */,
 				0CBA650F28A6C3E0006DCD9B /* NavigationBar+Extensions.swift in Sources */,
 				0C80CB8528CE209F00D79D94 /* YPAssetZoomableView.swift in Sources */,
+				0CD5960928E0CC3500550E2D /* UserProfileBackground.swift in Sources */,
 				0C80CB7F28CE209F00D79D94 /* YPVideoCaptureHelper.swift in Sources */,
 				0CB6004E28B479B1008849BB /* LibraryAlbum.swift in Sources */,
 				0CBA650428A6BC9C006DCD9B /* LoginViewModel.swift in Sources */,
@@ -1981,6 +2030,7 @@
 				0C80CB7028CE209F00D79D94 /* YPPickerScreen.swift in Sources */,
 				0C12E7C928AEB9BD006FE3E7 /* PhoneNumberAvailability.swift in Sources */,
 				0CD6150A28AE952300734002 /* URLBuilder.swift in Sources */,
+				0C79A4ED28E0758C0055EDD7 /* URLBuilder+Relationship.swift in Sources */,
 				0C80CB8128CE209F00D79D94 /* YPLibraryVC+CollectionView.swift in Sources */,
 				0C80CBB128CE209F00D79D94 /* CGFloat+Extensions.swift in Sources */,
 				0CC1494B28B3E03400AB724D /* TokenRoutes.swift in Sources */,
@@ -2010,6 +2060,7 @@
 				0CC1494128B3B47000AB724D /* AuthPhases.swift in Sources */,
 				0CBA651228A6C589006DCD9B /* Dismiss+Extension.swift in Sources */,
 				0CCE6A4F28A3CB9400D65D56 /* AppState.swift in Sources */,
+				0CD5960328E0776500550E2D /* Relationship.swift in Sources */,
 				0CD9E7A628C8BD5F007E25F9 /* TabBar.swift in Sources */,
 				0CBA651528A6C667006DCD9B /* HideKeyboard.swift in Sources */,
 				0CEC89B828B572490036E939 /* MeAPI+Edit.swift in Sources */,
@@ -2098,6 +2149,7 @@
 				0C9352EB28B15D1C00A264AE /* SceneDelegate.swift in Sources */,
 				0C0D3EB528D8DFE9008BDC81 /* WithAnimation+Extensions.swift in Sources */,
 				0CC1494728B3DFE500AB724D /* GenerateTokensPayload.swift in Sources */,
+				0CD5960B28E0D0FD00550E2D /* UserProfileRelationshipButton.swift in Sources */,
 				0C80CB8028CE209F00D79D94 /* YPVideoCaptureVC.swift in Sources */,
 				0CD614FD28AE77D300734002 /* EndPoints.swift in Sources */,
 				0C80CB7D28CE209F00D79D94 /* YPSelectionsGalleryView.swift in Sources */,
@@ -2109,6 +2161,7 @@
 				0CC1495328B3F58000AB724D /* MeRoutes.swift in Sources */,
 				0C80CB8628CE209F00D79D94 /* YPLibrary+LibraryChange.swift in Sources */,
 				0C95B07B28DB8A61002FF65D /* View+Sync.swift in Sources */,
+				0CD5960028E0769E00550E2D /* RelationshipAPI.swift in Sources */,
 				0C80CBA428CE209F00D79D94 /* UIImage+Extensions.swift in Sources */,
 				0C80CB7928CE209F00D79D94 /* YPDragDirection.swift in Sources */,
 				0CD6150328AE90C400734002 /* JSONCoding+Helpers.swift in Sources */,
@@ -2129,6 +2182,7 @@
 				0CEC89A828B53E840036E939 /* CAProfilePictureAlignmentView.swift in Sources */,
 				0C80CBBB28CE216000D79D94 /* PostImagePickerView.swift in Sources */,
 				0C12EF7728B01B27007C314E /* SMSOTPAttempt.swift in Sources */,
+				0CD5960528E0CACB00550E2D /* UserProfileViewModel.swift in Sources */,
 				0CC1494328B3B7C000AB724D /* TaskIsCancelled.swift in Sources */,
 				0C5A45B128DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift in Sources */,
 				0CC1495528B3F6A600AB724D /* URLBuilder+Me.swift in Sources */,
@@ -2154,7 +2208,9 @@
 				0CC1495128B3EC0300AB724D /* MeAPI.swift in Sources */,
 				0CC1492B28B3AA2E00AB724D /* SendSMSOTPPayload.swift in Sources */,
 				0CCE6A4B28A3CA1F00D65D56 /* AppDelegate.swift in Sources */,
+				0C0FC42828E2F33100179723 /* AsyncButton.swift in Sources */,
 				0CC41DAD28CD2CFD00B09BA9 /* PagingData.swift in Sources */,
+				0C79A4EB28E071320055EDD7 /* RelationshipRoutes.swift in Sources */,
 				0C7CB61128D0A4FF00034F14 /* UploadPostPayload.swift in Sources */,
 				0CD9E79D28C8BC15007E25F9 /* FeedView.swift in Sources */,
 				0C80CBB628CE209F00D79D94 /* YPPhotoSaver.swift in Sources */,

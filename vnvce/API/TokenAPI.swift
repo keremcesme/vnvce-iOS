@@ -36,6 +36,13 @@ extension TokenAPI {
         return try await task()
     }
     
+    public func retryTask(
+        task: @escaping () async throws -> Void
+    ) async throws {
+        try await generateTokens()
+        return try await task()
+    }
+    
     public func generateTokens(task: @escaping () async throws -> ()) async throws {
         switch try await generateTokensTask() {
             case .ok:

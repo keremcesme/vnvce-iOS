@@ -10,6 +10,7 @@ import PhoneNumberKit
 import SwiftUI
 import KeychainAccess
 
+@MainActor
 class CreateAccountViewModel: ObservableObject {
     private let authAPI = AuthAPI.shared
     private let storageAPI = StorageAPI.shared
@@ -176,7 +177,7 @@ private extension CreateAccountViewModel {
             return .error(.invalidNumber)
         }
         
-        guard let clientID = await UIDevice.current.identifierForVendor?.uuidString else {
+        guard let clientID = UIDevice.current.identifierForVendor?.uuidString else {
             return .error(.unknown)
         }
         

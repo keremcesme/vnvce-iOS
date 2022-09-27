@@ -13,6 +13,7 @@ class SearchViewModel: ObservableObject {
     @Published public var show: Bool = false
     
     @Published public var searchField: String = ""
+    @Published public var searchTerm: String = ""
     
     @Published private(set) public var searchResults: Pagination<User.Public> = Pagination()
     
@@ -92,7 +93,7 @@ extension SearchViewModel: PaginationProtocol {
     
     @Sendable
     private func search(page: Int) async throws -> Pagination<User.Public> {
-        let result = try await searchAPI.searchUser(searchField, page: page, per: 40)
+        let result = try await searchAPI.searchUser(searchTerm, page: page, per: 40)
         return result
     }
 }
