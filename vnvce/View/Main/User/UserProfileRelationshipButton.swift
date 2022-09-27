@@ -30,6 +30,7 @@ struct UserProfileRelationshipButton: View {
         }
     }
     
+    
     private func alertAction() {
         Task {
             switch userVM.relationship!.raw {
