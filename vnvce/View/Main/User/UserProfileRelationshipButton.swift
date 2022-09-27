@@ -17,6 +17,7 @@ struct UserProfileRelationshipButton: View {
         self._userVM = StateObject(wrappedValue: userVM)
     }
     
+    
     @Sendable
     private func action() async {
         switch userVM.relationship!.raw  {
