@@ -10,7 +10,7 @@ import SwiftUI
 @MainActor
 class UserProfileViewModel: ObservableObject {
     
-//    private let userAPI = UserAPI.shared
+    private let userAPI = UserAPI.shared
     private let relationshipAPI = RelationshipAPI.shared
     
     @Published public private(set) var user: User.Public
@@ -21,6 +21,10 @@ class UserProfileViewModel: ObservableObject {
     
     init(user: User.Public){
         self.user = user
+    }
+    
+    public func fetchProfile() async {
+        await fetchProfileTask()
     }
     
     public func fetchRelationship() async {
@@ -65,6 +69,21 @@ class UserProfileViewModel: ObservableObject {
 }
 
 private extension UserProfileViewModel {
+    
+    private func fetchProfileTask() async {
+        if Task.isCancelled { return }
+        do {
+            let user = try await userAPI.fetchProfile()
+            if Task.isCancelled { return }
+            await MainActor.run {
+                self.user = user
+            }
+        } catch {
+            if Task.isCancelled { return }
+            print(error.localizedDescription)
+        }
+    }
+    
     private func fetchRelationshipTask() async {
         if Task.isCancelled { return }
         do {

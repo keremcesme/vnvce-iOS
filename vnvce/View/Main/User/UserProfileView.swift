@@ -27,6 +27,8 @@ struct UserProfileView: View {
     
     @Sendable
     private func commonInit() async {
+//        TODO: Backend code is not ready.
+//        await userVM.fetchProfile()
         await userVM.fetchRelationship()
     }
     
@@ -45,10 +47,8 @@ struct UserProfileView: View {
                             }
                             .padding(.bottom, 75)
                         } onRefresh: {
-//                            await currentUserVM.fetchProfile()
-//                            await postsVM.loadFirstPage()
+                            try? await Task.sleep(seconds: 0.3)
                             await commonInit()
-                            try? await Task.sleep(seconds: 1)
                         }
                     }
                 }

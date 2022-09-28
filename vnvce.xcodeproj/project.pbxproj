@@ -30,6 +30,7 @@
 		0C12EF7128B017B9007C314E /* SendSMSOTPResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12EF7028B017B9007C314E /* SendSMSOTPResult.swift */; };
 		0C12EF7728B01B27007C314E /* SMSOTPAttempt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12EF7628B01B27007C314E /* SMSOTPAttempt.swift */; };
 		0C12EF7928B02834007C314E /* TaskInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C12EF7828B02833007C314E /* TaskInit.swift */; };
+		0C1FD46928E45F1D0072C1A6 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */; };
 		0C2256BA28A6B27800E48AD2 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2256B928A6B27800E48AD2 /* AuthView.swift */; };
 		0C249DA828C9256000215E5A /* TaskSleep+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */; };
 		0C2D154128B45FBC00690C6D /* CAProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2D154028B45FBC00690C6D /* CAProfilePictureView.swift */; };
@@ -322,6 +323,7 @@
 		0C12EF7028B017B9007C314E /* SendSMSOTPResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSMSOTPResult.swift; sourceTree = "<group>"; };
 		0C12EF7628B01B27007C314E /* SMSOTPAttempt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSOTPAttempt.swift; sourceTree = "<group>"; };
 		0C12EF7828B02833007C314E /* TaskInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskInit.swift; sourceTree = "<group>"; };
+		0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
 		0C2256B928A6B27800E48AD2 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskSleep+Extensions.swift"; sourceTree = "<group>"; };
 		0C2D154028B45FBC00690C6D /* CAProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAProfilePictureView.swift; sourceTree = "<group>"; };
@@ -1615,6 +1617,7 @@
 				0CEC89A928B557BB0036E939 /* StorageAPI.swift */,
 				0C7CB60B28D0A44A00034F14 /* PostAPI.swift */,
 				0CD595FF28E0769E00550E2D /* RelationshipAPI.swift */,
+				0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -2192,6 +2195,7 @@
 				0CD1521E28D9157A00C6E3D3 /* PostView+Media.swift in Sources */,
 				0C80CB8C28CE209F00D79D94 /* LibraryMediaManager.swift in Sources */,
 				0C80CBAF28CE209F00D79D94 /* AVFileType+Extensions.swift in Sources */,
+				0C1FD46928E45F1D0072C1A6 /* UserAPI.swift in Sources */,
 				0C12EF7928B02834007C314E /* TaskInit.swift in Sources */,
 				0C48CE3528CD1A3200D95BF1 /* SearchUserResponse.swift in Sources */,
 				0C80CBAD28CE209F00D79D94 /* PHFetchResult+Extensions.swift in Sources */,
