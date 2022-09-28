@@ -33,6 +33,9 @@
 		0C1FD46928E45F1D0072C1A6 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */; };
 		0C2256BA28A6B27800E48AD2 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2256B928A6B27800E48AD2 /* AuthView.swift */; };
 		0C249DA828C9256000215E5A /* TaskSleep+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */; };
+		0C2C6B1928E4D85B0076F7C3 /* UserRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C6B1828E4D85B0076F7C3 /* UserRoutes.swift */; };
+		0C2C6B1B28E4D8FB0076F7C3 /* URLBuilder+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C6B1A28E4D8FB0076F7C3 /* URLBuilder+User.swift */; };
+		0C2C6B1D28E4DA820076F7C3 /* PostsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C6B1C28E4DA820076F7C3 /* PostsPayload.swift */; };
 		0C2D154128B45FBC00690C6D /* CAProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2D154028B45FBC00690C6D /* CAProfilePictureView.swift */; };
 		0C2D154428B469AF00690C6D /* ProfilePictureLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2D154328B469AE00690C6D /* ProfilePictureLibraryViewModel.swift */; };
 		0C2D154628B469FE00690C6D /* LibraryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2D154528B469FE00690C6D /* LibraryStatus.swift */; };
@@ -326,6 +329,9 @@
 		0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
 		0C2256B928A6B27800E48AD2 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskSleep+Extensions.swift"; sourceTree = "<group>"; };
+		0C2C6B1828E4D85B0076F7C3 /* UserRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRoutes.swift; sourceTree = "<group>"; };
+		0C2C6B1A28E4D8FB0076F7C3 /* URLBuilder+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+User.swift"; sourceTree = "<group>"; };
+		0C2C6B1C28E4DA820076F7C3 /* PostsPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsPayload.swift; sourceTree = "<group>"; };
 		0C2D154028B45FBC00690C6D /* CAProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAProfilePictureView.swift; sourceTree = "<group>"; };
 		0C2D154328B469AE00690C6D /* ProfilePictureLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureLibraryViewModel.swift; sourceTree = "<group>"; };
 		0C2D154528B469FE00690C6D /* LibraryStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStatus.swift; sourceTree = "<group>"; };
@@ -689,6 +695,7 @@
 				0C48CE2E28CD124700D95BF1 /* URLBuilder+Search.swift */,
 				0C3A492028D0A345005FBB80 /* URLBuilder+Post.swift */,
 				0C79A4EC28E0758C0055EDD7 /* URLBuilder+Relationship.swift */,
+				0C2C6B1A28E4D8FB0076F7C3 /* URLBuilder+User.swift */,
 			);
 			name = Routes;
 			sourceTree = "<group>";
@@ -932,6 +939,7 @@
 			children = (
 				0C7CB61028D0A4FF00034F14 /* UploadPostPayload.swift */,
 				0C7CB61228D0A52C00034F14 /* PostMediaPayload.swift */,
+				0C2C6B1C28E4DA820076F7C3 /* PostsPayload.swift */,
 			);
 			path = Payloads;
 			sourceTree = "<group>";
@@ -1632,6 +1640,7 @@
 				0CEC89AD28B5592F0036E939 /* StorageRoutes.swift */,
 				0C3A491E28D0A30D005FBB80 /* PostRoutes.swift */,
 				0C79A4EA28E071320055EDD7 /* RelationshipRoutes.swift */,
+				0C2C6B1828E4D85B0076F7C3 /* UserRoutes.swift */,
 			);
 			path = Routes;
 			sourceTree = "<group>";
@@ -2089,6 +2098,7 @@
 				0CFC50BE28DC8C8D008730A5 /* PostsScrollView.swift in Sources */,
 				0C808A0528D89B57000E5DEC /* PostsGridCellView.swift in Sources */,
 				0C80CB6428CE209F00D79D94 /* YPCropView.swift in Sources */,
+				0C2C6B1D28E4DA820076F7C3 /* PostsPayload.swift in Sources */,
 				0C80CBB028CE209F00D79D94 /* AVCaptureSession+Extensions.swift in Sources */,
 				0C80CBB728CE209F00D79D94 /* YPAlerts.swift in Sources */,
 				0C12EF5A28AFD1D9007C314E /* CreateAccountResponse.swift in Sources */,
@@ -2098,6 +2108,7 @@
 				0CCE6A4928A3C9EF00D65D56 /* KeychainStorage.swift in Sources */,
 				0C80CB7828CE209F00D79D94 /* YPLog.swift in Sources */,
 				0C0D3EBF28D907E2008BDC81 /* PostScrollView.swift in Sources */,
+				0C2C6B1B28E4D8FB0076F7C3 /* URLBuilder+User.swift in Sources */,
 				0C2D154128B45FBC00690C6D /* CAProfilePictureView.swift in Sources */,
 				0C7CB61328D0A52C00034F14 /* PostMediaPayload.swift in Sources */,
 				0CD9E7BB28C8F3E6007E25F9 /* RefreshableScrollView.swift in Sources */,
@@ -2229,6 +2240,7 @@
 				0C80CB6728CE209F00D79D94 /* YPFiltersView.swift in Sources */,
 				0C12EF5E28AFD201007C314E /* Tokens.swift in Sources */,
 				0CEC89B528B572190036E939 /* EditProfilePicturePayload.swift in Sources */,
+				0C2C6B1928E4D85B0076F7C3 /* UserRoutes.swift in Sources */,
 				0C607EB328CB8D530078D351 /* SearchView.swift in Sources */,
 				0CEC89AC28B558910036E939 /* FirebaseStoragePathBuilder.swift in Sources */,
 				0CC1493928B3ABE500AB724D /* ReserveUsernameResult.swift in Sources */,

@@ -15,7 +15,10 @@ import SwiftUIX
 struct UserProfileView: View {
     @Environment(\.dismiss) var dismiss
     
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    
     @StateObject public var userVM: UserProfileViewModel
+    @StateObject private var postsVM: PostsViewModel
     
     @StateObject var scrollDelegate = ScrollViewModel()
     
@@ -23,13 +26,17 @@ struct UserProfileView: View {
     
     init(user: User.Public) {
         self._userVM = StateObject(wrappedValue: UserProfileViewModel(user: user))
+        self._postsVM = StateObject(wrappedValue: PostsViewModel(.user(userID: user.id)))
     }
     
     @Sendable
     private func commonInit() async {
 //        TODO: Backend code is not ready.
-//        await userVM.fetchProfile()
+        await userVM.fetchProfile()
         await userVM.fetchRelationship()
+        if userVM.relationship?.raw == .friend {
+            await postsVM.loadFirstPage()
+        }
     }
     
     var body: some View {
@@ -41,9 +48,7 @@ struct UserProfileView: View {
                         ScrollViewRefreshable(scrollDelegate: scrollDelegate) {
                             LazyVStack {
                                 DetailsView
-//                                Text(userVM.relationship.rawString)
-//                                    .font(.largeTitle.bold())
-//                                PostsGridView(vm: postsVM)
+                                PostsGridView(vm: postsVM, relationship: userVM.relationship)
                             }
                             .padding(.bottom, 75)
                         } onRefresh: {
@@ -56,6 +61,9 @@ struct UserProfileView: View {
                 .navigationBarBackButtonHidden(true)
                 .toolbar(ToolBar)
             }
+            PostRootView(postsVM)
+                .environmentObject(currentUserVM)
+//                .environmentObject(navigationController)
 //            NavigationLink {
 //                UserProfileView(user: userVM.user)
 //            } label: {
@@ -65,6 +73,22 @@ struct UserProfileView: View {
         }
         .navigationBarHidden(true)
         .taskInit(commonInit)
+        .onChange(of: postsVM.selectedPost.didAppear) {
+            if !$0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    scrollDelegate.addGesture()
+                }
+            } else {
+                scrollDelegate.removeGesture()
+            }
+        }
+        .onChange(of: userVM.relationship) { value in
+            if value?.raw == .friend {
+                Task {
+                    await postsVM.loadFirstPage()
+                }
+            }
+        }
     }
     
     @ViewBuilder

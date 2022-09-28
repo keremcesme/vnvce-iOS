@@ -47,8 +47,8 @@ extension PostAPI {
         }
     }
     
-    public func fetchPosts(params: PaginationParams) async throws -> Pagination<Post> {
-        let result = try await fetchPostsTask(params: params)
+    public func fetchPosts(payload: PostsPayload, params: PaginationParams) async throws -> Pagination<Post> {
+        let result = try await fetchPostsTask(payload, params)
         
         switch result {
             case let .success(response):
@@ -56,14 +56,13 @@ extension PostAPI {
             case let .failure(statusCode):
                 if statusCode == .unauthorized {
                     let response = try await TokenAPI.shared.retryTask(to: Pagination<Post>.self) {
-                        switch try await fetchPostsTask(params: params) {
+                        switch try await fetchPostsTask(payload, params) {
                             case let .success(response):
                                 return response
                             case let .failure(statusCode):
                                 throw generateError(code: Int(statusCode.code), description: statusCode.localizedDescription)
                         }
                     }
-                    
                     return response
                 } else {
                     throw generateError(code: Int(statusCode.code), description: statusCode.localizedDescription)
@@ -113,7 +112,7 @@ private extension PostAPI {
         }
     }
     
-    private func fetchPostsTask(params: PaginationParams) async throws -> Result<Pagination<Post>, HTTPStatus> {
+    private func fetchPostsTask(_ payload: PostsPayload, _ params: PaginationParams) async throws -> Result<Pagination<Post>, HTTPStatus> {
         guard let token = try Keychain().get("accessToken") else {
             fatalError()
         }
@@ -127,7 +126,9 @@ private extension PostAPI {
         let task = AF
             .request(
                 url,
-                method: .get,
+                method: .post,
+                parameters: payload,
+                encoder: encoder,
                 headers: headers)
             .serializingDecodable(PaginationResponse<Post>.self)
         

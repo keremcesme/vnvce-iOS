@@ -10,7 +10,7 @@ import SwiftUI
 import Nuke
 import ScrollViewPrefetcher
 
-let postsPerPage: Int = 6
+let postsPerPage: Int = 14
 
 class PostsViewModel: ObservableObject {
     private let postAPI = PostAPI.shared
@@ -18,7 +18,10 @@ class PostsViewModel: ObservableObject {
     private let imagePrefetcher: ImagePrefetcher
     private let scrollViewPrefetcher: ScrollViewPrefetcher
     
-    @Published public var postResults: Pagination<Post> = Pagination()
+    @Published private(set) public var payload: PostsPayload
+    
+//    @Published public var postResults: Pagination<Post> = Pagination()
+    @Published public var postResults: Pagination<Post>?
     
     @Published private(set) public var prefetcherImageURLs: [URL] = []
     
@@ -35,7 +38,8 @@ class PostsViewModel: ObservableObject {
     @Published public var currentPostIndex: Int = 0
     
     
-    init() {
+    init(_ payload: PostsPayload = .me(archived: false)) {
+        self.payload = payload
         self.imagePrefetcher = .init()
         self.scrollViewPrefetcher = .init()
         self.scrollViewPrefetcher.delegate = self
@@ -81,9 +85,9 @@ class PostsViewModel: ObservableObject {
             selectedPost.previewImage = value.previewImage
             selectedPost.didAppear = true
             
-            if let index = postResults.items.firstIndex(where: {$0 == value.post}) {
-                currentPostIndex = index
-            }
+//            if let index = postResults.items.firstIndex(where: {$0 == value.post}) {
+//                currentPostIndex = index
+//            }
             
 //            selectedPostIndex = value.index
             
@@ -126,8 +130,9 @@ extension PostsViewModel: PaginationProtocol {
             }
             if Task.isCancelled { return }
             await MainActor.run {
-                self.postResults.metadata = result.metadata
-                self.postResults.items = result.items
+                self.postResults = result
+//                self.postResults.metadata = result.metadata
+//                self.postResults.items = result.items
             }
         } catch {
             if Task.isCancelled { return }
@@ -137,6 +142,9 @@ extension PostsViewModel: PaginationProtocol {
     
     func loadNextPageTask() async {
         if Task.isCancelled { return }
+        guard var postResults = postResults else {
+            return
+        }
         if postResults.items.count < postResults.metadata.total {
             do {
                 try await Task.sleep(seconds: 0.5)
@@ -144,9 +152,11 @@ extension PostsViewModel: PaginationProtocol {
                     return
                 }
                 if Task.isCancelled { return }
+                postResults.metadata = result.metadata
+                postResults.items += result.items
+                let newResults = postResults
                 await MainActor.run {
-                    self.postResults.metadata = result.metadata
-                    self.postResults.items += result.items
+                    self.postResults = newResults
                 }
             } catch {
                 if Task.isCancelled { return }
@@ -158,7 +168,7 @@ extension PostsViewModel: PaginationProtocol {
     @Sendable
     private func fetch(page: Int) async throws -> Pagination<Post> {
         let params = PaginationParams(page: page, per: postsPerPage)
-        let result = try await postAPI.fetchPosts(params: params)
+        let result = try await postAPI.fetchPosts(payload: payload, params: params)
         return result
     }
 }
@@ -177,7 +187,7 @@ extension PostsViewModel: ScrollViewPrefetcherDelegate {
     }
     
     private func postIndex(_ postID: UUID) -> Int {
-        for post in postResults.items.enumerated() where post.element.id == postID {
+        for post in postResults!.items.enumerated() where post.element.id == postID {
             return post.offset
         }
         return 0

@@ -26,11 +26,10 @@ struct PostRootView: View {
                 if postsVM.selectedPost.show {
                     Color.black.opacity(0.2).ignoresSafeArea()
                 }
-                if let post = postsVM.selectedPost.post,
-                   let index = postsVM.postResults.items.firstIndex(where: {$0 == post}) {
-                    PostView(postsVM, post: $postsVM.postResults.items[index])
+                if let post = postsVM.selectedPost.post {
+                    PostView(postsVM, post: post)
                 }
-                
+
             }
         }
         
@@ -40,16 +39,17 @@ struct PostRootView: View {
 struct PostView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject var navigationController: NavigationController
     
     @StateObject public var postVM = PostViewModel()
     
     @StateObject public var postsVM: PostsViewModel
     
-    @Binding public var post: Post
+    @State public var post: Post
     
-    init(_ postsVM: PostsViewModel, post: Binding<Post>) {
+    init(_ postsVM: PostsViewModel, post: Post) {
         self._postsVM = StateObject(wrappedValue: postsVM)
-        self._post = post
+        self._post = State(initialValue: post)
     }
     
     private let width = UIScreen.main.bounds.width
@@ -63,7 +63,7 @@ struct PostView: View {
                 postVM.offset = .zero
                 postsVM.selectedPost.show = false
             } after: {
-//                navigationController.navigation.enabled = true
+                navigationController.navigation.enabled = true
                 postsVM.selectedPost.didAppear = false
             }
         }

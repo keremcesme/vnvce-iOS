@@ -23,8 +23,8 @@ struct UserAPI {
 // MARK: Public Methods -
 extension UserAPI {
     
-    public func fetchProfile() async throws -> User.Public {
-        let result = try await fetchProfileTask()
+    public func fetchProfile(userID: String) async throws -> User.Public {
+        let result = try await fetchProfileTask(userID)
         
         switch result {
         case let .success(response):
@@ -32,7 +32,7 @@ extension UserAPI {
         case let .failure(statusCode):
             if statusCode == .unauthorized {
                 let response = try await TokenAPI.shared.retryTask(to: User.Public.self) {
-                    switch try await fetchProfileTask() {
+                    switch try await fetchProfileTask(userID) {
                     case let .success(response):
                         return response
                     case let .failure(statusCode):
@@ -51,12 +51,37 @@ extension UserAPI {
 
 // MARK: Private Methods -
 extension UserAPI {
-    private func fetchProfileTask() async throws -> Result<User.Public, HTTPStatus> {
+    private func fetchProfileTask(_ userID: String) async throws -> Result<User.Public, HTTPStatus> {
         guard let token = try Keychain().get("accessToken") else {
             fatalError()
         }
-     
-        return .failure(HTTPStatus.unauthorized)
+        
+        var url = urlBuilder.userURL(route: .profile(userID: userID), version: .v1)
+        var headers = HTTPHeaders()
+        headers.add(.authorization(bearerToken: token))
+        
+        let task = AF
+            .request(
+                url,
+                method: .post,
+                headers: headers)
+            .serializingDecodable(Response<User.Public>.self)
+        
+        let taskResponse = await task.response
+        
+        guard let statusCode = taskResponse.response?.statusCode else {
+            throw NSError(domain: "Status Code not Available", code: 1)
+        }
+        
+        switch taskResponse.result {
+            case let .success(response):
+                guard let result = response.result else {
+                    throw NSError(domain: "Result is not available", code: 1)
+                }
+                return .success(result)
+            case .failure(_):
+                return .failure(HTTPStatus(statusCode: statusCode))
+        }
     }
     
     // Handle Errors

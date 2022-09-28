@@ -73,7 +73,7 @@ private extension UserProfileViewModel {
     private func fetchProfileTask() async {
         if Task.isCancelled { return }
         do {
-            let user = try await userAPI.fetchProfile()
+            let user = try await userAPI.fetchProfile(userID: user.id.uuidString)
             if Task.isCancelled { return }
             await MainActor.run {
                 self.user = user

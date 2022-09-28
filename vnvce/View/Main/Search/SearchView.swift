@@ -11,8 +11,9 @@ import Nuke
 import NukeUI
 
 struct SearchView: View {
-    
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
     @EnvironmentObject private var keyboardController: KeyboardController
+    @EnvironmentObject private var navigationController: NavigationController
     @EnvironmentObject private var searchVM: SearchViewModel
     
     @FocusState private var isFocused: Bool
@@ -50,6 +51,7 @@ struct SearchView: View {
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }
+        
     }
     
     @ViewBuilder
@@ -101,6 +103,8 @@ struct SearchView: View {
     private func UserCell(_ user: User.Public) -> some View {
         NavigationLink {
             UserProfileView(user: user)
+                .environmentObject(currentUserVM)
+                .environmentObject(navigationController)
         } label: {
             HStack(spacing: 10) {
                 if let profilepicture = user.profilePicture {

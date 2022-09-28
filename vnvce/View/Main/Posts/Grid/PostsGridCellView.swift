@@ -78,14 +78,15 @@ struct PostsGridCellView: View {
                                                               previewImage: uiImage,
                                                               frame: frame,
                                                               size: size)
+                        navigationController.navigation.enabled = false
                         self.tapAction(value)
                     }
                     .onAppear {
-                        guard let index = postsVM.postResults.items.firstIndex(where: {$0 == post}) else {
+                        guard let index = postsVM.postResults!.items.firstIndex(where: {$0 == post}) else {
                             return
                         }
                         
-                        postsVM.postResults.items[index].previewImage = CodableImage(image: uiImage)
+                        postsVM.postResults!.items[index].previewImage = CodableImage(image: uiImage)
                     }
             } else {
                 Color.primary.opacity(0.05)

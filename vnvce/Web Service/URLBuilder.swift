@@ -46,6 +46,11 @@ extension URLBuilder: URLBuilderProtocol {
     func relationshipURL(route relationship: RelationshipRoute, version: APIVersion) -> URL {
         generateRelationshipURL(route: relationship, version: version)
     }
+    
+    func userURL(route user: UserRoute, version: APIVersion) -> URL {
+        generateUserURL(route: user, version: version)
+    }
+    
 }
 
 // MARK: Pagination Params -
