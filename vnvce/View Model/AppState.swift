@@ -18,5 +18,14 @@ class AppState: ObservableObject {
     @KeychainStorage("accessToken") var accessToken
     @KeychainStorage("refreshToken") var refreshToken
     
+    @Published private(set) public var scenePhase: ScenePhase = .active
+    
     init() {}
+    
+    @Sendable
+    public func onChangeScenePhase(_ newPhase: ScenePhase) {
+        self.scenePhase = newPhase
+    }
 }
+
+

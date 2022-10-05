@@ -33,6 +33,7 @@
 		0C1FD46928E45F1D0072C1A6 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */; };
 		0C2256BA28A6B27800E48AD2 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2256B928A6B27800E48AD2 /* AuthView.swift */; };
 		0C249DA828C9256000215E5A /* TaskSleep+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */; };
+		0C2BE2F528EE0138003D070A /* PostView+Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2BE2F428EE0138003D070A /* PostView+Blur.swift */; };
 		0C2C6B1928E4D85B0076F7C3 /* UserRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C6B1828E4D85B0076F7C3 /* UserRoutes.swift */; };
 		0C2C6B1B28E4D8FB0076F7C3 /* URLBuilder+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C6B1A28E4D8FB0076F7C3 /* URLBuilder+User.swift */; };
 		0C2C6B1D28E4DA820076F7C3 /* PostsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C6B1C28E4DA820076F7C3 /* PostsPayload.swift */; };
@@ -329,6 +330,7 @@
 		0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
 		0C2256B928A6B27800E48AD2 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskSleep+Extensions.swift"; sourceTree = "<group>"; };
+		0C2BE2F428EE0138003D070A /* PostView+Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Blur.swift"; sourceTree = "<group>"; };
 		0C2C6B1828E4D85B0076F7C3 /* UserRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRoutes.swift; sourceTree = "<group>"; };
 		0C2C6B1A28E4D8FB0076F7C3 /* URLBuilder+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+User.swift"; sourceTree = "<group>"; };
 		0C2C6B1C28E4DA820076F7C3 /* PostsPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsPayload.swift; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 				0C5A45AF28DF3DC3009D2CF9 /* PostView+Properties */,
 				0CD1521D28D9157900C6E3D3 /* PostView+Media.swift */,
 				0C5A45A728DF183D009D2CF9 /* PostView+TimerBar.swift */,
+				0C2BE2F428EE0138003D070A /* PostView+Blur.swift */,
 				0C0D3EBE28D907E2008BDC81 /* PostScrollView.swift */,
 			);
 			path = Post;
@@ -2160,6 +2163,7 @@
 				0C80CBAE28CE209F00D79D94 /* CGRect+Extensions.swift in Sources */,
 				0CFC50BB28DC8BD4008730A5 /* PostsView.swift in Sources */,
 				0C43382228D8B076003C48B6 /* TaskIf.swift in Sources */,
+				0C2BE2F528EE0138003D070A /* PostView+Blur.swift in Sources */,
 				0C9352EB28B15D1C00A264AE /* SceneDelegate.swift in Sources */,
 				0C0D3EB528D8DFE9008BDC81 /* WithAnimation+Extensions.swift in Sources */,
 				0CC1494728B3DFE500AB724D /* GenerateTokensPayload.swift in Sources */,

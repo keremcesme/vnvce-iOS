@@ -39,6 +39,7 @@ struct PostRootView: View {
 struct PostView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var appState: AppState
     @EnvironmentObject var navigationController: NavigationController
     
     @StateObject public var postVM = PostViewModel()
@@ -81,6 +82,15 @@ struct PostView: View {
                 postVM.addGesture(dismiss)
             }
         }
+        .onChange(of: appState.scenePhase) { newPhase in
+            if newPhase == .inactive {
+                print("Inactive")
+            } else if newPhase == .active {
+                print("Active")
+            } else if newPhase == .background {
+                print("Background")
+            }
+        }
     }
     
     @ViewBuilder
@@ -88,31 +98,32 @@ struct PostView: View {
         VStack {
             VStack(alignment: .leading, spacing:0) {
                 MediaView
-                    .overlay {
-                        BlurView(style: .light)
-                            .opacity(postsVM.selectedPost.show ? 0.000001 : 1)
-                    }
+                    .overlay(PostViewBlur(postsVM: postsVM, postVM: postVM))
+//                    .overlay {
+//                        BlurView(style: .light)
+//                            .opacity(postsVM.selectedPost.show ? 0.000001 : 1)
+//                    }
                     .overlay {
                         ZStack {
                             EmptyView()
-                            if postVM.onDragging {
-                                BlurView(style: .light)
-                            }
-                            
-                            if postVM.stop {
-                                BlurView(style: .light)
-                                    .overlay {
-                                        VStack {
-                                            Image(systemName: "hand.tap.fill")
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 45, weight: .medium, design: .default))
-                                            Text("tap to show")
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 14, weight: .regular, design: .default))
-                                        }
-                                        .shadow(radius: 0.4)
-                                    }
-                            }
+//                            if postVM.onDragging {
+//                                BlurView(style: .light)
+//                            }
+//
+//                            if postVM.stop {
+//                                BlurView(style: .light)
+//                                    .overlay {
+//                                        VStack {
+//                                            Image(systemName: "hand.tap.fill")
+//                                                .foregroundColor(.white)
+//                                                .font(.system(size: 45, weight: .medium, design: .default))
+//                                            Text("tap to show")
+//                                                .foregroundColor(.white)
+//                                                .font(.system(size: 14, weight: .regular, design: .default))
+//                                        }
+//                                        .shadow(radius: 0.4)
+//                                    }
+//                            }
                         }
                         .animation(.default, value: postVM.onDragging)
                         .animation(.default, value: postVM.stop)
@@ -129,6 +140,21 @@ struct PostView: View {
                                 }
                             }
                     }
+                HStack(spacing: 3){
+                    Image(systemName: "timelapse")
+                        .font(.system(size: 11, weight: .semibold, design: .default))
+                    Text("\(postsVM.selectedPost.post!.totalSeconds)s")
+                        .font(.system(size: 12, weight: .medium, design: .default))
+                }
+                .foregroundColor(.primary)
+                .padding(5)
+                .background {
+                    Color.primary
+                        .opacity(0.05)
+                        .clipShape(Capsule())
+                }
+                .padding(.horizontal, 10)
+                .padding(.top, 10)
                 Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus")
                     .foregroundColor(.primary)
                     .font(.system(size: 12, weight: .regular, design: .default))

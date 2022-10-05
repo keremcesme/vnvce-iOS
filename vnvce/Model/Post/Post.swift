@@ -15,6 +15,7 @@ struct Post: Decodable, Hashable {
     let owner: Owner
     let media: Media
     let type: PostType
+    let totalSeconds: Int
     let archived: Bool
     let createdAt: TimeInterval
     let modifiedAt: TimeInterval

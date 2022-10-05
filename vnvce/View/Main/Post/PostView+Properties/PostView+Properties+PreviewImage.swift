@@ -52,7 +52,8 @@ extension PostView.PostProperties {
                         .aspectRatio(contentMode: .fill)
                         .frame(self.post.media.returnSize)
                         .scaleEffect(previewImageScaleEffect)
-                        .overlay(PreviewImageBlurLayer)
+//                        .overlay(PreviewImageBlurLayer)
+                        .overlay(PostViewBlur(postsVM: postsVM, postVM: postVM))
                         .padding(.top, previewImageTopPadding)
                 }
                 

@@ -23,13 +23,20 @@ struct vnvceApp: App {
         WindowGroup {
             Group {
                 switch appState.loggedIn {
-                    case true:
-                        HomeView()
-                    case false:
-                        AuthView()
+                case true:
+                    HomeView()
+                case false:
+                    AuthView()
                 }
             }
             .environmentObject(appState)
+//            .onReceive(NotificationCenter.default.publisher(for: UIApplication.userDidTakeScreenshotNotification), perform: { _ in
+//                print("screen shot")
+//            })
+            .onReceive(NotificationCenter.default.publisher(for: UIScreen.capturedDidChangeNotification)) { _ in
+                //                            isRecordingScreen.toggle()
+//                print(isRecordingScreen ? "Started recording screen" : "Stopped recording screen")
+            }
             .onAppear {
                 print("Access Token: \(appState.accessToken)")
                 print("Refresh Token: \(appState.refreshToken)")
@@ -38,15 +45,16 @@ struct vnvceApp: App {
             .onChange(of: notificationCenter.dumbData) { newValue in
                 
             }
-            .onChange(of: scenePhase) { newPhase in
-                if newPhase == .inactive {
-                    print("Inactive")
-                } else if newPhase == .active {
-                    print("Active")
-                } else if newPhase == .background {
-                    print("Background")
-                }
-            }
+            .onChange(of: scenePhase, perform: appState.onChangeScenePhase)
+            //            .onChange(of: scenePhase) { newPhase in
+            //                if newPhase == .inactive {
+            //                    print("Inactive")
+            //                } else if newPhase == .active {
+            //                    print("Active")
+            //                } else if newPhase == .background {
+            //                    print("Background")
+            //                }
+            //            }
         }
     }
 }
