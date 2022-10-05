@@ -20,6 +20,48 @@ extension PostView {
             .greedyWidth()
             .overlay(Media)
             .opacity(postsVM.selectedPost.ready ? 1 : 0.00001)
+            .overlay(PostViewBlur(postsVM: postsVM, postVM: postVM))
+//                    .overlay {
+//                        BlurView(style: .light)
+//                            .opacity(postsVM.selectedPost.show ? 0.000001 : 1)
+//                    }
+            .overlay {
+                ZStack {
+                    EmptyView()
+//                            if postVM.onDragging {
+//                                BlurView(style: .light)
+//                            }
+//
+//                            if postVM.stop {
+//                                BlurView(style: .light)
+//                                    .overlay {
+//                                        VStack {
+//                                            Image(systemName: "hand.tap.fill")
+//                                                .foregroundColor(.white)
+//                                                .font(.system(size: 45, weight: .medium, design: .default))
+//                                            Text("tap to show")
+//                                                .foregroundColor(.white)
+//                                                .font(.system(size: 14, weight: .regular, design: .default))
+//                                        }
+//                                        .shadow(radius: 0.4)
+//                                    }
+//                            }
+                }
+                .animation(.default, value: postVM.onDragging)
+                .animation(.default, value: postVM.stop)
+            }
+//            .overlay {
+//                Color.black.opacity(0.0000001)
+//                    .onTapGesture {
+//                        if postVM.stop {
+//                            postVM.stop = false
+//                            postVM.startTimer()
+//                        } else {
+//                            postVM.stop = true
+//                            postVM.pauseTimer()
+//                        }
+//                    }
+//            }
     }
     
     @ViewBuilder

@@ -16,15 +16,18 @@ extension PostViewModel {
                 self.totalSeconds += 0.05
             }
         }
+        if timer != nil {
+            RunLoop.current.add(timer!, forMode: .common)
+        }
     }
     
     public func stopTimer() {
-        timer.invalidate()
+        timer?.invalidate()
         secondsElapsed = 0
     }
     
     public func pauseTimer() {
-        timer.invalidate()
+        timer?.invalidate()
     }
     
 }

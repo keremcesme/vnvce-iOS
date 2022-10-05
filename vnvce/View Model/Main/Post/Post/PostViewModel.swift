@@ -12,7 +12,7 @@ typealias DismissPostViewAction = () -> Void
 class PostViewModel: NSObject, ObservableObject {
     
     // MARK: Timer
-    public var timer: Timer = Timer()
+    @Published public var timer: Timer?
     
     @Published public var totalSeconds: CGFloat = 0
     

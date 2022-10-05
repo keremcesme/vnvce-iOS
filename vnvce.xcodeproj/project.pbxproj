@@ -173,6 +173,7 @@
 		0C94712828A3D17400B79922 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0C94712A28A3D17400B79922 /* Localizable.strings */; };
 		0C95B07B28DB8A61002FF65D /* View+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C95B07A28DB8A61002FF65D /* View+Sync.swift */; };
 		0C9BD31128B270310019CD5C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0C9BD31028B270310019CD5C /* Alamofire */; };
+		0CAF5BFF28EE29BE00EF8401 /* PostView+Properties+BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAF5BFE28EE29BE00EF8401 /* PostView+Properties+BottomBar.swift */; };
 		0CB6004528B471DC008849BB /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB6004428B471DC008849BB /* Grid.swift */; };
 		0CB6004828B47238008849BB /* CAProfilePictureLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB6004728B47238008849BB /* CAProfilePictureLibraryView.swift */; };
 		0CB6004C28B476DC008849BB /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB6004B28B476DC008849BB /* BlurView.swift */; };
@@ -518,6 +519,7 @@
 		0C94714328A3D34F00B79922 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0C94714428A3D35B00B79922 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0C95B07A28DB8A61002FF65D /* View+Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Sync.swift"; sourceTree = "<group>"; };
+		0CAF5BFE28EE29BE00EF8401 /* PostView+Properties+BottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Properties+BottomBar.swift"; sourceTree = "<group>"; };
 		0CB6004428B471DC008849BB /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		0CB6004728B47238008849BB /* CAProfilePictureLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAProfilePictureLibraryView.swift; sourceTree = "<group>"; };
 		0CB6004B28B476DC008849BB /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
@@ -914,6 +916,7 @@
 			children = (
 				0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */,
 				0C5A45B028DF3E24009D2CF9 /* PostView+Properties+NavigationBar.swift */,
+				0CAF5BFE28EE29BE00EF8401 /* PostView+Properties+BottomBar.swift */,
 				0C5A45B228DF40E9009D2CF9 /* PostView+Properties+PreviewImage.swift */,
 			);
 			path = "PostView+Properties";
@@ -2217,6 +2220,7 @@
 				0CFC50C228DCAE21008730A5 /* PostsCellView.swift in Sources */,
 				0C80CB9728CE209F00D79D94 /* YPPhotoCaptureHelper.swift in Sources */,
 				0C80CBA028CE209F00D79D94 /* AVMutableComposition+Extensions.swift in Sources */,
+				0CAF5BFF28EE29BE00EF8401 /* PostView+Properties+BottomBar.swift in Sources */,
 				0C7CB61728D0A57300034F14 /* PostType.swift in Sources */,
 				0C5A45AE28DF39DF009D2CF9 /* PostViewModel+Timer.swift in Sources */,
 				0C607EAE28CB56E50078D351 /* ScrollViewRefreshable.swift in Sources */,
