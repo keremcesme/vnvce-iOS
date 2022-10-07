@@ -18,6 +18,13 @@ protocol AFRequestTaskProtocol {
         to: T.Type
     ) async throws -> Result<T, HTTPStatus>
     
+    func task<T: Decodable>(
+        url: URL,
+        method: HTTPMethod,
+        authorization: Bool,
+        to: T.Type
+    ) async throws -> Result<T, HTTPStatus>
+    
     func paginationTask<T: Decodable, E: Encodable>(
         payload: E,
         url: URL,
@@ -29,7 +36,14 @@ protocol AFRequestTaskProtocol {
 
 protocol AFRequestDataTaskProtocol {
     func generateDataTask<T: Decodable, E: Encodable>(
-        payload: E?,
+        payload: E,
+        url: URL,
+        method: HTTPMethod,
+        authorization: Bool,
+        to: T.Type
+    ) throws -> DataTask<Response<T>>
+    
+    func generateDataTask<T: Decodable>(
         url: URL,
         method: HTTPMethod,
         authorization: Bool,

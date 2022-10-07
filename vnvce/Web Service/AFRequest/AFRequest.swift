@@ -38,6 +38,20 @@ extension AFRequest: AFRequestTaskProtocol {
         return try await responseTask(dataTask: dataTask)
     }
     
+    func task<T: Decodable>(
+        url: URL,
+        method: HTTPMethod,
+        authorization: Bool = true,
+        to: T.Type
+    ) async throws -> Result<T, HTTPStatus> {
+        let dataTask = try generateDataTask(
+            url: url,
+            method: method,
+            authorization: authorization,
+            to: to)
+        return try await responseTask(dataTask: dataTask)
+    }
+    
     public func paginationTask<T: Decodable, E: Encodable>(
         payload: E,
         url: URL,
@@ -58,7 +72,7 @@ extension AFRequest: AFRequestTaskProtocol {
 // MARK: Generate 'DataTask' object before to request task
 extension AFRequest: AFRequestDataTaskProtocol {
     internal func generateDataTask<T: Decodable, E: Encodable>(
-        payload: E?,
+        payload: E,
         url: URL,
         method: HTTPMethod,
         authorization: Bool,
@@ -73,25 +87,40 @@ extension AFRequest: AFRequestDataTaskProtocol {
             headers.add(.authorization(bearerToken: token))
         }
         
-        if let payload {
-            headers.add(.contentType(MIMEType.appJSON))
-            
-            return AF
-                .request(
-                    url,
-                    method: method,
-                    parameters: payload,
-                    encoder: encoder,
-                    headers: headers)
-                .serializingDecodable(Response<T>.self)
-        } else {
-            return AF
-                .request(
-                    url,
-                    method: method,
-                    headers: headers)
-                .serializingDecodable(Response<T>.self)
+        headers.add(.contentType(MIMEType.appJSON))
+        
+        return AF
+            .request(
+                url,
+                method: method,
+                parameters: payload,
+                encoder: encoder,
+                headers: headers)
+            .serializingDecodable(Response<T>.self)
+    }
+    
+    internal func generateDataTask<T: Decodable>(
+        url: URL,
+        method: HTTPMethod,
+        authorization: Bool,
+        to: T.Type
+    ) throws -> DataTask<Response<T>> {
+        var headers = HTTPHeaders()
+        
+        if authorization {
+            guard let token = try Keychain().get("accessToken") else {
+                fatalError()
+            }
+            headers.add(.authorization(bearerToken: token))
         }
+        
+        return AF
+            .request(
+                url,
+                method: method,
+                headers: headers)
+            .serializingDecodable(Response<T>.self)
+        
     }
     
     internal func generatePaginationDataTask<T: Decodable, E: Encodable>(
