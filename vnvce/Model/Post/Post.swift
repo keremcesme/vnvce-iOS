@@ -15,7 +15,10 @@ struct Post: Decodable, Hashable {
     let owner: Owner
     let media: Media
     let type: PostType
-    let totalSeconds: Int
+    
+    var totalWatchTime: Int
+    var displayTime: DisplayTime?
+    
     let archived: Bool
     let createdAt: TimeInterval
     let modifiedAt: TimeInterval
@@ -35,6 +38,11 @@ struct Post: Decodable, Hashable {
         let url: String
         let thumbnailURL: String?
         let storageLocation: UUID
+    }
+    
+    struct DisplayTime: Decodable, Hashable {
+        let id: UUID
+        let second: Double
     }
 }
 

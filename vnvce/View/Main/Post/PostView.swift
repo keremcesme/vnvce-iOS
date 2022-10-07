@@ -101,7 +101,7 @@ struct PostView: View {
                 HStack(spacing: 3){
                     Image(systemName: "timelapse")
                         .font(.system(size: 11, weight: .semibold, design: .default))
-                    Text("\(postsVM.selectedPost.post!.totalSeconds)s")
+                    Text("\(postsVM.selectedPost.post!.totalWatchTime)s")
                         .font(.system(size: 12, weight: .medium, design: .default))
                 }
                 .foregroundColor(.primary)

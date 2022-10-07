@@ -43,6 +43,10 @@
 		0C2D154928B46C1300690C6D /* LibraryAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2D154828B46C1300690C6D /* LibraryAsset.swift */; };
 		0C3A491F28D0A30D005FBB80 /* PostRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3A491E28D0A30D005FBB80 /* PostRoutes.swift */; };
 		0C3A492128D0A345005FBB80 /* URLBuilder+Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3A492028D0A345005FBB80 /* URLBuilder+Post.swift */; };
+		0C3C4D7828F079C600B2B7C8 /* PostDisplayTimePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C4D7728F079C600B2B7C8 /* PostDisplayTimePayload.swift */; };
+		0C3C4D7A28F07E8300B2B7C8 /* SecureAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C4D7928F07E8300B2B7C8 /* SecureAPI.swift */; };
+		0C3C4D7C28F086DA00B2B7C8 /* AFRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C4D7B28F086DA00B2B7C8 /* AFRequest.swift */; };
+		0C3C4D7F28F092D800B2B7C8 /* AFRequest+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3C4D7E28F092D800B2B7C8 /* AFRequest+Protocols.swift */; };
 		0C43382228D8B076003C48B6 /* TaskIf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382128D8B076003C48B6 /* TaskIf.swift */; };
 		0C43382528D8B1B7003C48B6 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382428D8B1B7003C48B6 /* PostView.swift */; };
 		0C43382A28D8D121003C48B6 /* CustomTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C43382928D8D121003C48B6 /* CustomTransitions.swift */; };
@@ -341,6 +345,10 @@
 		0C2D154828B46C1300690C6D /* LibraryAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAsset.swift; sourceTree = "<group>"; };
 		0C3A491E28D0A30D005FBB80 /* PostRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRoutes.swift; sourceTree = "<group>"; };
 		0C3A492028D0A345005FBB80 /* URLBuilder+Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLBuilder+Post.swift"; sourceTree = "<group>"; };
+		0C3C4D7728F079C600B2B7C8 /* PostDisplayTimePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDisplayTimePayload.swift; sourceTree = "<group>"; };
+		0C3C4D7928F07E8300B2B7C8 /* SecureAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureAPI.swift; sourceTree = "<group>"; };
+		0C3C4D7B28F086DA00B2B7C8 /* AFRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFRequest.swift; sourceTree = "<group>"; };
+		0C3C4D7E28F092D800B2B7C8 /* AFRequest+Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFRequest+Protocols.swift"; sourceTree = "<group>"; };
 		0C43382128D8B076003C48B6 /* TaskIf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskIf.swift; sourceTree = "<group>"; };
 		0C43382428D8B1B7003C48B6 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		0C43382928D8D121003C48B6 /* CustomTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitions.swift; sourceTree = "<group>"; };
@@ -836,6 +844,15 @@
 			path = Grid;
 			sourceTree = "<group>";
 		};
+		0C3C4D7D28F0927E00B2B7C8 /* AFRequest */ = {
+			isa = PBXGroup;
+			children = (
+				0C3C4D7B28F086DA00B2B7C8 /* AFRequest.swift */,
+				0C3C4D7E28F092D800B2B7C8 /* AFRequest+Protocols.swift */,
+			);
+			path = AFRequest;
+			sourceTree = "<group>";
+		};
 		0C43382328D8B1A7003C48B6 /* Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -946,6 +963,7 @@
 				0C7CB61028D0A4FF00034F14 /* UploadPostPayload.swift */,
 				0C7CB61228D0A52C00034F14 /* PostMediaPayload.swift */,
 				0C2C6B1C28E4DA820076F7C3 /* PostsPayload.swift */,
+				0C3C4D7728F079C600B2B7C8 /* PostDisplayTimePayload.swift */,
 			);
 			path = Payloads;
 			sourceTree = "<group>";
@@ -1552,6 +1570,7 @@
 				0CD6150128AE90B500734002 /* JSON */,
 				0CD6150028AE781B00734002 /* Routes */,
 				0C12E7BE28AEB620006FE3E7 /* URL Builder */,
+				0C3C4D7D28F0927E00B2B7C8 /* AFRequest */,
 			);
 			path = "Web Service";
 			sourceTree = "<group>";
@@ -1624,6 +1643,7 @@
 		0CD614F928AE779500734002 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				0C3C4D7928F07E8300B2B7C8 /* SecureAPI.swift */,
 				0CD614FA28AE779D00734002 /* AuthAPI.swift */,
 				0CEC89B628B572370036E939 /* Me */,
 				0CC1494E28B3E44100AB724D /* TokenAPI.swift */,
@@ -2055,6 +2075,7 @@
 				0C2D154628B469FE00690C6D /* LibraryStatus.swift in Sources */,
 				0C5FA01028A6EF86000BB20F /* OTPViewModel.swift in Sources */,
 				0C12EF6D28B0173E007C314E /* ReserveUsernameAndSendSMSOTPPayload.swift in Sources */,
+				0C3C4D7A28F07E8300B2B7C8 /* SecureAPI.swift in Sources */,
 				0CEC89AE28B5592F0036E939 /* StorageRoutes.swift in Sources */,
 				0CCE6A4D28A3CAC100D65D56 /* NotificationCenter.swift in Sources */,
 				0C80CB9C28CE209F00D79D94 /* YPPermissionManager.swift in Sources */,
@@ -2063,6 +2084,7 @@
 				0CBA650628A6BCA6006DCD9B /* CreateAccountViewModel.swift in Sources */,
 				0C80CB7C28CE209F00D79D94 /* YPSelectionsGalleryVC.swift in Sources */,
 				0CC1493228B3AAFD00AB724D /* VerifySMSPayload.swift in Sources */,
+				0C3C4D7C28F086DA00B2B7C8 /* AFRequest.swift in Sources */,
 				0C43382528D8B1B7003C48B6 /* PostView.swift in Sources */,
 				0C80CB8728CE209F00D79D94 /* YPMenuItem.swift in Sources */,
 				0C80CB8D28CE209F00D79D94 /* YPAssetViewContainer.swift in Sources */,
@@ -2088,6 +2110,7 @@
 				0C80CBB528CE209F00D79D94 /* YPLoadingView.swift in Sources */,
 				0CBA651D28A6E0F0006DCD9B /* TextField+Extensions.swift in Sources */,
 				0C80CB7E28CE209F00D79D94 /* YPSelectionsGalleryCell.swift in Sources */,
+				0C3C4D7828F079C600B2B7C8 /* PostDisplayTimePayload.swift in Sources */,
 				0C43382A28D8D121003C48B6 /* CustomTransitions.swift in Sources */,
 				0CD614FF28AE781800734002 /* AuthRoutes.swift in Sources */,
 				0CD9E7AF28C8C7D2007E25F9 /* Color+Extensions.swift in Sources */,
@@ -2245,6 +2268,7 @@
 				0C2256BA28A6B27800E48AD2 /* AuthView.swift in Sources */,
 				0C80CB8428CE209F00D79D94 /* YPGridView.swift in Sources */,
 				0C80CB9628CE209F00D79D94 /* YPCameraView.swift in Sources */,
+				0C3C4D7F28F092D800B2B7C8 /* AFRequest+Protocols.swift in Sources */,
 				0C80CB6728CE209F00D79D94 /* YPFiltersView.swift in Sources */,
 				0C12EF5E28AFD201007C314E /* Tokens.swift in Sources */,
 				0CEC89B528B572190036E939 /* EditProfilePicturePayload.swift in Sources */,
