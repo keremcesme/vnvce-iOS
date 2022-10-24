@@ -15,6 +15,8 @@ import SwiftUIX
 struct ProfileView: View {
     @EnvironmentObject private var currentUserVM: CurrentUserViewModel
     @EnvironmentObject private var postsVM: PostsViewModel
+    @EnvironmentObject private var cameraVM: CameraViewModel
+    @EnvironmentObject private var momentsVM: MomentsViewModel
     
     @StateObject var scrollDelegate: ScrollViewModel = .init()
     
@@ -28,12 +30,64 @@ struct ProfileView: View {
                     ScrollViewRefreshable(scrollDelegate: scrollDelegate) {
                         LazyVStack {
                             DetailsView
-                            PostsGridView(vm: postsVM)
+//                            PostsGridView(vm: postsVM)
+                            
+                            
+                            
+                            GridLayout(items: momentsVM.moments, id: \.id, spacing: 1, columnCount: 3, cellRatio: 1.5) { post in
+                                
+                                
+                                GeometryReader{
+                                    let frame = $0.frame(in: .global)
+                                    let size = $0.size
+                                    
+                                    LazyImage(url: URL(string: post.moments[0].media.url)) {
+                                        if let uiImage = $0.imageContainer?.image {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(size)
+                                                .clipped()
+                                                .overlay {
+                                                    BlurView(style: .light)
+                                                }
+                                                .contentShape(Rectangle())
+                                                
+                                        } else {
+                                            Color.primary.opacity(0.05)
+                                                .shimmering()
+                                        }
+                                    }
+                                    .animation(nil)
+                                    .pipeline(.shared)
+                                    .processors([ImageProcessors.Resize(width: 100)])
+                                    .priority(.veryHigh)
+                                    
+                                }
+                                
+                                
+                                
+                                
+                                
+                                
+                            }
+                            
+                            
+                            
+                            
+                            
+                            NavigationLink {
+                                EmptyView()
+                            } label: {
+                                Text("GO")
+                                    .font(.title.bold())
+                            }
                         }
                         .padding(.bottom, 75)
                     } onRefresh: {
                         await currentUserVM.fetchProfile()
-                        await postsVM.loadFirstPage()
+//                        await postsVM.loadFirstPage()
+                        await momentsVM.fetchMoments()
                     }
                     .onChange(of: postsVM.scrollToPostID) { id in
                         if (postsVM.selectedPost.frame.top.height < UIDevice.current.statusAndNavigationBarHeight) || (postsVM.selectedPost.frame.bottom.height > UIScreen.main.bounds.height - UIDevice.current.bottomSafeAreaHeight() - 60) {
@@ -43,6 +97,13 @@ struct ProfileView: View {
                             postsVM.updateCurrentPostRectAfterScroll = true
                         }
                     }
+//                    .onChange(of: cameraVM.viewDidAppear) {
+//                        if !$0 {
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                scrollDelegate.addGesture()
+//                            }
+//                        }
+//                    }
                 }
                 .onChange(of: postsVM.selectedPost.didAppear) {
                     if !$0 {

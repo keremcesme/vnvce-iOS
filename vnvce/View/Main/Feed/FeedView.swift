@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import SwiftUIX
+import PureSwiftUI
+import Introspect
 
 struct FeedView: View {
     @EnvironmentObject private var searchVM: SearchViewModel
@@ -14,10 +17,81 @@ struct FeedView: View {
         NavigationView {
             ZStack {
                 CurrentUserBackground()
+                MomentsView
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar(ToolBar)
+        }
+    }
+}
+
+extension FeedView {
+    
+    @ViewBuilder
+    private var MomentsView: some View {
+        PaginationView(axis: .vertical, showsIndicators: false) {
+            ForEach(0..<30, id: \.self) { index in
+                FeedMomentView()
+//                RoundedRectangle(cornerRadius: 12)
+//                    .foregroundColor(.primary).opacity(0.1)
+            }
+        }
+        .ignoresSafeArea()
+    }
+    
+    @ViewBuilder
+    private var MomentsView2: some View {
+        HStack(spacing:0) {
+            GeometryReader{
+                ScrollViewReader { proxy in
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing:15) {
+                            ForEach((0...30), id: \.self){ item in
+                                Button {
+                                    withAnimation {
+                                        proxy.scrollTo("\(item)", anchor: .top)
+                                    }
+                                } label: {
+                                    RoundedRectangle(10, style: .continuous)
+                                        .foregroundColor(.primary)
+                                        .frame(width: 30, height: 30)
+                                        .overlay {
+                                            Text("\(item)")
+                                        }
+                                        .opacity(0.1)
+                                }
+                                .buttonStyle(.plain)
+                                .id("\(item)")
+                            }
+                        }
+                        .introspectScrollView { scrollView in
+                            scrollView.setContentOffset(.zero, animated: true)
+                        }
+                    }
+                }
+                .frame(maxWidth: $0.size.width)
+            }
+            .frame(maxWidth: 60, maxHeight: .infinity)
+            
+            GeometryReader {
+                let size = $0.size
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing:15) {
+                            ForEach((0...30), id: \.self){ item in
+                                Rectangle()
+                                    .foregroundColor(.primary)
+                                    .frame(width: size.width, height: size.width * 5 / 3)
+                                    .opacity(0.1)
+                            }
+                        }
+                    }
+                }
+                .frame(maxWidth: size.width)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+           
         }
     }
 }
@@ -51,4 +125,3 @@ extension FeedView {
         .buttonStyle(.plain)
     }
 }
-

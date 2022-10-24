@@ -2,16 +2,21 @@
 //  TabBar.swift
 //  vnvce
 //
-//  Created by Kerem Cesme on 7.09.2022.
+//  Created by Kerem Cesme on 19.10.2022.
 //
 
 import SwiftUI
 import SwiftUIX
 import PureSwiftUI
+import Nuke
+import NukeUI
 
 struct TabBar: View {
-    @EnvironmentObject var tabBarVM: TabBarViewModel
-    @EnvironmentObject var uploadPostVM: UploadPostViewModel
+    @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject private var tabBarVM: TabBarViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var camera: CameraManager
     
     var body: some View {
         VStack {
@@ -23,81 +28,99 @@ struct TabBar: View {
     
     @ViewBuilder
     private var TabBar: some View {
-        GeometryReader { g in
-            let height = g.size.height
-            HStack(spacing: 0){
-                TabBarItem(.feed, height: height)
-                ShareButton(height: height)
-                TabBarItem(.profile, height: height)
+        GeometryReader{
+            let size = $0.size
+            Group {
+                if tabBarVM.current == .camera {
+                    Color.white
+                } else {
+                    Color.primary
+                }
             }
+            .frame(size)
+            HStack(spacing: 26) {
+                TabBarItem(.feed)
+                TabBarItem(.camera)
+                TabBarItem(.profile)
+            }
+            .padding(4)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 60)
-        .background(Background)
-        .padding(.horizontal, 20)
+        .frame(width: 252, height: 38)
+        .clipShape(Capsule())
         .padding(.bottom, UIDevice.current.hasNotch() ? 0 : 15)
     }
     
     @ViewBuilder
-    private var Background: some View {
-        BlurView(style: .systemUltraThinMaterial)
-            .clipShape(Capsule())
-    }
-    
-    @ViewBuilder
-    private func TabBarItem(_ tab: Tab, height: CGFloat) -> some View {
-        Button {
-            tabBarVM.current = tab
-        } label: {
-            GeometryReader{g in
-                ZStack{
-                    Color.primary.opacity(0.00001)
-                    Image(tab.name)
+    private func TabBarItem(_ tab: Tab) -> some View {
+            ZStack {
+                Capsule()
+                    .foregroundColor(tabBarVM.current == .camera ? .white : .primary)
+                    .colorInvert()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .opacity(tabBarVM.current == tab ? 1 : 0)
+                if tab == .profile, let url = currentUserVM.user?.profilePicture?.url {
+                    LazyImage(url: URL(string: url)) { state in
+                        if let uiImage = state.imageContainer?.image {
+                            Circle()
+                                .foregroundColor(iconColor(.profile))
+                                .frame(21)
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(19)
+                                .clipShape(Circle())
+                        } else {
+                            Circle()
+                                .foregroundColor(iconColor(.profile))
+                                .frame(21)
+                                .shimmering()
+                        }
+                    }
+                    .pipeline(.shared)
+                    .processors([ImageProcessors.Resize(width: 19)])
+                    .priority(.veryHigh)
+                } else {
+                    Image(tab == tabBarVM.current ? tab.fill : tab.name)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .foregroundColor(Color.primary)
-                        .opacity(tabBarVM.current == tab ? 1 : 0.15)
-                        .frame(width: 22, height: 22, alignment: .center)
+                        .foregroundColor(iconColor(tab))
+                        .frame(width: 18, height: 18, alignment: .center)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
-        }
-        .buttonStyle(PlainButtonStyle())
+            .contentShape(Rectangle())
+            .onTapGesture {
+                tabBarVM.current = tab
+                if tab == .camera {
+                    UIDevice.current.setStatusBar(style: .lightContent, animation: false)
+                    if camera.image == nil {
+                        camera.startSession()
+                    }
+                } else {
+                    UIDevice.current.setStatusBar(style: .default, animation: false)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        if tabBarVM.current != .camera {
+                            camera.stopSession()
+                        }
+                    }
+                }
+            }
 
     }
     
-    @ViewBuilder
-    private func ShareButton(height: CGFloat) -> some View {
-        Button {
-            DispatchQueue.main.async {
-                uploadPostVM.showUploadPostView = true
+    private func iconColor(_ tab: Tab) -> Color {
+        if tabBarVM.current == .camera {
+            if tab == .camera {
+                return Color.white
+            } else {
+                return Color.black
             }
-        } label: {
-            GeometryReader{g in
-                ZStack{
-                    Color.primary.opacity(0.00001)
-                        .frame(width: height, height: height)
-                    Circle()
-                        .foregroundColor(.primary)
-                        .frame(width: height - 6, height: height - 6)
-                        .mask(
-                            Circle()
-                                .overlay(
-                                    Image(systemName: "plus")
-                                        .font(.system(size: 24, weight: .medium, design: .rounded))
-                                        .blendMode(.destinationOut)
-                                )
-                        )
-                }
-            }
-            .frame(width: height, height: height, alignment: .center)
-        }
-        .buttonStyle(PlainButtonStyle())
-        .fullScreenCover(isPresented: $uploadPostVM.showUploadPostView) {
-            PostImagePickerView()
+        } else if tabBarVM.current == tab {
+            return Color.primary
+        } else {
+            return colorScheme.primaryReverse
         }
     }
-            
     
 }
+
+//tabBarVM.current == tab ? .primary : colorScheme == .light ? .white : .black

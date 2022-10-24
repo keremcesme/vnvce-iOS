@@ -51,6 +51,10 @@ extension URLBuilder: URLBuilderProtocol {
         generateUserURL(route: user, version: version)
     }
     
+    func momentURL(route moment: MomentRoute, version: APIVersion) -> URL {
+        generateMomentURL(route: moment, version: version)
+    }
+    
 }
 
 // MARK: Pagination Params -

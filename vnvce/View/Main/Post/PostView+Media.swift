@@ -79,6 +79,9 @@ extension PostView {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .greedyWidth()
+//                    .taskInit {
+//                        postVM.startTimer()
+//                    }
             } else {
 //                ProgressView()
 //                    .progressViewStyle(CircularProgressViewStyle(tint: .white))

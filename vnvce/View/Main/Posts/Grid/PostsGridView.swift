@@ -26,12 +26,17 @@ struct PostsGridView: View {
     @ViewBuilder
     private var Root: some View {
         if relationship?.raw == .friend {
-            if let postResults = postsVM.postResults {
-                if postResults.metadata.total != 0 {
-                    GridView(posts: postResults.items)
-                } else {
-                    NoPostView
-                }
+//            if let postResults = postsVM.postResults {
+//                if postResults.metadata.total != 0 {
+//                    GridView(posts: postResults.items)
+//                } else {
+//                    NoPostView
+//                }
+//            }
+            if postsVM.postResults.metadata.total != 0 {
+                GridView(posts: postsVM.postResults.items)
+            } else {
+                NoPostView
             }
         } else if relationship == nil {
             RedactedPosts
@@ -75,7 +80,7 @@ struct PostsGridView: View {
     
     @ViewBuilder
     private var Progress: some View {
-        if postsVM.postResults!.items.count < postsVM.postResults!.metadata.total && postsVM.isRunning {
+        if postsVM.postResults.items.count < postsVM.postResults.metadata.total && postsVM.isRunning {
             ProgressView()
         }
     }

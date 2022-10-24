@@ -56,8 +56,8 @@ private extension PostAPI {
     private func setPostDisplayTimeTask(_ payload: PostDisplayTimePayload) async throws -> Result<Post.DisplayTime, HTTPStatus> {
         try await request.task(
             payload: payload,
-            url: urlBuilder.postURL(route: .upload, version: .v1),
-            method: .post,
+            url: urlBuilder.postURL(route: .setDisplayTime, version: .v1),
+            method: .put,
             to: Post.DisplayTime.self)
     }
 }

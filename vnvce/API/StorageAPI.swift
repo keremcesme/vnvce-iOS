@@ -20,6 +20,11 @@ enum UploadPostMediaPhase {
     case success(PostMediaPayload)
 }
 
+enum UploadMomentMediaPhase {
+    case uploading
+    case success(UploadMomentPayload)
+}
+
 struct StorageAPI {
     static let shared = StorageAPI()
     
@@ -41,6 +46,15 @@ extension StorageAPI {
         _ completion: @escaping (_ status: UploadPostMediaPhase, _ progress: Double) -> Void
     ) throws {
         try uploadImagePostTask(image) { status, progress in
+            completion(status, progress)
+        }
+    }
+    
+    public func uploadImageMoment(
+        _ image: UIImage,
+        _ completion: @escaping (_ status: UploadMomentMediaPhase, _ progress: Double) -> Void
+    ) throws {
+        try uploadImageMomentTask(image) { status, progress in
             completion(status, progress)
         }
     }
@@ -94,6 +108,39 @@ private extension StorageAPI {
                 guard error == nil, let url = url?.absoluteString else { return }
                 let ratio: Float = Float(image.size.height / image.size.width)
                 let media = PostMediaPayload(type: .image, name: name, ratio: ratio, url: url)
+                return completion(.success(media), 95)
+            }
+        }
+    }
+    
+    private func uploadImageMomentTask(
+        _ image: UIImage,
+        _ completion: @escaping (_ status: UploadMomentMediaPhase, _ progress: Double) -> Void
+    ) throws {
+        guard let userID = UserDefaults.standard.value(forKey: "currentUserID") as? String else {
+            fatalError()
+        }
+        
+        let data = try compressImage(image, size: 1024 * 1024)
+        let name = "image-\(UUID().uuidString).jpg"
+        
+        let ref = pathBuilder.momentsPath(userID: userID, name: name)
+        
+        let task = ref.putData(data)
+        task.observe(.progress) {
+            if let progress = $0.progress {
+                let value = progress.fractionCompleted * 100
+                if value <= 95 {
+                    completion(.uploading, value)
+                } else {
+                    completion(.uploading, 95)
+                }
+            }
+        }
+        task.observe(.success) { _ in
+            ref.downloadURL { url, error in
+                guard error == nil, let url = url?.absoluteString else { return }
+                let media = UploadMomentPayload(type: .image, name: name, url: url)
                 return completion(.success(media), 95)
             }
         }

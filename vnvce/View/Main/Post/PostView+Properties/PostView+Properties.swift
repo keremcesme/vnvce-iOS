@@ -48,7 +48,7 @@ extension PostView {
         func body(content: Content) -> some View {
             content
                 .overlay(NavigationBar, alignment: navigationBarAlignment)
-                .overlay(TimerView, alignment: bottomBarAlignment)
+                .overlay(TimerBar, alignment: bottomBarAlignment)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .opacity(postsVM.selectedPost.show ? 1 : 0.00001)
                 .background(Background)

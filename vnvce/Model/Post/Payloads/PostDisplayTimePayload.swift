@@ -10,7 +10,7 @@ import Foundation
 struct PostDisplayTimePayload: Encodable {
     let postID: UUID
     let postDisplayTimeID: UUID?
-    let second: Double
+    var second: Double
     
     init(postID: UUID, postDisplayTimeID: UUID? = nil, second: Double) {
         self.postID = postID

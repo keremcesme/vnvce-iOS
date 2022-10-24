@@ -30,6 +30,7 @@ import FirebaseSharedSwift
 enum StorageRoute {
     case profilePictures
     case posts
+    case moments
     
     var url: String {
         var url = WebConstants.storageURL
@@ -40,6 +41,9 @@ enum StorageRoute {
             case .posts:
                 url += "posts"
                 return url
+        case .moments:
+            url += "moments"
+            return url
         }
     }
     

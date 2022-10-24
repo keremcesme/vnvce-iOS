@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "grinning-face-with-big-eyes.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

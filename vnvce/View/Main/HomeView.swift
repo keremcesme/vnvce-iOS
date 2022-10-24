@@ -17,13 +17,18 @@ struct HomeView: View {
     @StateObject private var searchVM = SearchViewModel()
     @StateObject private var currentUserVM = CurrentUserViewModel()
     @StateObject private var postsVM = PostsViewModel()
+    @StateObject private var momentsVM = MomentsViewModel()
     
     @StateObject private var uploadPostVM = UploadPostViewModel()
+    
+    @StateObject private var camera = CameraManager()
+    @StateObject private var cameraVM = CameraViewModel()
     
     @Sendable
     private func commonInit() async {
         await currentUserVM.fetchProfile()
-        await postsVM.loadFirstPage()
+        await momentsVM.fetchMoments()
+//        await postsVM.loadFirstPage()
 //        do {
 //            let result = try await PostAPI.shared.fetchPosts(params: PaginationParams(page: 1, per: 20))
 //            print(result)
@@ -40,17 +45,22 @@ struct HomeView: View {
                 TabView(selection: $tabBarVM.current) {
                     FeedView()
                         .tag(Tab.feed)
+                    CameraView()
+                        .tag(Tab.camera)
                     ProfileView()
                         .tag(Tab.profile)
                 }
+//                .tabViewStyle(.page(indexDisplayMode: .never))
                 .introspectTabBarController {
                     $0.tabBar.isHidden = true
                 }
+//                TabBarOLD()
                 TabBar()
                 // MARK: Other Views
                 // ...
                 SearchView()
                 PostRootView(postsVM)
+                CameraRootView()
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
@@ -63,8 +73,11 @@ struct HomeView: View {
             .environmentObject(tabBarVM)
             .environmentObject(currentUserVM)
             .environmentObject(postsVM)
+            .environmentObject(momentsVM)
             .environmentObject(searchVM)
             .environmentObject(uploadPostVM)
+            .environmentObject(cameraVM)
+            .environmentObject(camera)
             .taskInit(commonInit)
         }
     }

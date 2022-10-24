@@ -13,6 +13,7 @@ enum MainRoute {
     static let me = "me"
     static let search = "search"
     static let post = "post"
+    static let moment = "moment"
     static let relationship = "relationship"
     static let user = "user"
 }

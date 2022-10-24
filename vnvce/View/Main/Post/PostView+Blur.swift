@@ -27,7 +27,7 @@ struct PostViewBlur: View {
         ZStack {
             EmptyView()
             if showBlur {
-                BlurView(style: .light)
+//                BlurView(style: .light)
 //                    .opacity(blurOpacity)
             }
         }

@@ -19,7 +19,7 @@ enum PostRoute {
         case let .posts(params):
             return "\(MainRoute.post)/fetch_posts/\(params.raw)"
         case .setDisplayTime:
-            return "\(MainRoute.post)/set_display_timeb"
+            return "\(MainRoute.post)/set_display_time"
         }
     
         

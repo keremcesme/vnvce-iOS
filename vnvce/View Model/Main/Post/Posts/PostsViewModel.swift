@@ -20,8 +20,8 @@ class PostsViewModel: ObservableObject {
     
     @Published private(set) public var payload: PostsPayload
     
-//    @Published public var postResults: Pagination<Post> = Pagination()
-    @Published public var postResults: Pagination<Post>?
+    @Published public var postResults: Pagination<Post> = Pagination()
+//    @Published public var postResults: Pagination<Post>?
     
     @Published private(set) public var prefetcherImageURLs: [URL] = []
     
@@ -142,9 +142,9 @@ extension PostsViewModel: PaginationProtocol {
     
     func loadNextPageTask() async {
         if Task.isCancelled { return }
-        guard var postResults = postResults else {
-            return
-        }
+//        guard var postResults = postResults else {
+//            return
+//        }
         if postResults.items.count < postResults.metadata.total {
             do {
                 try await Task.sleep(seconds: 0.5)
@@ -187,7 +187,7 @@ extension PostsViewModel: ScrollViewPrefetcherDelegate {
     }
     
     private func postIndex(_ postID: UUID) -> Int {
-        for post in postResults!.items.enumerated() where post.element.id == postID {
+        for post in postResults.items.enumerated() where post.element.id == postID {
             return post.offset
         }
         return 0

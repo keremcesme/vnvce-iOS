@@ -25,6 +25,11 @@ struct FirebaseStoragePathBuilder {
         return Storage.storage(url: url).reference().child(userID).child(name)
     }
     
+    public func momentsPath(userID: String, name: String) -> StorageReference {
+        let url = StorageRoute.moments.url
+        return Storage.storage(url: url).reference().child(userID).child(name)
+    }
+    
     
     
 //    public func generateProfilePicturePath(userID: String, name: String) -> StorageReference {

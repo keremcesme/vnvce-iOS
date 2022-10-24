@@ -26,65 +26,83 @@ extension PostView.PostProperties {
     }
     
     @ViewBuilder
-    public var TimerView: some View {
+    public var TimerBar: some View {
         HStack(spacing: 8){
             TimerEmojiProgress
             TimerTimeLabel
-            Spacer()
-            TimerControlButton
+//            Spacer()
+//            TimerControlButton
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+//        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(8)
         .padding(.trailing, 4)
         .background(Color.primary)
         .clipShape(Capsule())
-        .padding(.horizontal, 100)
+//        .padding(.horizontal, 100)
         .padding(.bottom, UIDevice.current.postTimerBarBottomPadding)
         .opacity(postsVM.selectedPost.show ? 1 : 0.00001)
-        .onChange(of: postsVM.selectedPost.ready) {
-            if $0 {
-                postVM.startTimer()
-            }
+        .taskInit {
+            
         }
-        .onChange(of: postVM.secondsElapsed) { value in
-            print(String(format: "%0.1fs", postVM.secondsElapsed))
-            DispatchQueue.main.async {
-                if value > postVM.maxDuration - 0.2 {
-                    self.postVM.maxDuration += 5.0
-                    self.postVM.secondsElapsed = 0.0
-                }
-            }
-        }
-//        .onChange(of: postVM.onDragging) { value in
-//            if value {
-//                postVM.pauseTimer()
-//            } else {
+//        .onChange(of: postsVM.selectedPost.ready) {
+//            if $0 {
 //                postVM.startTimer()
+//            }
+//        }
+//        .onChange(of: postVM.secondsElapsed) { value in
+////            print(String(format: "%0.1fs", postVM.secondsElapsed))
+//            DispatchQueue.main.async {
+//                if value >= postVM.maxDuration {
+//                    self.postVM.maxDuration = 4.0
+//                    self.postVM.secondsElapsed = 0.0
+//                }
 //            }
 //        }
     }
     
     @ViewBuilder
     private var TimerEmojiProgress: some View {
-        Text(postVM.totalSeconds < 5.0 ? "😃" : "🥳")
+//        Group {
+//            Text(postVM.totalSeconds < 5.0 ? "😃" : "🥳")
+            Image(uiImage: timerImage())
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 19, height: 19)
+                .scaleEffect(emojiScale)
             .mask{
                 Circle()
                     .frame(width: 22, height: 22)
             }
             .frame(width: 26, height: 26, alignment: .center)
             .overlay {
-                ProgressView(value: postVM.secondsElapsed, total: postVM.maxDuration)
-                    .progressViewStyle(TimerProgressViewStyle(width: 24))
-                    .frame(width: 24, height: 24, alignment: .center)
+                if postVM.totalSeconds < 27 {
+                    ProgressView(value: postVM.secondsElapsed, total: postVM.maxDuration)
+                        .progressViewStyle(TimerProgressViewStyle(width: 24))
+                        .frame(width: 24, height: 24, alignment: .center)
+                }
             }
     }
     
+    //            Text(String(format: "%0.1fs", postVM.totalSeconds))
     @ViewBuilder
     private var TimerTimeLabel: some View {
-        Text(String(format: "%0.1fs", postVM.totalSeconds))
-            .font(.system(size: 16, weight: .medium, design: .default))
-            .foregroundColor(.primary)
-            .colorInvert()
+        HStack {
+            HStack(spacing:0) {
+                let seconds = Int(postVM.totalSeconds)
+                
+                ForEach(seconds.digits, id: \.self) { number in
+                    Text("\(number)")
+                        .frame(width: 9.6, alignment: .center)
+                }
+                Text(".")
+                Text("\(Int((postVM.totalSeconds - Double(Int(postVM.totalSeconds))) * 10))")
+                    .frame(width: 9.6)
+                Text("s")
+            }
+        }
+        .foregroundColor(.primary)
+        .font(.system(size: 16, weight: .medium, design: .default))
+        .colorInvert()
     }
     
     @ViewBuilder
@@ -102,6 +120,35 @@ extension PostView.PostProperties {
                 .font(.system(size: 22, weight: .medium, design: .default))
                 .foregroundColor(.primary)
                 .colorInvert()
+        }
+    }
+    
+    private func timerImage() -> UIImage {
+        switch postVM.totalSeconds {
+//        case (0...3):
+//            return UIImage()
+        case (0..<7):
+            return LikeEmojiLevel.level1.image
+        case (7..<11):
+            return LikeEmojiLevel.level2.image
+        case (11..<15):
+            return LikeEmojiLevel.level3.image
+        case (15..<19):
+            return LikeEmojiLevel.level4.image
+        case (19..<23):
+            return LikeEmojiLevel.level5.image
+        case (23..<27):
+            return LikeEmojiLevel.level6.image
+        default:
+            return LikeEmojiLevel.level7.image
+        }
+    }
+    
+    private var emojiScale: CGFloat {
+        if postVM.totalSeconds < 3 {
+            return postVM.totalSeconds / 3
+        } else {
+            return 1
         }
     }
     

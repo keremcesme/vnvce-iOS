@@ -24,7 +24,7 @@ enum APIVersion: String {
 enum WebConstants {
     static let apiVersion = APIVersions.v1
     static let url = "https://vnvce.com" // PROD
-//    static let url = "https://fe46-78-135-94-75.ngrok.io" // DEV
+//    static let url = "https://754c-78-135-94-75.ngrok.io" // DEV
     
     static let storageURL = "gs://vnvce-" // FIREBASE STORAGE
     
