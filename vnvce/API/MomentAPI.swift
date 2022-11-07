@@ -21,31 +21,31 @@ struct MomentAPI {
 
 // MARK: Public Methods -
 extension MomentAPI {
-    public func uploadMoment(_ payload: UploadMomentPayload) async throws -> MomentDay {
-        return try await secureAPI.task(payload: payload, uploadMomentTask, decode: MomentDay.self)
+    public func uploadMoment(_ payload: UploadMomentPayload) async throws -> Moment {
+        return try await secureAPI.task(payload: payload, uploadMomentTask, decode: Moment.self)
     }
     
-    public func fetchMoments(_ payload: MomentsPayload) async throws -> [MomentDay] {
-        return try await secureAPI.task(payload: payload, fetchMomentsTask, decode: [MomentDay].self)
+    public func fetchMoments(_ payload: MomentsPayload) async throws -> [Moment] {
+        return try await secureAPI.task(payload: payload, fetchMomentsTask, decode: [Moment].self)
     }
 }
 
 // MARK: Private Methods -
 private extension MomentAPI {
     
-    private func uploadMomentTask(_ payload: UploadMomentPayload) async throws -> Result<MomentDay, HTTPStatus> {
+    private func uploadMomentTask(_ payload: UploadMomentPayload) async throws -> Result<Moment, HTTPStatus> {
         try await request.task(
             payload: payload,
             url: urlBuilder.momentURL(route: .upload, version: .v1),
             method: .post,
-            to: MomentDay.self)
+            to: Moment.self)
     }
     
-    private func fetchMomentsTask(_ payload: MomentsPayload) async throws -> Result<[MomentDay], HTTPStatus> {
+    private func fetchMomentsTask(_ payload: MomentsPayload) async throws -> Result<[Moment], HTTPStatus> {
         try await request.task(
             payload: payload,
             url: urlBuilder.momentURL(route: .moments, version: .v1),
             method: .post,
-            to: [MomentDay].self)
+            to: [Moment].self)
     }
 }

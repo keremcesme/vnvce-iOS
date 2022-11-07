@@ -14,6 +14,7 @@ enum Relationship: Codable, Equatable {
     case friendRequestReceived(requestID: UUID)
     case targetUserBlocked
     case blocked(blockID: UUID)
+    case me
 }
 
 enum RelationshipRaw: Equatable {
@@ -23,6 +24,7 @@ enum RelationshipRaw: Equatable {
     case friendRequestReceived
     case targetUserBlocked
     case blocked
+    case me
 }
 
 extension Relationship {
@@ -40,6 +42,8 @@ extension Relationship {
             return "Target User Blocked"
         case .blocked(_):
             return "Blocked"
+        case .me:
+            return "me"
         }
     }
 }
@@ -59,6 +63,8 @@ extension Relationship {
             return .targetUserBlocked
         case .blocked(_):
             return .blocked
+        case .me:
+            return .me
         }
     }
 }
@@ -79,6 +85,8 @@ extension RelationshipRaw {
             return .targetUserBlocked
         case .blocked:
             return .blocked(blockID: id)
+        case .me:
+            return .me
         }
     }
 }

@@ -24,7 +24,7 @@ struct vnvceApp: App {
             Group {
                 switch appState.loggedIn {
                 case true:
-                    HomeView()
+                    RootView()
                 case false:
                     AuthView()
                 }

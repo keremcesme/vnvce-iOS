@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "branch" : "master",
-        "revision" : "3d51280713332af3f023abc7e305541871c1e005"
+        "revision" : "f0926478fda955aef0dfbf99263b5c24b2ca5db4",
+        "version" : "10.1.0"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "c1cfde8067668027b23a42c29d11c246152fe046",
-        "version" : "9.6.0"
+        "revision" : "71eb6700dd53a851473c48d392f00a3ab26699a6",
+        "version" : "10.1.0"
       }
     },
     {
@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "22907832079d808e82f1182b21af58ef3880666f",
-        "version" : "7.8.0"
+        "revision" : "68ea347bdb1a69e2d2ae2e25cd085b6ef92f64cb",
+        "version" : "7.9.0"
       }
     },
     {
@@ -187,15 +187,6 @@
       "state" : {
         "revision" : "40489273ee4703032c7d4d185ac25743f604e158",
         "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "scrollviewprefetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kean/ScrollViewPrefetcher",
-      "state" : {
-        "revision" : "36cdfa3e5c11423511c21cd7e4ddb5a27536d89d",
-        "version" : "0.1.2"
       }
     },
     {

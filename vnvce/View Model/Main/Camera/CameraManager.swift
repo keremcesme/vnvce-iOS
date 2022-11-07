@@ -24,7 +24,7 @@ enum BackCameraMode {
 
 class CameraManager: NSObject, ObservableObject {
     
-    @Published var session: AVCaptureSession = AVCaptureSession()
+    public var session: AVCaptureSession = AVCaptureSession()
     @Published var preview: AVCaptureVideoPreviewLayer!
     
     public let sessionQueue = DispatchQueue(label: "sessionQueue")
@@ -77,7 +77,7 @@ class CameraManager: NSObject, ObservableObject {
         self.telephotoValue = device.setTelephoto()
         self.ultraWideIsSupported = device.setUltraWide()
         super.init()
-        self.session.sessionPreset = .photo
+        self.session.sessionPreset = .high
         self.initalizeZoomFactors()
         self.makeReadyPreviewView()
         self.attemtToConfigureSession()
@@ -109,14 +109,18 @@ class CameraManager: NSObject, ObservableObject {
         self.preview.frame.size = self.previewViewFrame()
         self.preview.cornerCurve = .continuous
         self.preview.connection?.videoOrientation = .portrait
-        self.preview.videoGravity = .resizeAspectFill
+        self.preview.videoGravity = .resizeAspect
     }
     
     // [2] Preview View Frame
     public func previewViewFrame() -> CGSize {
-        let width = UIScreen.main.bounds.width
-        let height = width * 3 / 2
-        return CGSize(width, height)
+        if UIDevice.current.hasNotch() {
+            let width = UIScreen.main.bounds.width
+            let height = width * 16 / 9
+            return CGSize(width, height)
+        } else {
+            return UIScreen.main.bounds.size
+        }
     }
     
     
@@ -175,7 +179,9 @@ class CameraManager: NSObject, ObservableObject {
                 }
                 
                 self.session.commitConfiguration()
-                self.configurationStatus = .success
+                DispatchQueue.main.async {
+                    self.configurationStatus = .success
+                }
             }
         }
     }
@@ -203,19 +209,26 @@ class CameraManager: NSObject, ObservableObject {
             switch self.backCameraType {
             case .triple, .wideAndUltraWide:
                 device.videoZoomFactor = 2
-                self.currentZoom = 2
+                DispatchQueue.main.async {
+                    self.currentZoom = 2
+                }
+                
             default:
                 device.videoZoomFactor = 1
-                self.currentZoom = 1
+                DispatchQueue.main.async {
+                    self.currentZoom = 1
+                }
             }
             
             
-            if device.hasTorch {device.torchMode = .off}
+            if device.hasTorch {
+                device.torchMode = .off
+            }
             
             if device.isFocusModeSupported(.continuousAutoFocus) {
                 device.focusMode = .continuousAutoFocus
             }
-            
+
             if device.isExposureModeSupported(.continuousAutoExposure) {
                 device.exposureMode = .continuousAutoExposure
             }
@@ -249,7 +262,7 @@ class CameraManager: NSObject, ObservableObject {
             case .success:
                 return
 //                self.addObservers()
-//                self.startSession()
+                self.startSession()
             case .failed:
                 DispatchQueue.main.async {
                     self.delegate?.presentVideoConfigurationErrorAlert()
@@ -427,7 +440,9 @@ extension CameraManager {
                 
                 if position == .back {
                     device.videoZoomFactor = self.wideZoomFactor
-                    self.backCameraMode = .wide
+                    DispatchQueue.main.async {
+                        self.backCameraMode = .wide
+                    }
                 } else {
                     device.videoZoomFactor = 1
                 }

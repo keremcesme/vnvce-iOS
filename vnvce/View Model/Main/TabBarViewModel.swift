@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Tab: Hashable {
+public enum TabOLD: Hashable {
     case feed
     case camera
     case profile
@@ -36,5 +36,5 @@ public enum Tab: Hashable {
 }
 
 class TabBarViewModel: ObservableObject {
-    @Published public var current: Tab = .feed
+    @Published public var current: TabOLD = .feed
 }

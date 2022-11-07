@@ -19,3 +19,9 @@ func withAnimation(
         DispatchQueue.main.asyncAfter(deadline: .now() + response, execute: after)
 }
 
+func animation(response: Double, _ value: inout Bool, to: Bool) async {
+    SwiftUI.withAnimation(.spring(response: response, dampingFraction: 0.95, blendDuration: 1)) {
+        value = to
+    }
+    try? await Task.sleep(seconds: response)
+}

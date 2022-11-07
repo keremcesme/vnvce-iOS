@@ -15,16 +15,36 @@ class UploadMomentViewModel: ObservableObject {
     @Published var uploading = false
     @Published var progress: Double = 0
     
-    }
+}
 
 extension UploadMomentViewModel {
     
-    @MainActor
+    public func uploadMoment(image: UIImage) {
+        self.progress = 0
+        self.uploading = true
+        
+        do {
+            try uploadMomentToStorage(image: image) { payload in
+                Task {
+                    let moment = try await self.uploadMomentToServer(payload: payload)
+                    await MainActor.run {
+                        print("✅ [STEP: 2] ~ Moment is uploaded to Server.")
+                        print(moment)
+                    }
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     public func uploadMoment(image: UIImage) async {
         if Task.isCancelled { return }
         
-        self.progress = 0
-        self.uploading = true
+        await MainActor.run {
+            self.progress = 0
+            self.uploading = true
+        }
         
         do {
             let payload = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<UploadMomentPayload, Error>) in
@@ -38,11 +58,12 @@ extension UploadMomentViewModel {
             }
             
             if Task.isCancelled { return }
-            let momentDay = try await self.uploadMomentToServer(payload: payload)
+            let moment = try await self.uploadMomentToServer(payload: payload)
             if Task.isCancelled { return }
-            print("✅ [STEP: 2] ~ Moment is uploaded to Server.")
-            print(momentDay)
-            
+            await MainActor.run {
+                print("✅ [STEP: 2] ~ Moment is uploaded to Server.")
+                print(moment)
+            }
         } catch {
             print(error.localizedDescription)
             return
@@ -54,10 +75,13 @@ extension UploadMomentViewModel {
 private extension UploadMomentViewModel {
     
     private func uploadMomentToStorage(image: UIImage, completion: @escaping (UploadMomentPayload) -> Void) throws {
+        
         try storageAPI.uploadImageMoment(image) { status, progress in
             switch status {
             case .uploading:
-                self.progress = progress
+                DispatchQueue.main.async {
+                    self.progress = progress
+                }
             case let .success(payload):
                 print("✅ [STEP: 1] ~ Moment is uploaded to Firebase Storage.")
                 return completion(payload)
@@ -72,7 +96,7 @@ private extension UploadMomentViewModel {
         }
     }
     
-    private func uploadMomentToServer(payload: UploadMomentPayload) async throws -> MomentDay {
+    private func uploadMomentToServer(payload: UploadMomentPayload) async throws -> Moment {
         return try await momentAPI.uploadMoment(payload)
     }
     

@@ -65,7 +65,7 @@ struct ScrollViewRefreshable<Content: View>: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 24, height: 24, alignment: .center)
-                    .scaleEffect(scrollDelegate.progress)
+                    .scaleEffect(scrollDelegate.progress > 0.001 ? scrollDelegate.progress : 0.001)
                     .scaleEffect(scrollDelegate.isEligible ? 0.001 : 1)
                     .opacity(scrollDelegate.isEligible ? 0 : 1)
                     .animation(.easeInOut(duration: 0.25), value: scrollDelegate.isEligible)

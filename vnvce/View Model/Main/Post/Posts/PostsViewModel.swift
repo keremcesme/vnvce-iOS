@@ -8,15 +8,14 @@
 import Foundation
 import SwiftUI
 import Nuke
-import ScrollViewPrefetcher
 
 let postsPerPage: Int = 14
 
 class PostsViewModel: ObservableObject {
     private let postAPI = PostAPI.shared
     
-    private let imagePrefetcher: ImagePrefetcher
-    private let scrollViewPrefetcher: ScrollViewPrefetcher
+//    private let imagePrefetcher: ImagePrefetcher
+//    private let scrollViewPrefetcher: ScrollViewPrefetcher
     
     @Published private(set) public var payload: PostsPayload
     
@@ -40,9 +39,9 @@ class PostsViewModel: ObservableObject {
     
     init(_ payload: PostsPayload = .me(archived: false)) {
         self.payload = payload
-        self.imagePrefetcher = .init()
-        self.scrollViewPrefetcher = .init()
-        self.scrollViewPrefetcher.delegate = self
+//        self.imagePrefetcher = .init()
+//        self.scrollViewPrefetcher = .init()
+//        self.scrollViewPrefetcher.delegate = self
     }
     
     @MainActor
@@ -174,43 +173,43 @@ extension PostsViewModel: PaginationProtocol {
 }
 
 // MARK: Prefetch Post Images
-extension PostsViewModel: ScrollViewPrefetcherDelegate {
-    
-    @Sendable
-    public func onAppear(_ postID: UUID) {
-        scrollViewPrefetcher.onAppear(postIndex(postID))
-    }
-    
-    @Sendable
-    public func onDisappear(_ postID: UUID) {
-        scrollViewPrefetcher.onDisappear(postIndex(postID))
-    }
-    
-    private func postIndex(_ postID: UUID) -> Int {
-        for post in postResults.items.enumerated() where post.element.id == postID {
-            return post.offset
-        }
-        return 0
-    }
-    
-    func getAllIndicesForPrefetcher(_ prefetcher: ScrollViewPrefetcher) -> Range<Int> {
-        prefetcherImageURLs.indices
-    }
-    
-    func prefetcher(_ prefetcher: ScrollViewPrefetcher, prefetchItemsAt indices: [Int]) {
-        imagePrefetcher.startPrefetching(with: indices.map { prefetcherImageURLs[$0] })
-    }
-    
-    func prefetcher(_ prefetcher: ScrollViewPrefetcher, cancelPrefechingForItemAt indices: [Int]) {
-        imagePrefetcher.stopPrefetching(with: indices.map { prefetcherImageURLs[$0] })
-    }
-    
-    func resetPrefetcher() async {
-        prefetcherImageURLs.removeAll()
-    }
-    
-    
-}
+//extension PostsViewModel: ScrollViewPrefetcherDelegate {
+//
+//    @Sendable
+//    public func onAppear(_ postID: UUID) {
+//        scrollViewPrefetcher.onAppear(postIndex(postID))
+//    }
+//
+//    @Sendable
+//    public func onDisappear(_ postID: UUID) {
+//        scrollViewPrefetcher.onDisappear(postIndex(postID))
+//    }
+//
+//    private func postIndex(_ postID: UUID) -> Int {
+//        for post in postResults.items.enumerated() where post.element.id == postID {
+//            return post.offset
+//        }
+//        return 0
+//    }
+//
+//    func getAllIndicesForPrefetcher(_ prefetcher: ScrollViewPrefetcher) -> Range<Int> {
+//        prefetcherImageURLs.indices
+//    }
+//
+//    func prefetcher(_ prefetcher: ScrollViewPrefetcher, prefetchItemsAt indices: [Int]) {
+//        imagePrefetcher.startPrefetching(with: indices.map { prefetcherImageURLs[$0] })
+//    }
+//
+//    func prefetcher(_ prefetcher: ScrollViewPrefetcher, cancelPrefechingForItemAt indices: [Int]) {
+//        imagePrefetcher.stopPrefetching(with: indices.map { prefetcherImageURLs[$0] })
+//    }
+//
+//    func resetPrefetcher() async {
+//        prefetcherImageURLs.removeAll()
+//    }
+//
+//
+//}
 
 extension PostsViewModel {
     struct SelectPost {
