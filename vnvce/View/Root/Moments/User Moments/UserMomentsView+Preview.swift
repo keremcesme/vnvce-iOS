@@ -164,7 +164,5 @@ extension UserMomentsView {
         } else {
             return CGSize(width: width, height: momentsVM.openMomentsView ? UIScreen.main.bounds.height : (width * 3 / 2))
         }
-        
-        
     }
 }

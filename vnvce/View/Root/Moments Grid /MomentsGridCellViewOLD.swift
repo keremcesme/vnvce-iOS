@@ -89,7 +89,6 @@ struct MomentsGridCellViewOLD: View {
                     }
                     .onChange(of: momentsVM.momentsViewIsReady) { value in
                         if !value && self.index == momentsVM.currentIndex {
-                            print("asdas")
                             self.momentsVM.onChangeIndexUpdateCell(size: size, frame: frame)
                         }
                     }

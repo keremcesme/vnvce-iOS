@@ -60,7 +60,8 @@ struct RootView: View {
                 SearchView()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .colorScheme(.dark)
-                UserMomentsRootView(momentsVM)
+//                UserMomentsRootView(momentsVM, momentsVM2: momentsVM2)
+                MomentsRootView(momentsVM2)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
@@ -114,7 +115,7 @@ struct RootView: View {
             case .lightContent:
                 self.camera.startSession()
             default:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     if rootVM.currentStatusBarStyle == value {
                         self.camera.stopSession()
                     }

@@ -187,8 +187,8 @@ extension RootViewModel: UIGestureRecognizerDelegate {
     }
     
     // MARK: Removing When Leaving The View
-    public func removeProfileGesture() {
-        rootController().view.gestureRecognizers?.removeLast()
+    public func removeAllGestures() {
+        rootController().view.gestureRecognizers?.removeAll()
     }
     
     // MARK: Finding Root Controller

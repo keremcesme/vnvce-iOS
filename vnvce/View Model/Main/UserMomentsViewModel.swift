@@ -303,7 +303,7 @@ extension UserMomentsViewModel: UIGestureRecognizerDelegate {
         switch gesture.state {
         case .possible, .began:
             let angle = atan2(velocity.y, velocity.x) * 180 / 3.14159
-            print(angle)
+            
             if (angle <= (self.currentIndex == 0 ? 125 : 55) && angle >= (self.currentIndex == self.momentsMain.count - 1 ? -155 : -55)) {
                 DispatchQueue.main.async {
                     self.onDragging = true

@@ -37,6 +37,7 @@
 		0C1AC97529129EFA0061F24E /* UserMomentsDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1AC97429129EFA0061F24E /* UserMomentsDayView.swift */; };
 		0C1CB65529195BA9006EB109 /* MomentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1CB65429195BA9006EB109 /* MomentsViewModel.swift */; };
 		0C1CB658291962A3006EB109 /* Collection+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1CB657291962A3006EB109 /* Collection+Safe.swift */; };
+		0C1CB65B2919B284006EB109 /* ShapeBuilder in Frameworks */ = {isa = PBXBuildFile; productRef = 0C1CB65A2919B284006EB109 /* ShapeBuilder */; };
 		0C1FD46928E45F1D0072C1A6 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1FD46828E45F1D0072C1A6 /* UserAPI.swift */; };
 		0C2256BA28A6B27800E48AD2 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2256B928A6B27800E48AD2 /* AuthView.swift */; };
 		0C249DA828C9256000215E5A /* TaskSleep+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C249DA728C9256000215E5A /* TaskSleep+Extensions.swift */; };
@@ -99,6 +100,9 @@
 		0C808A0528D89B57000E5DEC /* PostsGridCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C808A0428D89B57000E5DEC /* PostsGridCellView.swift */; };
 		0C80CBBF28CE26D300D79D94 /* Stevia in Frameworks */ = {isa = PBXBuildFile; productRef = 0C80CBBE28CE26D300D79D94 /* Stevia */; };
 		0C80CBC128CE26DA00D79D94 /* PryntTrimmerView in Frameworks */ = {isa = PBXBuildFile; productRef = 0C80CBC028CE26DA00D79D94 /* PryntTrimmerView */; };
+		0C855A32291C0AE500484F06 /* MomentsView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C855A31291C0AE500484F06 /* MomentsView+Preview.swift */; };
+		0C855A34291C1DB900484F06 /* MomentsDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C855A33291C1DB900484F06 /* MomentsDayView.swift */; };
+		0C855A36291C363D00484F06 /* MomentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C855A35291C363D00484F06 /* MomentView.swift */; };
 		0C8B271328FC503800A43D9C /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8B271228FC503800A43D9C /* CameraManager.swift */; };
 		0C8B271528FC511900A43D9C /* CameraManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8B271428FC511900A43D9C /* CameraManagerDelegate.swift */; };
 		0C8B271728FC542600A43D9C /* CameraManager+Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8B271628FC542600A43D9C /* CameraManager+Observers.swift */; };
@@ -108,6 +112,9 @@
 		0C9352EB28B15D1C00A264AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9352EA28B15D1C00A264AE /* SceneDelegate.swift */; };
 		0C94712828A3D17400B79922 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0C94712A28A3D17400B79922 /* Localizable.strings */; };
 		0C95B07B28DB8A61002FF65D /* View+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C95B07A28DB8A61002FF65D /* View+Sync.swift */; };
+		0C97DF9F291A8DB20041C48A /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C97DF9E291A8DB20041C48A /* PageView.swift */; };
+		0C97DFA1291AC6810041C48A /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C97DFA0291AC6810041C48A /* MomentsView.swift */; };
+		0C97DFA4291AC8DF0041C48A /* AsyncTapGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C97DFA3291AC8DF0041C48A /* AsyncTapGesture.swift */; };
 		0C994612290707DC009BBE3E /* MomentsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C994611290707DC009BBE3E /* MomentsPayload.swift */; };
 		0C994614290708B5009BBE3E /* UserMomentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C994613290708B5009BBE3E /* UserMomentsViewModel.swift */; };
 		0C9BD31128B270310019CD5C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 0C9BD31028B270310019CD5C /* Alamofire */; };
@@ -347,6 +354,9 @@
 		0C8089FA28D88E36000E5DEC /* PostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel.swift; sourceTree = "<group>"; };
 		0C808A0028D89809000E5DEC /* PostsGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsGridView.swift; sourceTree = "<group>"; };
 		0C808A0428D89B57000E5DEC /* PostsGridCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsGridCellView.swift; sourceTree = "<group>"; };
+		0C855A31291C0AE500484F06 /* MomentsView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentsView+Preview.swift"; sourceTree = "<group>"; };
+		0C855A33291C1DB900484F06 /* MomentsDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsDayView.swift; sourceTree = "<group>"; };
+		0C855A35291C363D00484F06 /* MomentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentView.swift; sourceTree = "<group>"; };
 		0C8B271228FC503800A43D9C /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		0C8B271428FC511900A43D9C /* CameraManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManagerDelegate.swift; sourceTree = "<group>"; };
 		0C8B271628FC542600A43D9C /* CameraManager+Observers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraManager+Observers.swift"; sourceTree = "<group>"; };
@@ -382,6 +392,9 @@
 		0C94714328A3D34F00B79922 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0C94714428A3D35B00B79922 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0C95B07A28DB8A61002FF65D /* View+Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Sync.swift"; sourceTree = "<group>"; };
+		0C97DF9E291A8DB20041C48A /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
+		0C97DFA0291AC6810041C48A /* MomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsView.swift; sourceTree = "<group>"; };
+		0C97DFA3291AC8DF0041C48A /* AsyncTapGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncTapGesture.swift; sourceTree = "<group>"; };
 		0C994611290707DC009BBE3E /* MomentsPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsPayload.swift; sourceTree = "<group>"; };
 		0C994613290708B5009BBE3E /* UserMomentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMomentsViewModel.swift; sourceTree = "<group>"; };
 		0CAF5BFE28EE29BE00EF8401 /* PostView+Properties+TimerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostView+Properties+TimerBar.swift"; sourceTree = "<group>"; };
@@ -508,6 +521,7 @@
 				0C80CBC128CE26DA00D79D94 /* PryntTrimmerView in Frameworks */,
 				0CCE6A3728A3C64700D65D56 /* FirebasePerformance in Frameworks */,
 				0CCE6A1B28A3C40E00D65D56 /* SwiftUIX in Frameworks */,
+				0C1CB65B2919B284006EB109 /* ShapeBuilder in Frameworks */,
 				0CB6005128B4BBFD008849BB /* ActionOver in Frameworks */,
 				0CCE6A2D28A3C64700D65D56 /* FirebaseFirestore in Frameworks */,
 				0C9BD31128B270310019CD5C /* Alamofire in Frameworks */,
@@ -893,6 +907,10 @@
 		0C75D01C29100D5C0054945B /* Moments */ = {
 			isa = PBXGroup;
 			children = (
+				0C97DFA0291AC6810041C48A /* MomentsView.swift */,
+				0C855A31291C0AE500484F06 /* MomentsView+Preview.swift */,
+				0C855A33291C1DB900484F06 /* MomentsDayView.swift */,
+				0C855A35291C363D00484F06 /* MomentView.swift */,
 				0C1AC97229129ED30061F24E /* User Moments */,
 				0C1AC97329129EE00061F24E /* User Moments Day  */,
 				0C0515CD2915210F004CA1CA /* User Moment */,
@@ -1004,6 +1022,22 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		0C97DF9D291A8D9C0041C48A /* Pagination View */ = {
+			isa = PBXGroup;
+			children = (
+				0C97DF9E291A8DB20041C48A /* PageView.swift */,
+			);
+			path = "Pagination View";
+			sourceTree = "<group>";
+		};
+		0C97DFA2291AC8B00041C48A /* Tap Gesture */ = {
+			isa = PBXGroup;
+			children = (
+				0C97DFA3291AC8DF0041C48A /* AsyncTapGesture.swift */,
+			);
+			path = "Tap Gesture";
+			sourceTree = "<group>";
+		};
 		0CB592F72917E2AA0012C562 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -1076,6 +1110,7 @@
 		0CB6004928B476C7008849BB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0C97DF9D291A8D9C0041C48A /* Pagination View */,
 				0CB592F82917E8F00012C562 /* Scrollable Tab View */,
 				0CD9E7B928C8F3B6007E25F9 /* Refreshable Scroll View */,
 				0CB6004A28B476D1008849BB /* Blur */,
@@ -1371,6 +1406,7 @@
 		0CCE6A4228A3C9B000D65D56 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0C97DFA2291AC8B00041C48A /* Tap Gesture */,
 				0C1CB65629196288006EB109 /* Collection */,
 				0C1A027529004D44000A70C5 /* Color Scheme */,
 				0C0FC42628E2F31900179723 /* Button */,
@@ -1489,9 +1525,9 @@
 			isa = PBXGroup;
 			children = (
 				0CD9E79E28C8BC22007E25F9 /* ProfileViewOLD.swift */,
-				0CBC070128C9FAAD0036CE5B /* Edit Profile */,
 				0CB5930429182A030012C562 /* ProfileView.swift */,
 				0CB5930829182B940012C562 /* ProfileView+NavigationBar.swift */,
+				0CBC070128C9FAAD0036CE5B /* Edit Profile */,
 				0CB5930A29182E280012C562 /* Helpers */,
 			);
 			path = Profile;
@@ -1684,6 +1720,7 @@
 				0CFC50CA28DCC3E1008730A5 /* Nuke */,
 				0CFC50CC28DCC3E1008730A5 /* NukeExtensions */,
 				0CFC50CE28DCC3E1008730A5 /* NukeUI */,
+				0C1CB65A2919B284006EB109 /* ShapeBuilder */,
 			);
 			productName = vnvce;
 			productReference = 0CCE69E628A3C3A500D65D56 /* vnvce.app */;
@@ -1806,6 +1843,7 @@
 				0C80CADA28CE1FFA00D79D94 /* XCRemoteSwiftPackageReference "PryntTrimmerView" */,
 				0CFC50B528DC82F0008730A5 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
 				0CFC50C928DCC3E0008730A5 /* XCRemoteSwiftPackageReference "Nuke" */,
+				0C1CB6592919B284006EB109 /* XCRemoteSwiftPackageReference "ShapeBuilder" */,
 			);
 			productRefGroup = 0CCE69E728A3C3A500D65D56 /* Products */;
 			projectDirPath = "";
@@ -1858,6 +1896,7 @@
 				0CD5960928E0CC3500550E2D /* UserProfileBackground.swift in Sources */,
 				0CB6004E28B479B1008849BB /* LibraryAlbum.swift in Sources */,
 				0C75D01B290FEDBE0054945B /* MomentsGridCellViewOLD.swift in Sources */,
+				0C97DFA4291AC8DF0041C48A /* AsyncTapGesture.swift in Sources */,
 				0C8B271528FC511900A43D9C /* CameraManagerDelegate.swift in Sources */,
 				0CBA650428A6BC9C006DCD9B /* LoginViewModel.swift in Sources */,
 				0CEC89AA28B557BB0036E939 /* StorageAPI.swift in Sources */,
@@ -1877,6 +1916,7 @@
 				0CEC89AE28B5592F0036E939 /* StorageRoutes.swift in Sources */,
 				0CCE6A4D28A3CAC100D65D56 /* NotificationCenter.swift in Sources */,
 				0C5A45AC28DF39B0009D2CF9 /* PostViewModel+Scroll+Refresh+Gesture.swift in Sources */,
+				0C97DF9F291A8DB20041C48A /* PageView.swift in Sources */,
 				0CBA650628A6BCA6006DCD9B /* CreateAccountViewModel.swift in Sources */,
 				0CC1493228B3AAFD00AB724D /* VerifySMSPayload.swift in Sources */,
 				0C3C4D7C28F086DA00B2B7C8 /* AFRequest.swift in Sources */,
@@ -1908,6 +1948,7 @@
 				0C1CB658291962A3006EB109 /* Collection+Safe.swift in Sources */,
 				0C45862C2911BB0000A857FD /* ShareView.swift in Sources */,
 				0CC1493428B3AB3200AB724D /* SMSVerificationError.swift in Sources */,
+				0C855A32291C0AE500484F06 /* MomentsView+Preview.swift in Sources */,
 				0C7CB61528D0A55100034F14 /* MediaType.swift in Sources */,
 				0CB592FC2917FA400012C562 /* RootViewModel.swift in Sources */,
 				0CD614F428AE72B400734002 /* TextFieldFocusBool+Extension.swift in Sources */,
@@ -1934,6 +1975,7 @@
 				0CEC89B028B571E00036E939 /* ProfilePictureAlignmentType.swift in Sources */,
 				0CC1493D28B3AD7300AB724D /* LoginAccountResponse.swift in Sources */,
 				0C12EF6028AFD234007C314E /* User.swift in Sources */,
+				0C855A36291C363D00484F06 /* MomentView.swift in Sources */,
 				0CD614FB28AE779D00734002 /* AuthAPI.swift in Sources */,
 				0CD9E79F28C8BC22007E25F9 /* ProfileViewOLD.swift in Sources */,
 				0C607EB028CB8CBA0078D351 /* SearchViewModel.swift in Sources */,
@@ -2029,6 +2071,7 @@
 				0C994612290707DC009BBE3E /* MomentsPayload.swift in Sources */,
 				0C12EF5E28AFD201007C314E /* Tokens.swift in Sources */,
 				0C1A027429004097000A70C5 /* TabBar.swift in Sources */,
+				0C855A34291C1DB900484F06 /* MomentsDayView.swift in Sources */,
 				0C0515CF29152156004CA1CA /* UserMomentView.swift in Sources */,
 				0C8B271328FC503800A43D9C /* CameraManager.swift in Sources */,
 				0CEC89B528B572190036E939 /* EditProfilePicturePayload.swift in Sources */,
@@ -2040,6 +2083,7 @@
 				0CC1493928B3ABE500AB724D /* ReserveUsernameResult.swift in Sources */,
 				0CCE69EA28A3C3A500D65D56 /* vnvceApp.swift in Sources */,
 				0CC1493728B3ABD100AB724D /* ReserveUsernameError.swift in Sources */,
+				0C97DFA1291AC6810041C48A /* MomentsView.swift in Sources */,
 				0C48CE3728CD1A5600D95BF1 /* PageMetadata.swift in Sources */,
 				0CC1492D28B3AA6300AB724D /* SendSMSOTPError.swift in Sources */,
 				0C5A45A828DF183D009D2CF9 /* PostView+TimerBar.swift in Sources */,
@@ -2448,6 +2492,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		0C1CB6592919B284006EB109 /* XCRemoteSwiftPackageReference "ShapeBuilder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ohitsdaniel/ShapeBuilder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
 		0C5FA01128A6F6BB000BB20F /* XCRemoteSwiftPackageReference "swift-focuser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/art-technologies/swift-focuser";
@@ -2517,7 +2569,7 @@
 			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.2;
+				minimumVersion = 0.1.3;
 			};
 		};
 		0CCE6A1C28A3C41A00D65D56 /* XCRemoteSwiftPackageReference "Cache" */ = {
@@ -2572,6 +2624,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0C12E7CA28AEC257006FE3E7 /* XCRemoteSwiftPackageReference "swift-nio" */;
 			productName = NIOCore;
+		};
+		0C1CB65A2919B284006EB109 /* ShapeBuilder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0C1CB6592919B284006EB109 /* XCRemoteSwiftPackageReference "ShapeBuilder" */;
+			productName = ShapeBuilder;
 		};
 		0C5FA01228A6F6BB000BB20F /* Focuser */ = {
 			isa = XCSwiftPackageProductDependency;

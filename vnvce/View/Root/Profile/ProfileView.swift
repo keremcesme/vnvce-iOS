@@ -37,16 +37,19 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        GeometryReader {
-            let size = $0.size
+        GeometryReader {_ in
             NavigationView {
                 ZStack {
                     CurrentUserBackground()
-                    ProfileScrollView(onRefresh) {
-                        LazyVStack {
-                            DetailsView
-                            MomentsGridView(momentsVM: momentsVM, momentsVM2: momentsVM2)
+                    ScrollViewReader { proxy in
+                        ProfileScrollView(onRefresh) {
+                            LazyVStack {
+                                DetailsView
+                                MomentsGridView(proxy: proxy, momentsVM: momentsVM, momentsVM2: momentsVM2)
+                            }
+                            .padding(.bottom, 200)
                         }
+                        
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
@@ -55,14 +58,13 @@ struct ProfileView: View {
                     if value == .profile {
                         rootVM.addGestureToProfile()
                     } else {
-                        rootVM.removeProfileGesture()
+                        rootVM.removeAllGestures()
                     }
                 }
-                .onChange(of: momentsVM.momentsViewWillAppear) {
+                .onChange(of: momentsVM2.show) {
                     if !$0 {
+                        rootVM.removeAllGestures()
                         rootVM.addGestureToProfile()
-                    } else {
-                        rootVM.removeProfileGesture()
                     }
                 }
             }

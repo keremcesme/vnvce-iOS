@@ -14,9 +14,11 @@ import Introspect
 
 struct UserMomentsRootView: View {
     @StateObject private var momentsVM: UserMomentsViewModel
+    @StateObject private var momentsVM2: MomentsViewModel
     
-    init(_ momentsVM: UserMomentsViewModel) {
+    init(_ momentsVM: UserMomentsViewModel, momentsVM2: MomentsViewModel) {
         self._momentsVM = StateObject(wrappedValue: momentsVM)
+        self._momentsVM2 = StateObject(wrappedValue: momentsVM2)
     }
     
     var body: some View {
@@ -29,6 +31,8 @@ struct UserMomentsRootView: View {
                 }
                 UserMomentsView(momentsVM)
             }
+            
+            
         }
     }
 }

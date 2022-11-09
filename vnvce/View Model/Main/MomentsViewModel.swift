@@ -13,14 +13,90 @@ class MomentsViewModel: NSObject, ObservableObject {
     private let momentAPI = MomentAPI.shared
     private let imageLoader = ImageLoader()
     
-    public let animationDuration: CGFloat = 0.25
+    @Published public var scrollView: UIScrollView!
     
-    @Published  public var moments = [Moments]()
+    public let animationDuration: CGFloat = 0.25
+    public let blur: UIBlurEffect.Style = .light
+    
+    @Published public var moments = [Moments]()
+    
+    @Published  public var selectedMomentCellSize: CGSize!
+    @Published  public var selectedMomentCellFrame: CGRect!
+    
+    @Published private(set) public var viewWillAppear: Bool = false
+    @Published private(set) public var show: Bool = false // Animation Variable
+    @Published private(set) public var viewIsReady: Bool = false
+    
+    @Published private(set) public var viewOffset: CGSize = .zero
+    
+    @Published private(set) public var onDragging: Bool = false
+    @Published private(set) public var onDraggingAnimation: Bool = false // Animation Variable
+    
+    @Published public var pageIndex: Int = 0
     
     override init() {
-        
         super.init()
+    }
+    
+    public func scrollViewConnector(_ scrollView: UIScrollView) {
+        self.scrollView = scrollView
+    }
+}
+
+// MARK: Actions:
+@MainActor
+extension MomentsViewModel {
+    public func gridCellTapAction(index: Int, size: CGSize, frame: CGRect) async {
+        guard !viewWillAppear else { return }
+        self.onDragging = false
+        self.onDraggingAnimation = false
         
+        self.selectedMomentCellSize = size
+        self.selectedMomentCellFrame = frame
+        self.pageIndex = index
+        self.viewWillAppear = true
+        
+        do {
+            self.removeGesture()
+            try await Task.sleep(seconds: 0.001)
+            self.addGesture()
+            withAnimation(response: self.animationDuration) {
+                self.show = true
+            } after: {
+                self.viewIsReady = true
+            }
+        } catch {
+            return
+        }
+    }
+    
+    @Sendable
+    public func dismiss() async {
+        self.viewIsReady = false
+        self.removeGesture()
+        do {
+            try await Task.sleep(seconds: 0.001)
+            withAnimation(response: self.animationDuration) {
+                self.viewOffset = .zero
+                self.show = false
+            } after: {
+                Task {
+                    try? await Task.sleep(seconds: 0.1)
+                    self.viewWillAppear = false
+                }
+            }
+        } catch {
+            return
+        }
+    }
+    
+    public func dismissNonAsync() {
+        Task(operation: self.dismiss)
+    }
+    
+    public func onChangeViewIsReady(size: CGSize, frame: CGRect) {
+        self.selectedMomentCellSize = size
+        self.selectedMomentCellFrame = frame
     }
     
 }
@@ -82,7 +158,7 @@ extension MomentsViewModel {
 // MARK: Download Images
 extension MomentsViewModel {
     
-    
+    @Sendable
     public func downloadImages() async {
         for items in self.moments.enumerated() where items.element.moments.first?.downloadedImage == nil {
             guard let firstMoment = items.element.moments.first else {
@@ -95,15 +171,17 @@ extension MomentsViewModel {
                 let image = try await imageLoader.fetch(request)
                 DispatchQueue.main.async {
                     let downloadedImage = CodableImage(image: image)
-                    self.moments[items.offset].moments[0].downloadedImage = downloadedImage
+                    if self.moments[safe: items.offset]?.moments[safe: 0] != nil {
+                        self.moments[items.offset].moments[0].downloadedImage = downloadedImage
+                    }
                 }
             } catch {
                 print(error.localizedDescription)
                 continue
             }
         }
+        print("ALL IMAGES IS DOWNLOADED")
     }
-    
     
     public func downloadMoreImages(index: Int) async {
         for items in self.moments[index].moments.enumerated() where items.element.downloadedImage == nil {
@@ -131,7 +209,6 @@ extension MomentsViewModel {
         let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(gesture))
         dragGesture.delegate = self
         dragGesture.maximumNumberOfTouches = 1
-        
         let root = findRootViewController()
         root.view.addGestureRecognizer(dragGesture)
     }
@@ -139,7 +216,7 @@ extension MomentsViewModel {
     // MARK: Removing When Leaving The View
     public func removeGesture() {
         let root = findRootViewController()
-        root.view.gestureRecognizers?.removeLast()
+        root.view.gestureRecognizers?.removeAll()
     }
 }
 
@@ -163,28 +240,77 @@ extension MomentsViewModel: UIGestureRecognizerDelegate {
     
     @objc
     private func gesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: gesture.view)
+        let velo = gesture.velocity(in: gesture.view)
         switch gesture.state {
         case .possible, .began:
-            onBeginGesture()
+            onBeginGesture(velo)
         case .changed:
-            onChangedGesture()
+            onChangedGesture(translation)
         case .ended, .cancelled, .failed:
-            onEndedGesture()
+            onEndedGesture(translation, velo)
         @unknown default:
-            onEndedGesture()
+            onEndedGesture(translation, velo)
         }
     }
     
-    private func onBeginGesture() {
-        
+    private func onBeginGesture(_ velo: CGPoint) {
+        let angle = atan2(velo.y, velo.x) * 180 / 3.14159
+        if (angle <= (self.pageIndex == 0 ? 125 : 55) && angle >= (self.pageIndex == self.moments.count - 1 ? -155 : -55)) {
+            DispatchQueue.main.async {
+                self.scrollView.isScrollEnabled = false
+                self.onDragging = true
+                withAnimation(response: self.animationDuration) {
+                    self.onDraggingAnimation = true
+                }
+//                if !UIDevice.current.hasNotch() {
+//                    UIDevice.current.showStatusBar()
+//                }
+            }
+        }
     }
     
-    private func onChangedGesture() {
-        
+    private func onChangedGesture(_ translation: CGPoint) {
+        let width: CGFloat = translation.width / 1.5
+        let height: CGFloat = translation.height / 1.5
+        DispatchQueue.main.async {
+            if self.onDragging {
+                let size = CGSize(width, height)
+                self.viewOffset = size
+            }
+        }
     }
     
-    private func onEndedGesture() {
-        
+    private func onEndedGesture(_ translation: CGPoint, _ velo: CGPoint) {
+        let width: CGFloat = translation.width / 1.5
+        let height: CGFloat = translation.height / 1.5
+        DispatchQueue.main.async {
+            if self.onDragging {
+                self.scrollView.isScrollEnabled = true
+                
+                if width >= 25 || height >= 25 {
+                    self.dismissNonAsync()
+                }
+                
+//                else if abs(velo.y) > 100 && (width >= 5 || height >= 5) {
+//                    self.dismissNonAsync()
+//                }
+                
+                else {
+                    withAnimation(response: self.animationDuration) {
+                        self.viewOffset = .zero
+                        self.onDraggingAnimation = false
+                    } after: {
+                        self.onDragging = false
+                        
+                        
+//                        if !UIDevice.current.hasNotch() {
+//                            UIDevice.current.hideStatusBar()
+//                        }
+                    }
+                }
+            }
+        }
     }
     
 }
