@@ -29,16 +29,51 @@ struct MomentsDayView: View {
         self._momentsVM = StateObject(wrappedValue: vm)
     }
     
+    private func calculateOffsetY(_ value: CGFloat) {
+//        if momentsVM.pageIndex == index && !momentsVM.animationIsEnabled {
+//            let offset = value - (proxy.size.height * CGFloat(index))
+//            self.momentsVM.tabViewOffset = offset
+//        }
+//        
+//        if value == 0 && momentsVM.isTapped {
+//            momentsVM.animationIsEnabled = false
+//        }
+    }
+    
     var body: some View {
         GeometryReader {
             let size = $0.size
             ZStack(alignment: .top){
                 Color.clear.frame(size)
                 ForEach(Array(moments.moments.enumerated()), id: \.element.id, content: MomentItemView)
+                    .overlay(alignment: .top) {
+                        LinearGradient([Color.black.opacity(0.5), Color.clear], from: .top, to: .bottom)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: UIDevice.current.statusBarHeight() + 44)
+                            .opacity(momentsVM.onDragging || !momentsVM.viewIsReady ? 0.00001 : 1)
+                    }
+                    .overlay(alignment: .top) {
+                        HStack {
+                            AsyncButton {
+                                await momentsVM.dismiss()
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 28, weight: .regular, design: .default))
+                                    .foregroundColor(.white)
+                            }
+                            .buttonStyle(.plain)
+                            Spacer()
+                        }
+                        .padding(.top, (UIDevice.current.hasNotch() ? UIDevice.current.statusBarHeight() : 0) + 15)
+                        .padding(.horizontal, 10)
+                        .opacity(momentsVM.onDragging || !momentsVM.viewIsReady ? 0.00001 : 1)
+                    }
             }
+            .offsetY(calculateOffsetY)
         }
         .frame(self.proxy.size)
         .tag(self.index)
+        
     }
     
     @ViewBuilder

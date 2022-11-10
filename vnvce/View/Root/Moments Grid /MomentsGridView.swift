@@ -93,6 +93,7 @@ struct MomentsGridCellView: View {
     // MARK: View -
     var body: some View {
         GeometryReader(content: CellView)
+            .overlay(CountLabel, alignment: .bottomTrailing)
             .clipped()
             .aspectRatio(2 / 3, contentMode: .fit)
             .opacity(momentsVM.pageIndex == index && momentsVM.viewWillAppear ? 0.001 : 1)
@@ -150,5 +151,28 @@ struct MomentsGridCellView: View {
             .aspectRatio(contentMode: .fill)
             .overlay(BlurView(style: momentsVM.blur))
             .frame(height: height)
+    }
+    
+    @ViewBuilder
+    private var CountLabel: some View {
+        if momentGroup.count > 1 {
+            RoundedRectangle(5, style: .continuous)
+                .fill(.white)
+                .shadow(radius: 4)
+                .frame(width: 15, height: 15)
+                .overlay {
+                    if momentGroup.count > 9 {
+                        Text("9+")
+                            .foregroundColor(.black)
+                            .font(.system(size: 8, weight: .semibold, design: .default))
+                    } else {
+                        Text("\(momentGroup.count)")
+                            .foregroundColor(.black)
+                            .font(.system(size: 9, weight: .semibold, design: .default))
+                    }
+                    
+                }
+                .padding(9)
+        }
     }
 }

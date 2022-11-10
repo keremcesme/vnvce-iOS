@@ -35,20 +35,45 @@ struct MomentView: View {
             ImageView
                 .frame(imageFrame())
                 .cornerRadius(UIDevice.current.hasNotch() ? 20 : 0)
+                .overlay(alignment: .trailing) {
+                    let width = UIScreen.main.bounds.width
+                    Color.black.opacity(0.00001)
+                        .frame(width: width / 4, height:  width * 16 / 9)
+                        .onTapGesture {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            let count = self.moments.moments.count
+                            DispatchQueue.main.async {
+                                let maxIndex = count - 1
+                                if moments.currentIndex < maxIndex {
+                                    self.moments.currentIndex += 1
+                                } else {
+                                    momentsVM.animationIsEnabled = true
+                                    self.momentsVM.pageIndex += 1
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        self.momentsVM.animationIsEnabled = false
+                                    }
+                                }
+                            }
+                        }
+                }
                 .padding(.top, topPadding())
                 .opacity(momentsVM.onDragging || !momentsVM.viewIsReady ? 0.00001 : 1)
-                .onTapGesture {
-                    self.momentsVM.dismissNonAsync()
-                }
+//                .onTapGesture {
+//                    self.momentsVM.dismissNonAsync()
+//                }
             
             if UIDevice.current.hasNotch() {
-                Text("TEST")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                    .padding()
-                    .background(Color.blue)
-                    .clipShape(Capsule())
-                    .opacity(momentsVM.onDraggingAnimation || !momentsVM.show ? 0.0001 : 1)
+                NavigationLink {
+                    EmptyView()
+                } label: {
+                    Text("TEST")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .padding()
+                        .background(Color.blue)
+                        .clipShape(Capsule())
+                }
+                .opacity(momentsVM.onDraggingAnimation || !momentsVM.show ? 0.0001 : 1)
             }
         }
         

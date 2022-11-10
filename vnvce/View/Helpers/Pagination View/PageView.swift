@@ -21,6 +21,8 @@ where Content: View,
     
     private var scrollViewConnector: (UIScrollView) -> ()
     
+    private var animationIsEnabled: Bool
+    
     @Binding private var selection: SelectionValue
     
     init(
@@ -28,6 +30,7 @@ where Content: View,
         selection: Binding<SelectionValue>,
         id: ID,
         scrollViewConnector: @escaping (UIScrollView) -> Void,
+        animationIsEnabled: Bool = false,
         @ViewBuilder content: @escaping (GeometryProxy) -> Content
     ) {
         self.axes = axes
@@ -35,6 +38,7 @@ where Content: View,
         self.id = id
         self.content = content
         self.scrollViewConnector = scrollViewConnector
+        self.animationIsEnabled = animationIsEnabled
     }
     
     var body: some View {
@@ -48,7 +52,7 @@ where Content: View,
     @ViewBuilder
     private func PageView(_ proxy: GeometryProxy) -> some View {
         let size = proxy.size
-        TabView(selection: $selection) {
+        TabView(selection: $selection.animation()) {
             content(proxy)
                 .frame(width: size.width, height: size.height)
                 .rotationEffect(contentRotation)
@@ -59,6 +63,17 @@ where Content: View,
         .offset(x: pageOffset(size.width))
         .id(id)
         .tabViewStyle(.page(indexDisplayMode: .never))
+        .animation(animation())
+        .transition(.slide)
+    }
+    
+    private func animation() -> Animation? {
+        if animationIsEnabled {
+            return .spring(response: 0.3, dampingFraction: 1, blendDuration: 1)
+        } else {
+            return nil
+        }
+        
     }
     
     private var contentRotation: Angle {

@@ -55,12 +55,14 @@ struct MomentsView: View {
             Color.black
                 .opacity(backgroundOpacity())
                 .ignoresSafeArea()
-            
             MomentsDayViews
             PreviewView
         }
-        
-        
+        .onChange(of: momentsVM.pageIndex) { index in
+            Task.detached(priority: .high) {
+                await self.momentsVM.downloadMoreImages(index: index)
+            }
+        }
     }
     
     @ViewBuilder
@@ -68,6 +70,7 @@ struct MomentsView: View {
         PageView(selection: $momentsVM.pageIndex,
                  id: momentsVM.moments.count - 1,
                  scrollViewConnector: momentsVM.scrollViewConnector,
+                 animationIsEnabled: momentsVM.animationIsEnabled,
                  content: PageItem)
     }
     

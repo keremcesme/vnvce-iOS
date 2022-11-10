@@ -27,11 +27,14 @@ struct HomeView: View {
         GeometryReader{
             let size = $0.size
             NavigationView {
-                VStack {
-                    CameraView()
-                    Text("Camera View")
-                        .foregroundColor(.white)
-                    Spacer()
+                ZStack {
+                    Color.black.ignoresSafeArea()
+                    VStack {
+                        CameraView()
+                        Text("Camera View")
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
                 }
                 .ignoresSafeArea()
                 .navigationBarTitleDisplayMode(.inline)

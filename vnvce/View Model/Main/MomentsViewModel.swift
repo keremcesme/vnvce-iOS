@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor
+//@MainActor
 class MomentsViewModel: NSObject, ObservableObject {
     private let momentAPI = MomentAPI.shared
     private let imageLoader = ImageLoader()
@@ -34,9 +34,13 @@ class MomentsViewModel: NSObject, ObservableObject {
     
     @Published public var pageIndex: Int = 0
     
+    @Published public var tabViewOffset: CGFloat = 0
+    @Published public var animationIsEnabled: Bool = false
+    
     override init() {
         super.init()
     }
+    
     
     public func scrollViewConnector(_ scrollView: UIScrollView) {
         self.scrollView = scrollView
@@ -104,6 +108,7 @@ extension MomentsViewModel {
 // MARK: Fetch Moments
 extension MomentsViewModel {
     
+    @MainActor
     public func fetchMoments() async {
         if Task.isCancelled { return }
         do {
@@ -135,6 +140,7 @@ extension MomentsViewModel {
                 let moments = Moments(day: getDayString(first: moments.first!), moments: moments)
                 newMoments.append(moments)
             }
+            
             
             await MainActor.run {
                 self.moments = newMoments
@@ -191,13 +197,17 @@ extension MomentsViewModel {
                 let image = try await imageLoader.fetch(request)
                 DispatchQueue.main.async {
                     let downloadedImage = CodableImage(image: image)
-                    self.moments[index].moments[items.offset].downloadedImage = downloadedImage
+                    if self.moments[safe: index]?.moments[safe: items.offset] != nil {
+                        self.moments[index].moments[items.offset].downloadedImage = downloadedImage
+                    }
                 }
             } catch {
                 print(error.localizedDescription)
                 continue
             }
         }
+        
+        print("INDEX: \(index), ALL IMAGES IS DOWNLOADED")
     }
     
 }

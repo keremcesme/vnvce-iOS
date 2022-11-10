@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
       "state" : {
-        "branch" : "master",
-        "revision" : "6299daec1d74be12164fec090faf9ed14d0da9d6"
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
       }
     },
     {
@@ -163,15 +163,6 @@
       }
     },
     {
-      "identity" : "prynttrimmerview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/HHK1/PryntTrimmerView",
-      "state" : {
-        "revision" : "ac1b60a22c7e6a6514de7a66d2f3d5b537c956d5",
-        "version" : "4.0.2"
-      }
-    },
-    {
       "identity" : "pure-swift-ui",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CodeSlicing/pure-swift-ui.git",
@@ -196,15 +187,6 @@
       "state" : {
         "revision" : "39f80d64136d90faf85956bf876967242b0f4663",
         "version" : "0.1.1"
-      }
-    },
-    {
-      "identity" : "stevia",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/freshOS/Stevia",
-      "state" : {
-        "revision" : "cfb1a1d2159277bb553c3dc46f3f742c0275566d",
-        "version" : "5.1.2"
       }
     },
     {
@@ -250,15 +232,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "d3cbf32788250741d397cfb5bcd532c37aa1096d"
-      }
-    },
-    {
-      "identity" : "swiftuipager",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/fermoya/SwiftUIPager",
-      "state" : {
-        "revision" : "4ddc04c801aac143090bb14cf26603a3bf9c74cb",
-        "version" : "2.5.0"
       }
     },
     {

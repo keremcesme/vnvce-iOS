@@ -57,9 +57,9 @@ struct RootView: View {
                 
                 
                 // MARK: Other Views
-                SearchView()
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                    .colorScheme(.dark)
+//                SearchView()
+//                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+//                    .colorScheme(.dark)
 //                UserMomentsRootView(momentsVM, momentsVM2: momentsVM2)
                 MomentsRootView(momentsVM2)
             }
