@@ -9,6 +9,19 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
+    func offsetX(_ completion: @escaping (CGFloat) -> Void) -> some View {
+        self
+            .overlay {
+                GeometryReader{
+                    let minX = $0.frame(in: .global).minX
+                    Color.clear
+                        .preference(key: OffsetKey.self, value: minX)
+                        .onPreferenceChange(OffsetKey.self, perform: completion)
+                }
+            }
+    }
+    
+    @ViewBuilder
     func offsetY(_ completion: @escaping (CGFloat) -> Void) -> some View {
         self
             .overlay {

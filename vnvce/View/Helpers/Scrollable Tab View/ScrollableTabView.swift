@@ -34,7 +34,7 @@ struct ScrollableTabView<Content: View>: UIViewRepresentable {
     internal func makeUIView(context: Context) -> UIScrollView {
         let tabCount: CGFloat = CGFloat(self.tabs.count)
         
-        let gesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.onGestureChange))
+//        let gesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.onGestureChange))
 //        scrollView.addGestureRecognizer(gesture)
         
         setUpScrollView()
@@ -63,7 +63,6 @@ struct ScrollableTabView<Content: View>: UIViewRepresentable {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
-        
     }
     
     private func extractView() -> UIView {

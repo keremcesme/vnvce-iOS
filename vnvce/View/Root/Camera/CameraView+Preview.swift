@@ -10,7 +10,6 @@ import SwiftUI
 extension CameraView {
     struct CameraPreviewView: UIViewRepresentable {
         @EnvironmentObject public var camera: CameraManager
-        @EnvironmentObject public var rootVM: RootViewModel
         
         private let view = UIView()
         
@@ -40,20 +39,15 @@ extension CameraView {
             let doubleTapGesture = UITapGestureRecognizer(
                 target: context.coordinator,
                 action: #selector(Coordinator.doubleTap))
-            let dragGesture = UIPanGestureRecognizer(
-                target: rootVM,
-                action: #selector(rootVM.dragGesture))
             
             
             tapGesture.require(toFail: doubleTapGesture)
             
             tapGesture.numberOfTapsRequired = 1
             doubleTapGesture.numberOfTapsRequired = 2
-            dragGesture.maximumNumberOfTouches = 1
             
             view.addGestureRecognizer(tapGesture)
             view.addGestureRecognizer(doubleTapGesture)
-            view.addGestureRecognizer(dragGesture)
             
         }
         
@@ -90,46 +84,6 @@ extension CameraView {
             public func doubleTap(_ gesture: UITapGestureRecognizer) {
                 self.parent.camera.rotateCamera()
             }
-            
-            @objc func dragGesture(_ gesture: UIPanGestureRecognizer) {
-                let state = gesture.state
-                let screenWidth = UIScreen.main.bounds.width
-                let x = gesture.translation(in: gesture.view).x
-                let v = gesture.velocity(in: gesture.view)
-                
-                DispatchQueue.main.async {
-                    if gesture.state == .changed {
-                        if x <= 0 {
-                            self.parent.rootVM.offset = x
-                        }
-                        if self.parent.rootVM.currentOffset > screenWidth / 2 {
-                            UIDevice.current.setStatusBar(style: .default, animation: true)
-                        } else {
-                            UIDevice.current.setStatusBar(style: .lightContent, animation: true)
-                        }
-                    } else if state == .ended || state == .cancelled || state == .failed {
-//                        print("~~~~~~~")
-//                        print(abs(v.x))
-//                        print(x)
-                        if abs(v.x) >= 700 && abs(x) >= 5 {
-                            UIDevice.current.setStatusBar(style: .default, animation: true)
-                            withAnimation(.spring()) {
-                                self.parent.rootVM.offset = -screenWidth
-                            }
-                        } else if self.parent.rootVM.currentOffset > screenWidth / 2 {
-                            withAnimation(.spring()) {
-                                self.parent.rootVM.offset = -screenWidth
-                            }
-                        } else {
-                            withAnimation(.spring()) {
-                                self.parent.rootVM.offset = 0
-                            }
-                        }
-                    }
-                    
-                }
-            }
-            
         }
     }
 }

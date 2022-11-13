@@ -67,7 +67,7 @@ struct MomentsView: View {
     
     @ViewBuilder
     private var MomentsDayViews: some View {
-        PageView(selection: $momentsVM.pageIndex,
+        PageViewOLD(selection: $momentsVM.pageIndex,
                  id: momentsVM.moments.count - 1,
                  scrollViewConnector: momentsVM.scrollViewConnector,
                  animationIsEnabled: momentsVM.animationIsEnabled,

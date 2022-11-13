@@ -10,142 +10,103 @@ import SwiftUIX
 import PureSwiftUI
 import Nuke
 import NukeUI
+import Colorful
 
 struct HomeView: View {
+    @Environment(\.viewController) public var viewControllerHolder: ViewControllerHolder
+    
     @EnvironmentObject public var rootVM: RootViewModel
     @EnvironmentObject public var currentUserVM: CurrentUserViewModel
     @EnvironmentObject public var searchVM: SearchViewModel
     @EnvironmentObject public var camera: CameraManager
     
-    private var size: CGSize
-    
-    init(size: CGSize) {
-        self.size = size
-    }
     
     var body: some View {
-        GeometryReader{
-            let size = $0.size
             NavigationView {
                 ZStack {
-                    Color.black.ignoresSafeArea()
-                    VStack {
+//                    ColorfulView()
+//                        .colorScheme(.dark)
+//                        .overlay(Color.black.opacity(0.5))
+//                        .ignoresSafeArea()
+                    Color.black
+                        .frame(UIScreen.main.bounds.size)
+                        .ignoresSafeArea()
+                    if UIDevice.current.hasNotch() {
+                        VStack {
+                            CameraView()
+                            TestView
+                            Spacer()
+                        }
+                    } else {
                         CameraView()
-                        Text("Camera View")
-                            .foregroundColor(.white)
-                        Spacer()
+                            .overlay(alignment: .bottom) {
+                                LinearGradient(colors: [.clear, .black.opacity(0.5)], startPoint: .top, endPoint: .bottom)
+                                    .frame(height: 80)
+                            }
+                            .overlay(alignment: .bottom) {
+                                TestView
+                                    .padding(.bottom, 15)
+                            }
                     }
+                    
                 }
                 .ignoresSafeArea()
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar(ToolBar)
             }
-            
-        }
-        .frame(width: size.width / 2, height: size.height)
-    }
-}
-
-extension HomeView {
-    @ToolbarContentBuilder
-    private var ToolBar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) { NavigationLeading }
-        ToolbarItem(placement: .navigationBarTrailing) { NavigationTrailing }
-    }
-    
-    @ViewBuilder
-    private var NavigationLeading: some View {
-        if camera.image == nil {
-            LOGO
-        } else {
-            DismissOutputButton
-        }
-    }
-    
-    @ViewBuilder
-    private var NavigationTrailing: some View {
-        if camera.image == nil {
-            HStack(spacing: 20) {
-                SearchButton
-                ProfileButton
-            }
-        } else {
-            
-        }
-    }
-    
-    @ViewBuilder
-    private var LOGO: some View {
-        HStack {
-            Image("vnvceLOGO")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(22)
-            Text("vnvce".lowercased())
-                .font(.system(size: 34, weight: .heavy, design: .default))
-                .foregroundColor(.white)
-                .yOffset(-4)
-        }
-    }
-    
-    @ViewBuilder
-    private var DismissOutputButton: some View {
-        Button {
-            self.camera.image = nil
-            self.camera.startSession()
-        } label: {
-            Image(systemName: "xmark")
-                .font(.title2)
-                .foregroundColor(.white)
-        }
-    }
-    
-    @ViewBuilder
-    private var SearchButton: some View {
-        Button {
-            DispatchQueue.main.async {
-                searchVM.show = true
-            }
-        } label: {
-            Image(systemName: "magnifyingglass.circle.fill")
-                .font(.system(size: 26, weight: .medium, design: .default))
-                .foregroundColor(.white)
-        }
-        .buttonStyle(.plain)
-    }
-    
-    @ViewBuilder
-    private var ProfileButton: some View {
-        Button {
-            self.rootVM.showProfile()
-        } label: {
-            if let url = currentUserVM.user?.profilePicture?.url {
-                LazyImage(url: URL(string: url)) { state in
-                    if let uiImage = state.imageContainer?.image {
-                        Circle()
-                            .foregroundColor(.white)
-                            .frame(35)
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(33)
-                            .clipShape(Circle())
-                    } else {
-                        Circle()
-                            .foregroundColor(.white)
-                            .frame(35)
-                            .shimmering()
+            .overlay {
+                ZStack {
+                    EmptyView()
+                    if searchVM.show {
+                        Color.black
                     }
                 }
-                .pipeline(.shared)
-                .processors([ImageProcessors.Resize(width: 33)])
-                .priority(.veryHigh)
-            } else {
-                Circle()
-                    .foregroundColor(.white)
-                    .frame(35)
-                    .shimmering()
             }
-        }
+            .frame(UIScreen.main.bounds.size)
     }
+    
+    @ViewBuilder
+    private var TestView: some View {
+        ZStack(alignment: .leading) {
+            GeometryReader { g in
+                ScrollViewReader { proxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 15) {
+                            ForEach((1...24), id: \.self){ item in
+                                Button {
+                                    withAnimation {
+                                        proxy.scrollTo(item, anchor: .trailing)
+                                    }
+                                } label: {
+                                    RoundedRectangle(15, style: .continuous)
+                                        .foregroundColor(.white)
+                                        .frame(70, 70)
+                                        .opacity(0.1)
+                                        .overlay {
+                                            Text("\(item)")
+                                                .foregroundColor(.white)
+                                                .font(.title.bold())
+                                        }
+                                }
+                                .buttonStyle(.plain)
+                                .id(item)
+                            }
+                        }
+                        .padding(.leading, 80)
+                        .padding(.horizontal, 15)
+                    }
+                }
+                
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 70)
+            .cornerRadius(100, corners: .topLeft)
+            .cornerRadius(100, corners: .bottomLeft)
+            ShutterView()
+        }
+        .padding(.leading, 15)
+    }
+    
 }
+
+

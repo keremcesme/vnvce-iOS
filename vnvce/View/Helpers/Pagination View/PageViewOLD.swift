@@ -9,7 +9,7 @@ import SwiftUI
 import PureSwiftUI
 import Introspect
 
-struct PageView<Content, ID, SelectionValue>: View
+struct PageViewOLD<Content, ID, SelectionValue>: View
 where Content: View,
       ID: Hashable,
       SelectionValue: Hashable {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class SearchViewModel: ObservableObject {
     private let searchAPI = SearchAPI.shared
@@ -22,6 +23,10 @@ class SearchViewModel: ObservableObject {
     private let pagingData = PagingData(itemsPerPage: 40)
     
     private var searchTask: Task<Void, Never>?
+    
+    init() {
+//        self.pullToDismiss = PDPullToDismiss(scrollView: scrollView)
+    }
     
     @MainActor
     @Sendable

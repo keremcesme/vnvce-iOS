@@ -23,8 +23,6 @@ class ProfileViewModel: NSObject, ObservableObject {
     @Published public var contentOffset: CGFloat = 0
     @Published public var progress: CGFloat = 0
     
-    
-    
 }
 
 extension ProfileViewModel: UIGestureRecognizerDelegate {
@@ -52,7 +50,7 @@ extension ProfileViewModel: UIGestureRecognizerDelegate {
     
     // MARK: Removing When Leaving The View
     public func removeGesture() {
-        rootController().view.gestureRecognizers?.removeLast()
+        rootController().view.gestureRecognizers?.removeAll()
     }
     
     // MARK: Finding Root Controller

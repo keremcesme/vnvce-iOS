@@ -58,6 +58,8 @@ struct MomentsGridView: View {
 struct MomentsGridCellView: View {
     @StateObject private var momentsVM: MomentsViewModel
     
+    @EnvironmentObject private var scrollViewDelegate: RefreshableScrollViewModel
+    
     @Binding private var momentGroup: Moments
     
     private var index: Int

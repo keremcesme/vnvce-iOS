@@ -13,6 +13,7 @@ import Nuke
 import NukeUI
 
 struct RootView: View {
+    
     @StateObject var keyboardController = KeyboardController()
     @StateObject var navigationController = NavigationController()
     
@@ -22,6 +23,7 @@ struct RootView: View {
     
     @StateObject private var currentUserVM = CurrentUserViewModel()
     @StateObject private var profileVM = ProfileViewModel()
+    @StateObject private var profileScrollViewDelegate = RefreshableScrollViewModel()
     
     @StateObject private var searchVM = SearchViewModel()
     @StateObject private var postsVM = PostsViewModel()
@@ -48,16 +50,11 @@ struct RootView: View {
         NavigationView {
             ZStack {
                 // MARK: Main View
-//                MainView()
-                
-                
-                Root
-                
-//                Root2
+                PageView
                 
                 
                 // MARK: Other Views
-//                SearchView()
+//                SearchViewOLD()
 //                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
 //                    .colorScheme(.dark)
 //                UserMomentsRootView(momentsVM, momentsVM2: momentsVM2)
@@ -77,6 +74,7 @@ struct RootView: View {
         
         .environmentObject(currentUserVM)
         .environmentObject(profileVM)
+        .environmentObject(profileScrollViewDelegate)
         
         .environmentObject(momentsVM)
         .environmentObject(momentsVM2)
@@ -95,40 +93,44 @@ struct RootView: View {
     }
     
     @ViewBuilder
-    private var Root: some View {
-        GeometryReader {
-            let size = $0.size
-            HStack(alignment: .top, spacing: 0) {
-                HomeView(size: size).background(Color.black)
-                ProfileView(size: size)
-            }
-            .frame(size)
-            .updateOffset($0, value: $rootVM.currentOffset)
-        }
-        .frame(width: UIScreen.main.bounds.width * 2)
-        .frame(maxHeight: .infinity)
-        .xOffset(UIScreen.main.bounds.width / 2 + rootVM.offset)
-        .ignoresSafeArea()
-        .onChange(of: rootVM.currentOffset, perform: rootVM.onChangeCurrentOffset)
-        .onChange(of: rootVM.currentStatusBarStyle) { value in
-            switch value {
-            case .lightContent:
-                self.camera.startSession()
-            default:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    if rootVM.currentStatusBarStyle == value {
-                        self.camera.stopSession()
+    private var PageView: some View {
+        ScrollViewReader { proxy in
+            GeometryReader { g in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        HomeView().id(0)
+                        ProfileView().id(1)
+                    }
+                    .introspectScrollView {
+                        $0.isPagingEnabled = true
+                        $0.bounces = false
+                        $0.contentInsetAdjustmentBehavior = .never
+                    }
+                    .offsetX(rootVM.onChangeOffset)
+                    .onChange(of: rootVM.profileWillShowed) {
+                        rootVM.onChangeProfileWillShowed($0, proxy: proxy)
+                    }
+                    .onChange(of: rootVM.homeWillShowed) {
+                        rootVM.onChangeHomeWillShowed($0, proxy: proxy)
+                    }
+                    .onChange(of: rootVM.currentTab) {
+                        if $0 == .profile {
+                            self.profileScrollViewDelegate.addGesture()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                if rootVM.currentTab == .profile {
+                                    self.camera.stopSession()
+                                }
+                            }
+                        } else {
+                            self.profileScrollViewDelegate.deleteGesture()
+                            self.camera.startSession()
+                        }
                     }
                 }
             }
+            
+            .ignoresSafeArea(.keyboard)
         }
-    }
-    
-    
-}
-
-extension View {
-    func updateOffset(_ proxy: GeometryProxy, value: Binding<CGFloat>) -> some View {
-        modifier(RootViewModifier(proxy, value))
+        .ignoresSafeArea()
     }
 }
