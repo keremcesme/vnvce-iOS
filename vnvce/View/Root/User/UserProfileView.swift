@@ -19,6 +19,9 @@ struct UserProfileView: View {
     
     @StateObject public var userVM: UserProfileViewModel
     @StateObject private var postsVM: PostsViewModel
+    @StateObject private var momentsVM: MomentsViewModel
+    
+    @StateObject private var scrollViewDelegate = RefreshableScrollViewModel()
     
     @StateObject var scrollDelegate = ScrollViewModel()
     
@@ -27,6 +30,7 @@ struct UserProfileView: View {
     init(user: User.Public) {
         self._userVM = StateObject(wrappedValue: UserProfileViewModel(user: user))
         self._postsVM = StateObject(wrappedValue: PostsViewModel(.user(userID: user.id)))
+        self._momentsVM = StateObject(wrappedValue: MomentsViewModel(payload: .user(userID: user.id)))
     }
     
     @Sendable
@@ -35,7 +39,8 @@ struct UserProfileView: View {
         await userVM.fetchProfile()
         await userVM.fetchRelationship()
         if userVM.relationship?.raw == .friend {
-            await postsVM.loadFirstPage()
+//            await postsVM.loadFirstPage()
+            await momentsVM.fetchMoments()
         }
     }
     
@@ -45,50 +50,47 @@ struct UserProfileView: View {
                 ZStack {
                     UserProfileBackground(profilePicture: userVM.user.profilePicture)
                     ScrollViewReader { proxy in
-                        ScrollViewRefreshable(scrollDelegate: scrollDelegate) {
+                        ScrollView {
                             LazyVStack {
                                 DetailsView
-                                PostsGridView(vm: postsVM, relationship: userVM.relationship)
+                                MomentsGridView(proxy: proxy, momentsVM: momentsVM)
                             }
                             .padding(.bottom, 75)
-                        } onRefresh: {
-                            try? await Task.sleep(seconds: 0.3)
-                            await commonInit()
                         }
+                        .refreshable(delegate: scrollViewDelegate) {
+                            try? await Task.sleep(seconds: 2)
+                        }
+                        .addGestureRecognizer(scrollViewDelegate.gesture())
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbar(ToolBar)
+//                .onAppear {
+//                    scrollViewDelegate.addGesture()
+//                }
             }
-            PostRootView(postsVM)
-                .environmentObject(currentUserVM)
-//                .environmentObject(navigationController)
-//            NavigationLink {
-//                UserProfileView(user: userVM.user)
-//            } label: {
-//                Text("GO")
-//                    .font(.largeTitle.bold())
-//            }
+            MomentsRootView(momentsVM)
         }
         .navigationBarHidden(true)
         .taskInit(commonInit)
-        .onChange(of: postsVM.selectedPost.didAppear) {
-            if !$0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    scrollDelegate.addGesture()
-                }
-            } else {
-                scrollDelegate.removeGesture()
-            }
-        }
-        .onChange(of: userVM.relationship) { value in
-            if value?.raw == .friend {
-                Task {
-                    await postsVM.loadFirstPage()
-                }
-            }
-        }
+        
+//        .onChange(of: postsVM.selectedPost.didAppear) {
+//            if !$0 {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                    scrollDelegate.addGesture()
+//                }
+//            } else {
+//                scrollDelegate.removeGesture()
+//            }
+//        }
+//        .onChange(of: userVM.relationship) { value in
+//            if value?.raw == .friend {
+//                Task {
+//                    await postsVM.loadFirstPage()
+//                }
+//            }
+//        }
     }
     
     @ViewBuilder

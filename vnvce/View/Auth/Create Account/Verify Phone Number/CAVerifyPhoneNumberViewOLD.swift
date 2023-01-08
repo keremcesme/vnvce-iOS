@@ -8,7 +8,7 @@
 import SwiftUI
 import Focuser
 
-struct CAVerifyPhoneNumberView: View {
+struct CAVerifyPhoneNumberViewOLD: View {
     @KeychainStorage("accessToken") var accessToken
     @KeychainStorage("refreshToken") var refreshToken
     
@@ -18,7 +18,7 @@ struct CAVerifyPhoneNumberView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var vm: CreateAccountViewModel
     
-    @StateObject private var timer = SMSTimerController()
+    @StateObject private var timer = OTPTimerController()
     
     private func timerInit() {
         guard let attempt = vm.smsAttempt else {
@@ -181,7 +181,7 @@ struct CAVerifyPhoneNumberView: View {
 }
 
 // Navigation Bar
-extension CAVerifyPhoneNumberView {
+extension CAVerifyPhoneNumberViewOLD {
     @ToolbarContentBuilder
     var ToolBar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) { BackButton }
@@ -200,7 +200,7 @@ extension CAVerifyPhoneNumberView {
     }
 }
 
-extension CAVerifyPhoneNumberView {
+extension CAVerifyPhoneNumberViewOLD {
     
     private struct OTPTextField: View {
         @EnvironmentObject var vm: CreateAccountViewModel

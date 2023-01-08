@@ -12,11 +12,14 @@ import SwiftUI
 class MomentsViewModel: NSObject, ObservableObject {
     private let momentAPI = MomentAPI.shared
     private let imageLoader = ImageLoader()
+    private let imageDownloader = ImageDownloader()
     
     @Published public var scrollView: UIScrollView!
     
     public let animationDuration: CGFloat = 0.25
     public let blur: UIBlurEffect.Style = .light
+    
+    @Published private(set) var payload: MomentsPayload
     
     @Published public var moments = [Moments]()
     
@@ -37,10 +40,9 @@ class MomentsViewModel: NSObject, ObservableObject {
     @Published public var tabViewOffset: CGFloat = 0
     @Published public var animationIsEnabled: Bool = false
     
-    override init() {
-        super.init()
+    init(payload: MomentsPayload = .me) {
+        self.payload = payload
     }
-    
     
     public func scrollViewConnector(_ scrollView: UIScrollView) {
         self.scrollView = scrollView
@@ -59,11 +61,13 @@ extension MomentsViewModel {
         self.selectedMomentCellFrame = frame
         self.pageIndex = index
         self.viewWillAppear = true
-        
+        Task.detached {
+            await self.downloadMoreImages(index: index)
+        }
         do {
-            self.removeGesture()
+//            self.removeGesture()
             try await Task.sleep(seconds: 0.001)
-            self.addGesture()
+//            self.addGesture()
             withAnimation(response: self.animationDuration) {
                 self.show = true
             } after: {
@@ -77,7 +81,7 @@ extension MomentsViewModel {
     @Sendable
     public func dismiss() async {
         self.viewIsReady = false
-        self.removeGesture()
+//        self.removeGesture()
         do {
             try await Task.sleep(seconds: 0.001)
             withAnimation(response: self.animationDuration) {
@@ -112,7 +116,7 @@ extension MomentsViewModel {
     public func fetchMoments() async {
         if Task.isCancelled { return }
         do {
-            var result = try await momentAPI.fetchMoments(.me)
+            var result = try await momentAPI.fetchMoments(self.payload)
             if Task.isCancelled { return }
             
             for moment in result.enumerated() {
@@ -174,7 +178,8 @@ extension MomentsViewModel {
             let request = URLRequest(url: firstMoment.returnURL)
             
             do {
-                let image = try await imageLoader.fetch(request)
+                let image = try await imageDownloader.load(url: firstMoment.returnURL)
+//                let image = try await imageLoader.fetch(request)
                 DispatchQueue.main.async {
                     let downloadedImage = CodableImage(image: image)
                     if self.moments[safe: items.offset]?.moments[safe: 0] != nil {
@@ -186,7 +191,7 @@ extension MomentsViewModel {
                 continue
             }
         }
-        print("ALL IMAGES IS DOWNLOADED")
+//        print("ALL IMAGES IS DOWNLOADED")
     }
     
     public func downloadMoreImages(index: Int) async {
@@ -194,7 +199,8 @@ extension MomentsViewModel {
             let request = URLRequest(url: items.element.returnURL)
             
             do {
-                let image = try await imageLoader.fetch(request)
+                let image = try await imageDownloader.load(url: items.element.returnURL)
+//                let image = try await imageLoader.fetch(request)
                 DispatchQueue.main.async {
                     let downloadedImage = CodableImage(image: image)
                     if self.moments[safe: index]?.moments[safe: items.offset] != nil {
@@ -207,7 +213,7 @@ extension MomentsViewModel {
             }
         }
         
-        print("INDEX: \(index), ALL IMAGES IS DOWNLOADED")
+//        print("INDEX: \(index), ALL IMAGES IS DOWNLOADED")
     }
     
 }
@@ -221,6 +227,13 @@ extension MomentsViewModel {
         dragGesture.maximumNumberOfTouches = 1
         let root = findRootViewController()
         root.view.addGestureRecognizer(dragGesture)
+    }
+    
+    public func addGesture2() -> UIGestureRecognizer {
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(gesture))
+        panGesture.delegate = self
+        
+        return panGesture
     }
     
     // MARK: Removing When Leaving The View

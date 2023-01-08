@@ -13,8 +13,14 @@ enum Tab {
     case profile
 }
 
+enum ExpandCameraIcon: String, CaseIterable {
+    case expand = "arrow.up.left.and.arrow.down.right"
+    case narrow = "arrow.down.right.and.arrow.up.left"
+}
+
 class RootViewModel: NSObject, ObservableObject {
     private let screenWidth = UIScreen.main.bounds.width
+    
     @Published public var currentTab: Tab
     
     @Published public var offset: CGFloat = 0
@@ -51,7 +57,7 @@ class RootViewModel: NSObject, ObservableObject {
         let absValue = abs(value)
         DispatchQueue.main.async {
             if UIDevice.current.hasNotch() {
-                //            self.offset = absValue
+                self.offset = absValue
             }
 
             if absValue > self.screenWidth / 2 {

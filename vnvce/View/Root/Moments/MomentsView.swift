@@ -39,9 +39,15 @@ struct MomentsView: View {
     private func backgroundOpacity() -> CGFloat {
         if momentsVM.show {
             if momentsVM.onDragging {
+                
+                
                 let width = momentsVM.viewOffset.width / (UIScreen.main.bounds.width / 2)
                 let height = momentsVM.viewOffset.height / (UIScreen.main.bounds.height / 2)
                 return 1.0 - width - height
+                
+                
+                
+                
             } else {
                 return 1
             }
@@ -56,6 +62,7 @@ struct MomentsView: View {
                 .opacity(backgroundOpacity())
                 .ignoresSafeArea()
             MomentsDayViews
+                .addGestureRecognizer(momentsVM.addGesture2())
             PreviewView
         }
         .onChange(of: momentsVM.pageIndex) { index in
@@ -63,6 +70,7 @@ struct MomentsView: View {
                 await self.momentsVM.downloadMoreImages(index: index)
             }
         }
+        
     }
     
     @ViewBuilder

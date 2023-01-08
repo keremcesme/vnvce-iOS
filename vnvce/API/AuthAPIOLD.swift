@@ -1,5 +1,5 @@
 //
-//  AuthAPI.swift
+//  AuthAPIOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 18.08.2022.
@@ -10,8 +10,8 @@ import KeychainAccess
 import Alamofire
 import NIOCore
 
-struct AuthAPI {
-    static let shared = AuthAPI()
+struct AuthAPIOLD {
+    static let shared = AuthAPIOLD()
     
     private init() {}
     
@@ -21,7 +21,7 @@ struct AuthAPI {
 }
 
 // MARK: Create Account Methods -
-extension AuthAPI {
+extension AuthAPIOLD {
     
     // Step 1 - Check phone number availability.
     public func checkPhoneNumber(phoneNumber: String, clientID: String) async throws -> PhoneNumberAvailability? {
@@ -50,7 +50,7 @@ extension AuthAPI {
     }
     
     // Auto - Check username availabiltiy.
-    public func autoCheckUsername(username: String, clientID: String) async throws -> UsernameAvailability? {
+    public func autoCheckUsername(username: String, clientID: String) async throws -> UsernameAvailabilityOLD? {
         let route: AuthRoute = .create(.username(.check(username, clientID)))
         let url = urlBuilder.authURL(route: route, version: .v1)
         
@@ -62,7 +62,7 @@ extension AuthAPI {
                 url,
                 method: .get,
                 headers: headers)
-            .serializingDecodable(Response<UsernameAvailability>.self)
+            .serializingDecodable(Response<UsernameAvailabilityOLD>.self)
         
         
         let result = await task.result
@@ -158,7 +158,7 @@ extension AuthAPI {
 }
 
 // MARK: Private Methods -
-private extension AuthAPI {
+private extension AuthAPIOLD {
     // Handle Errors
     private func generateError(code: Int = 1, description: String) -> Error {
         NSError(domain: "AuthAPI", code: code, userInfo: [NSLocalizedDescriptionKey: description])

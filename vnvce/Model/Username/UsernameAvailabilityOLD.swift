@@ -1,5 +1,5 @@
 //
-//  UsernameAvailability.swift
+//  UsernameAvailabilityOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 22.08.2022.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum UsernameAvailability: String, Codable {
+enum UsernameAvailabilityOLD: String, Codable {
     case available = "available"
     case alreadyTaken = "alreadyTaken"
     case reserved = "reserved"
 }
 
-extension UsernameAvailability {
+extension UsernameAvailabilityOLD {
     
     func message(_ username: String) -> String {
         switch self {

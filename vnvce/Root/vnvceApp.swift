@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Firebase
+import DeviceCheck
+import CryptoKit
 
 @main
 struct vnvceApp: App {
@@ -41,6 +43,56 @@ struct vnvceApp: App {
                 print("Access Token: \(appState.accessToken)")
                 print("Refresh Token: \(appState.refreshToken)")
                 print("Logged In: \(appState.loggedIn)")
+                
+                let pkce = PKCEService()
+                
+                Task {
+                    let verifier = await pkce.generateCodeVerifier()
+                    let challenge = try await pkce.codeChallenge(fromVerifier: verifier)
+                    let deviceID = UIDevice.current.identifierForVendor?.uuidString ?? ""
+                    
+                    print("Device ID: \(deviceID)")
+                    print("Verifier: \(verifier)")
+                    print("Challenge: \(challenge)")
+                }
+                
+                
+//                do {
+//                    let pkce = try PKCEService()
+//                    print("Verifier: \(pkce.codeVerifier)")
+//                    print("Challenge: \(pkce.codeChallenge)")
+//                } catch {
+//                    
+//                }
+                
+                
+//                let service = DCAppAttestService.shared
+//
+//
+//
+//                if service.isSupported {
+//                    print("App Attest is supported")
+//                    service.generateKey { keyID, error in
+//                        guard error == nil else { return }
+//                        print("Key: \(keyID)")
+//                    }
+//                }
+//
+//                if DCDevice.current.isSupported { // Always test for availability.
+//                    DCDevice.current.generateToken { token, error in
+//                        guard error == nil else {
+//                            return
+//                        }
+//                        if let data = token {
+//                            let xAppleDeviceCheckToken = data.base64EncodedString()
+//
+////                            print(xAppleDeviceCheckToken)
+//                        }
+//                    }
+//                } else {
+//                    print("UNSUPPORTED")
+//                }
+                
             }
             .onChange(of: notificationCenter.dumbData) { newValue in
                 
@@ -58,5 +110,3 @@ struct vnvceApp: App {
         }
     }
 }
-
-

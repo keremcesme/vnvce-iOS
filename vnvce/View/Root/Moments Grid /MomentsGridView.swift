@@ -14,17 +14,15 @@ import NukeUI
 struct MomentsGridView: View {
     @EnvironmentObject private var currentUserVM: CurrentUserViewModel
     
-    @StateObject private var momentsVM: UserMomentsViewModel
-    @StateObject private var momentsVM2: MomentsViewModel
+    @StateObject private var momentsVM: MomentsViewModel
     
     private let proxy: ScrollViewProxy
     
     private var relationship: Relationship?
     
-    init(proxy: ScrollViewProxy, momentsVM: UserMomentsViewModel, momentsVM2: MomentsViewModel, relationship: Relationship? = .me) {
+    init(proxy: ScrollViewProxy, momentsVM: MomentsViewModel, relationship: Relationship? = .me) {
         self.proxy = proxy
         self._momentsVM = StateObject(wrappedValue: momentsVM)
-        self._momentsVM2 = StateObject(wrappedValue: momentsVM2)
         self.relationship = relationship
     }
     
@@ -40,16 +38,16 @@ struct MomentsGridView: View {
     
     @ViewBuilder
     private func GridItems() -> some View {
-        ForEach(Array(self.momentsVM2.moments.enumerated()), id: \.element.id, content: GridCell)
+        ForEach(Array(self.momentsVM.moments.enumerated()), id: \.element.id, content: GridCell)
     }
     
     @ViewBuilder
     private func GridCell(_ inx: Int, _ item: Moments) -> some View {
         MomentsGridCellView(
-            momentGroup: self.$momentsVM2.moments[inx],
+            momentGroup: self.$momentsVM.moments[inx],
             index: inx,
             proxy: self.proxy,
-            vm: momentsVM2)
+            vm: momentsVM)
         .id(item.id)
     }
 }
@@ -59,6 +57,7 @@ struct MomentsGridCellView: View {
     @StateObject private var momentsVM: MomentsViewModel
     
     @EnvironmentObject private var scrollViewDelegate: RefreshableScrollViewModel
+    @EnvironmentObject public var navigationController: NavigationController
     
     @Binding private var momentGroup: Moments
     
@@ -83,6 +82,9 @@ struct MomentsGridCellView: View {
     private func onChangeViewIsReady(_ value: Bool, _ size: CGSize, _ frame: CGRect) {
         if !value && self.index == self.momentsVM.pageIndex {
             self.momentsVM.onChangeViewIsReady(size: size, frame: frame)
+        }
+        if !value {
+            self.navigationController.navigation.enabled = true
         }
     }
     
@@ -110,13 +112,25 @@ struct MomentsGridCellView: View {
             ImageContainerView(moment, width: g.size.width)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    await self.momentsVM.gridCellTapAction(
-                        index: index,
-                        size: g.size,
-                        frame: g.frame(in: .global))
-                    try? await Task.sleep(seconds: self.momentsVM.animationDuration)
-                    await self.proxy.scrollTo(momentGroup.id, anchor: .bottom)
+                    self.navigationController.navigation.enabled = false
+                    Task {
+                        await self.momentsVM.gridCellTapAction(
+                            index: index,
+                            size: g.size,
+                            frame: g.frame(in: .global))
+                        try? await Task.sleep(seconds: self.momentsVM.animationDuration)
+                        self.proxy.scrollTo(momentGroup.id, anchor: .bottom)
+                    }
                 }
+//                .onTapGesture {
+//
+//                    await self.momentsVM.gridCellTapAction(
+//                        index: index,
+//                        size: g.size,
+//                        frame: g.frame(in: .global))
+//                    try? await Task.sleep(seconds: self.momentsVM.animationDuration)
+//                    await self.proxy.scrollTo(momentGroup.id, anchor: .bottom)
+//                }
                 .onChange(of: momentsVM.viewIsReady) {
                     onChangeViewIsReady($0, g.size, g.frame(in: .global))
                 }

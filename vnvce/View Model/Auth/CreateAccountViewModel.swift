@@ -12,7 +12,7 @@ import KeychainAccess
 
 @MainActor
 class CreateAccountViewModel: ObservableObject {
-    private let authAPI = AuthAPI.shared
+    private let authAPI = AuthAPIOLD.shared
     private let storageAPI = StorageAPI.shared
     private let meAPI = MeAPI.shared
     

@@ -20,7 +20,6 @@ struct HomeView: View {
     @EnvironmentObject public var searchVM: SearchViewModel
     @EnvironmentObject public var camera: CameraManager
     
-    
     var body: some View {
             NavigationView {
                 ZStack {
@@ -32,9 +31,9 @@ struct HomeView: View {
                         .frame(UIScreen.main.bounds.size)
                         .ignoresSafeArea()
                     if UIDevice.current.hasNotch() {
-                        VStack {
+                        VStack(spacing:15) {
                             CameraView()
-                            TestView
+                            BottomView
                             Spacer()
                         }
                     } else {
@@ -44,7 +43,7 @@ struct HomeView: View {
                                     .frame(height: 80)
                             }
                             .overlay(alignment: .bottom) {
-                                TestView
+                                BottomView
                                     .padding(.bottom, 15)
                             }
                     }
@@ -63,6 +62,44 @@ struct HomeView: View {
                 }
             }
             .frame(UIScreen.main.bounds.size)
+    }
+    
+    @ViewBuilder
+    private var BottomView: some View {
+        GeometryReader {
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: 15) {
+                        ShutterView()
+                        ForEach((1...24), id: \.self){ item in
+                            Button {
+                                withAnimation {
+                                    proxy.scrollTo(item, anchor: .trailing)
+                                }
+                            } label: {
+                                RoundedRectangle(15, style: .continuous)
+                                    .foregroundColor(.white)
+                                    .frame(70, 70)
+//                                    .opacity(0.1)
+                                    .overlay {
+                                        Text("\(item)")
+                                            .foregroundColor(.white)
+                                            .font(.title.bold())
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                            .id(item)
+                        }
+                    }
+                    .padding(.trailing, 15)
+                    .padding(.leading, UIScreen.main.bounds.width / 2 - 40)
+                }
+            }
+            .frame($0.size)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 80)
+        
     }
     
     @ViewBuilder

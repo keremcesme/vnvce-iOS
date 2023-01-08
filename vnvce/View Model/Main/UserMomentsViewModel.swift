@@ -51,7 +51,7 @@ class UserMomentsViewModel: NSObject, ObservableObject {
         
         try? await Task.sleep(seconds: 0.001)
         
-        self.addGesture()
+//        self.addGesture()
         
         withAnimation(response: animationDuration) {
             self.openMomentsView = true
@@ -76,7 +76,7 @@ class UserMomentsViewModel: NSObject, ObservableObject {
                 
                 self.momentsViewIsReady = false
                 
-                self.removeGesture()
+//                self.removeGesture()
                 try? await Task.sleep(seconds: 0.01)
                 withAnimation(response: self.animationDuration) {
                     self.offset = .zero
@@ -276,6 +276,8 @@ extension UserMomentsViewModel: UIGestureRecognizerDelegate {
         panGesture.maximumNumberOfTouches = 1
         rootController().view.addGestureRecognizer(panGesture)
     }
+    
+    
     
     // MARK: Removing When Leaving The View
     public func removeGesture() {

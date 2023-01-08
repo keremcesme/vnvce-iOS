@@ -13,6 +13,7 @@ import Nuke
 import NukeUI
 
 struct RootView: View {
+    @StateObject private var image = FetchImage()
     
     @StateObject var keyboardController = KeyboardController()
     @StateObject var navigationController = NavigationController()
@@ -24,6 +25,8 @@ struct RootView: View {
     @StateObject private var currentUserVM = CurrentUserViewModel()
     @StateObject private var profileVM = ProfileViewModel()
     @StateObject private var profileScrollViewDelegate = RefreshableScrollViewModel()
+    
+    @StateObject private var feedVM = FeedViewModel()
     
     @StateObject private var searchVM = SearchViewModel()
     @StateObject private var postsVM = PostsViewModel()
@@ -41,24 +44,24 @@ struct RootView: View {
     
     @Sendable
     private func commonInit() async {
-        await currentUserVM.fetchProfile()
-        await momentsVM.fetchMoments()
-        await momentsVM2.fetchMoments()
+//        await currentUserVM.fetchProfile()
+//        await momentsVM.fetchMoments()
+//        await momentsVM2.fetchMoments()
     }
     
     var body: some View {
         NavigationView {
             ZStack {
-                // MARK: Main View
-                PageView
+//                Color.black.ignoresSafeArea()
                 
+//                PageView
                 
-                // MARK: Other Views
-//                SearchViewOLD()
-//                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-//                    .colorScheme(.dark)
-//                UserMomentsRootView(momentsVM, momentsVM2: momentsVM2)
-                MomentsRootView(momentsVM2)
+                FeedView()
+                
+                if camera.image != nil {
+                    Color.red
+                }
+                
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
@@ -84,7 +87,7 @@ struct RootView: View {
         .environmentObject(cameraVM)
         .environmentObject(camera)
         
-        
+        .environmentObject(feedVM)
         
         .environmentObject(tabBarVM)
         
@@ -115,14 +118,14 @@ struct RootView: View {
                     }
                     .onChange(of: rootVM.currentTab) {
                         if $0 == .profile {
-                            self.profileScrollViewDelegate.addGesture()
+//                            self.profileScrollViewDelegate.addGesture()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 if rootVM.currentTab == .profile {
                                     self.camera.stopSession()
                                 }
                             }
                         } else {
-                            self.profileScrollViewDelegate.deleteGesture()
+//                            self.profileScrollViewDelegate.deleteGesture()
                             self.camera.startSession()
                         }
                     }

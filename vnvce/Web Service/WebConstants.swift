@@ -1,11 +1,7 @@
-//
-//  WebConstants.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 18.08.2022.
-//
 
 import Foundation
+import VNVCECore
+import UIKit
 
 enum APIVersions {
     static let v1 = "v1"
@@ -22,30 +18,22 @@ enum APIVersion: String {
 }
 
 enum WebConstants {
-    static let apiVersion = APIVersions.v1
-    static let url = "https://vnvce.com" // PROD
-//    static let url = "https://0e33-78-135-94-75.ngrok.io" // DEV
+//    static let host = "vnvce.com" // PROD
+    
+    static let url = "b152-78-135-94-183.ngrok.io" // DEV
     
     static let storageURL = "gs://vnvce-" // FIREBASE STORAGE
     
-    static let baseURL = "\(url)/api/\(apiVersion)/"
     static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
 }
 
-enum HTTPMethods: String {
-    case POST, GET, PUT, PATCH, DELETE
-}
 
 enum MIMEType {
     static let appJSON = "application/json"
     static let bearer = "Bearer "
 }
 
-//enum HTTPHeaders: String {
-//    case contentType = "Content-Type"
-//    case authorization = "Authorization"
-//}
-
 enum HTTPError: Error {
     case badURL, badResponse, errorDecodingData, invalidURL, badAccessTokenOrBadURL, badAccessToken
 }
+

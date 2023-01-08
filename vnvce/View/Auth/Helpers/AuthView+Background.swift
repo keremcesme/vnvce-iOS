@@ -17,7 +17,6 @@ struct AuthViewBackground: View {
              .frame(UIScreen.main.bounds.size)
              .overlay(Overlay)
              .ignoresSafeArea()
-
     }
     
     @ViewBuilder

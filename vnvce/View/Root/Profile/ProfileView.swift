@@ -13,14 +13,16 @@ import PureSwiftUI
 import SwiftUIX
 
 struct ProfileView: View {
+    @Environment(\.dismiss) var dismiss
+    
     @EnvironmentObject public var rootVM: RootViewModel
     @EnvironmentObject public var profileVM: ProfileViewModel
     
     @EnvironmentObject public var camera: CameraManager
     
     @EnvironmentObject public var currentUserVM: CurrentUserViewModel
-    @EnvironmentObject public var momentsVM: UserMomentsViewModel
-    @EnvironmentObject public var momentsVM2: MomentsViewModel
+    
+    @StateObject public var momentsVM = MomentsViewModel()
     
     @EnvironmentObject private var scrollViewDelegate: RefreshableScrollViewModel
     
@@ -29,38 +31,44 @@ struct ProfileView: View {
     private func onRefresh() async {
         await currentUserVM.fetchProfile()
 //        await momentsVM.fetchMoments()
-        await momentsVM2.fetchMoments()
+//        await momentsVM.fetchMoments()
     }
     
     var body: some View {
-            NavigationView {
-                ZStack {
-                    CurrentUserBackground()
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            LazyVStack {
-                                DetailsView
-                                MomentsGridView(proxy: proxy, momentsVM: momentsVM, momentsVM2: momentsVM2)
+            ZStack {
+                NavigationView {
+                    ZStack {
+                        CurrentUserBackground()
+                        ScrollViewReader { proxy in
+                            ScrollView {
+                                LazyVStack {
+                                    DetailsView
+                                    MomentsGridView(proxy: proxy, momentsVM: momentsVM)
+                                }
+                                .padding(.bottom, 200)
                             }
-                            .padding(.bottom, 200)
+                            .refreshable(delegate: scrollViewDelegate, onRefresh)
+                            .addGestureRecognizer(scrollViewDelegate.gesture())
                         }
-                        .refreshable(delegate: scrollViewDelegate, onRefresh)
                     }
+                    .navigationBarBackButtonHidden()
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar(ToolBar)
                 }
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar(ToolBar)
-                .onChange(of: momentsVM2.show) {
-                    if !$0 {
-                        scrollViewDelegate.addGesture()
-                    }
-                }
+                
+                MomentsRootView(momentsVM)
             }
-            .frame(UIScreen.main.bounds.size)
-            .cornerRadius(UIDevice.current.screenCornerRadius, corners: .bottomLeft)
-            .background(.black)
+            .navigationBarHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+//            .cornerRadius(UIDevice.current.screenCornerRadius, corners: [.bottomLeft])
+//            .ignoresSafeArea()
+//            .background(.black)
+            .taskInit {
+                await momentsVM.fetchMoments()
+            }
     }
 }
-
+ 
 extension ProfileView {
     @ViewBuilder
     private var DetailsView: some View {

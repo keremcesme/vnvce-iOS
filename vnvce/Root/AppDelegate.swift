@@ -9,12 +9,28 @@ import SwiftUI
 import AVFoundation
 import Firebase
 import KeychainAccess
+import FirebaseAppCheck
 
 class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
         FirebaseApp.configure()
+        AppCheck.appCheck().token(forcingRefresh: false) { token, error in
+            guard error == nil else {
+                // Handle any errors if the token was not retrieved.
+                print("Unable to retrieve App Check token: \(error!)")
+                return
+            }
+            guard let token = token else {
+                print("Unable to retrieve App Check token.")
+                return
+            }
+            // Get the raw App Check token string.
+            let tokenString = token.token
+            
+//            print("AppCheck Token: \(tokenString)")
+        }
         
         setup()
         

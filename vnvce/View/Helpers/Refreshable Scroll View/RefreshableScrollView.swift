@@ -30,6 +30,12 @@ class RefreshableScrollViewModel: NSObject, ObservableObject, UIGestureRecognize
         rootController().view.addGestureRecognizer(pangGesture)
     }
     
+    public func gesture() -> UIGestureRecognizer {
+        let pangGesture = UIPanGestureRecognizer(target: self, action: #selector(onGestureChange))
+        pangGesture.delegate = self
+        return pangGesture
+    }
+    
     public func deleteGesture() {
         rootController().view.gestureRecognizers?.removeAll()
     }
@@ -37,11 +43,12 @@ class RefreshableScrollViewModel: NSObject, ObservableObject, UIGestureRecognize
     // MARK: Finding Root Controller
     private func rootController() -> UIViewController {
         guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let root = screen.windows.first?.rootViewController
+              let root = screen.windows.last?.rootViewController
         else {
             return .init()
         }
-        
+        print(screen.windows.count)
+        print("burasi 2")
         return root
     }
     

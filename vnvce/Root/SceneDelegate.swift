@@ -8,17 +8,23 @@
 import Foundation
 import SwiftUI
 import UIKit
-
+import Cache
 
 class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject {
     
     @Published var accountIsCreated: Bool = false
     
+    private let diskConfig = DiskConfig(name: "Moment",
+                                        maxSize: 1_073_741_824,
+                                        protectionType: .complete)
+    
+    private let memoryConfig = MemoryConfig(expiry: .seconds(86400))
+    private let transformer = TransformerFactory.forData()
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions
     ) {
         // ...
     }
-    
     
     func sceneWillEnterForeground(_ scene: UIScene) {
         // ...
@@ -42,8 +48,23 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject {
             userDefaults.set(true, forKey: "loggedIn")
         }
         
+        removeMomentsCache()
+        
         print("~ SCENE UPDATE ~ Disconected or Terminated App")
         
+    }
+    
+    private func removeMomentsCache() {
+        do {
+            let storage: Storage<String, Data> = try Storage(
+                diskConfig: diskConfig,
+                memoryConfig: memoryConfig,
+                transformer: transformer
+            )
+            
+            try storage.removeExpiredObjects()
+            
+        } catch { return }
     }
     
 }

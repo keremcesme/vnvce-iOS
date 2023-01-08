@@ -9,7 +9,7 @@ import Foundation
 
 enum ReserveUsernameStatus: Decodable {
     case success
-    case failure(UsernameAvailability)
+    case failure(UsernameAvailabilityOLD)
 }
 
 struct ReserveUsernameResponse: Decodable {

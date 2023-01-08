@@ -1,117 +1,152 @@
-//
-//  AuthView.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 12.08.2022.
-//
 
 import SwiftUI
-import UIKit
-import Introspect
+import SwiftUIX
 import PureSwiftUI
 
 struct AuthView: View {
-    @Environment(\.colorScheme) var colorScheme
+    @StateObject private var authVM: AuthViewModel
     
-    @State var navigation = NavigationCoordinator()
-    
-    @StateObject var createAccountVM: CreateAccountViewModel
+    @State private var showContinueButton = false
     
     init() {
-        self._createAccountVM = StateObject(wrappedValue: CreateAccountViewModel())
+        self._authVM = StateObject(wrappedValue: AuthViewModel())
     }
     
     var body: some View {
         NavigationView {
-            ZStack(alignment: .bottom){
-                Color.init("AuthBG")
-                    .ignoresSafeArea()
-                VStack(alignment: .leading, spacing: 0){
-                    Button {
-                        
-                    } label: {
-                        Text("TEST")
-                            .padding()
-                    }
-
-                    Logo
-                    CreateAccount
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 18)
+            BodyView
+                .navigationBarHidden(true)
+        }
+        .environmentObject(authVM)
+    }
+    
+    @ViewBuilder
+    private var BodyView: some View {
+        ZStack(alignment: .bottom){
+            ColorfulBackgroundView()
+            VStack(alignment: .leading, spacing: 0){
+                Logo
+                PhoneNumberView
+                Spacer()
+                CreateAccount
             }
-            
-            .introspectNavigationController(customize: {
-                navigation.controller = $0
-                $0.delegate = navigation
-                $0.interactivePopGestureRecognizer?.delegate = navigation
-            })
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 18)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
     
     @ViewBuilder
     private var Logo: some View {
-        HStack {
+        HStack(spacing: 10) {
+            Image("logo")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(32)
             Text("vnvce")
-                .font(.system(size: 36, weight: .bold, design: .default))
+                .font(.system(size: 48, weight: .heavy, design: .default))
+                .yOffset(-6)
+        }
+        .padding(.top, 44)
+    }
+    
+    @ViewBuilder
+    private var PhoneNumberView: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Description
+            VStack(alignment: .leading, spacing: 10) {
+                PhoneNumberField
+                ContinueButton
+            }
+        }
+        .padding(.top, 44)
+        .onChange(of: authVM.loginPhoneNumber.number) { num in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showContinueButton = num != ""
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var Description: some View {
+        Text("Phone Number")
+            .foregroundColor(.secondary)
+            .font(.system(size: 14, weight: .regular, design: .default))
+            .padding(.horizontal, 12)
+    }
+    
+    @ViewBuilder
+    private var PhoneNumberField: some View {
+        PhoneNumberFieldUI($authVM.loginPhoneNumber)
+            .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 60, alignment: .center)
+            .padding(.horizontal, 15)
+            .background {
+                RoundedRectangle(12, style: .continuous)
+                    .foregroundColor(.primary)
+                    .opacity(0.05)
+            }
+    }
+    
+    @ViewBuilder
+    private var ContinueButton: some View {
+        if showContinueButton {
+            Button {
+                
+            } label: {
+                RoundedRectangle(12, style: .continuous)
+                    .foregroundColor(.primary)
+                    .frame(maxWidth: .infinity, maxHeight: 60, alignment: .center)
+                    .overlay {
+                        Text("Continue")
+                            .colorInvert()
+                            .foregroundColor(.primary)
+                            .font(.system(size: 22, weight: .semibold, design: .default))
+                    }
+                    .transition(.opacity)
+            }
         }
     }
     
     @ViewBuilder
     private var CreateAccount: some View {
-        Button {
-            createAccountVM.phoneNumberField = ""
-            createAccountVM.phoneNumber = nil
-            createAccountVM.phoneNumberPhase = .none
-            
-            createAccountVM.regionCode = nil
-            
-            createAccountVM.show = true
-        } label: {
-            VStack(alignment: .leading, spacing: 5){
-                Text("Don't have an account?")
-                    .foregroundColor(.secondary)
-                    .font(.system(size: 14, weight: .regular, design: .default))
-                HStack{
+        Button(action: authVM.showCreateAction) {
+            HStack {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("Don't have an account?")
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 14, weight: .regular, design: .default))
+                    
                     Text("Create account")
-                    Image(systemName: "chevron.forward.circle.fill")
+                        .font(.system(size: 22, weight: .bold, design: .default))
+                        .foregroundStyle(.linearGradient(
+                            colors: [Color.init(hex: "53E6CA"), Color.init(hex: "6A3FFB")],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing))
                 }
-                .foregroundColor(.primary)
-                .font(.system(size: 16, weight: .medium, design: .default))
+                Spacer()
+                Image(systemName: "chevron.forward.circle.fill")
+                    .foregroundColor(.primary)
+                    .font(.system(size: 16, weight: .medium, design: .default))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 15)
+            .padding(15)
+            .background {
+                RoundedRectangle(12, style: .continuous)
+                    .foregroundColor(.primary)
+                    .opacity(0.05)
+            }
         }
         .background(CreateAccountNavigation)
+        .padding(.bottom, 18)
+        
     }
     
     private var CreateAccountNavigation: some View {
-        NavigationLink(isActive: $createAccountVM.show) {
-            CACheckPhoneNumberView().environmentObject(createAccountVM)
+        NavigationLink(isActive: $authVM.showCreateView) {
+            CACheckPhoneNumberView()
         } label: {
             EmptyView()
         }
         .isDetailLink(false)
-    }
-}
-
-extension AuthView {
-    class NavigationCoordinator: NSObject, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
-        var controller: UINavigationController!
-        
-        var enabled = true
-        
-        public func gestureRecognizerShouldBegin(
-            _ gestureRecognizer: UIGestureRecognizer
-        ) -> Bool {
-            return false
-        }
-        
-        public func gestureRecognizer(
-            _ gestureRecognizer: UIGestureRecognizer,
-            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-        ) -> Bool {
-            false
-        }
     }
 }

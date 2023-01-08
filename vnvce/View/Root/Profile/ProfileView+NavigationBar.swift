@@ -18,7 +18,8 @@ extension ProfileView {
     @ViewBuilder
     private var NavigationBar_Back: some View {
         Button {
-            self.rootVM.showHome()
+//            self.rootVM.showHome()
+            dismiss()
         } label: {
             Image(systemName: "chevron.backward")
                 .foregroundColor(.primary)

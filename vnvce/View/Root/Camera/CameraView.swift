@@ -34,7 +34,7 @@ struct CameraView: View {
 //                    .opacity(rootVM.currentStatusBarStyle == .lightContent ? 0 : 1)
 //                    .animation(.default, value: rootVM.currentStatusBarStyle)
             }
-            .modifier(CornerRadiusModifier())
+//            .modifier(CornerRadiusModifier())
     }
     
     @ViewBuilder

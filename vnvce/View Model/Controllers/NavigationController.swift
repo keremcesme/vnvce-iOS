@@ -14,7 +14,7 @@ class NavigationController: ObservableObject {
     
     public func properties(_ controller: UINavigationController) {
         navigation.controller = controller
-        controller.setNavigationBarHidden(true, animated: false)
+//        controller.setNavigationBarHidden(true, animated: false)
         controller.delegate = navigation
         controller.interactivePopGestureRecognizer?.delegate = navigation
         controller.interactivePopGestureRecognizer?.isEnabled = true

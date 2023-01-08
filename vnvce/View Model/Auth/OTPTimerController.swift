@@ -1,5 +1,5 @@
 //
-//  SMSTimerController.swift
+//  OTPTimerController.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 18.08.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class SMSTimerController: ObservableObject {
+class OTPTimerController: ObservableObject {
     /// String to show in UI
     @Published private(set) var message = "Not running"
     @Published private(set) var remaining: Int = 60
@@ -41,7 +41,7 @@ class SMSTimerController: ObservableObject {
     }
 }
 
-extension SMSTimerController {
+extension OTPTimerController {
     func startTask() {
         timer?.cancel()
         if startTime == nil {
@@ -88,7 +88,7 @@ extension SMSTimerController {
 }
 
 // MARK: - Private implementation
-extension SMSTimerController {
+extension OTPTimerController {
     func saveStartTime() {
         if let startTime = startTime {
             UserDefaults.standard.set(startTime, forKey: "smsStartTime")
