@@ -13,13 +13,12 @@ import Photos
 struct CAProfilePictureLibraryView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var picker: ProfilePictureLibraryViewModel
-    
     @State private var scrollToTop: Bool = false
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .top){
-                Color.init("AuthBG")
+                Color.black
                     .ignoresSafeArea()
                 ScrollViewReader { proxy in
                     ScrollView {

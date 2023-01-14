@@ -2,6 +2,7 @@
 import Foundation
 import SwiftUI
 import VNVCECore
+import KeychainAccess
 
 enum UsernameAvailability {
     case available
@@ -9,11 +10,29 @@ enum UsernameAvailability {
     case nothing
 }
 
-@MainActor
+//@MainActor
 class AuthViewModel: ObservableObject {
     public let authAPI = AuthAPI()
+    private let meAPI = MeAPI()
     
+    private let keychain = Keychain()
+    private let pkce = PKCEService()
+    
+    // MARK: Login -
+    // MARK: Check Phone Number and Send OTP
     @Published public var loginPhoneNumber = PhoneNumber()
+    @Published private(set) public var showLoginVerifyOTPButton: Bool = false
+    @Published public var checkLoginPhoneNumberIsRunning: Bool = false
+    @Published public var loginOTPResponse: AuthorizeAndOTPResponse.V1?
+    @Published private(set) var checkLoginPhoneNumberError: Bool = false
+    
+    // MARK: Verify OTP
+    @Published public var showLoginOTPVerifyView: Bool = false
+    @Published public var loginOTPText: String = ""
+    @Published public var loginVerifyOTPIsRunning: Bool = false
+    @Published public var loginVerifyOTPError: Bool = false
+    @Published public var showLoginButton: Bool = false
+    
     
     // MARK: Create -
     @Published public var showCreateView: Bool = false
@@ -38,19 +57,74 @@ class AuthViewModel: ObservableObject {
     
     @Published public var otp: OTPResponse.V1?
     
-    private var checkUsernameTask: Task<Void, Never>?
-    
     // MARK: OTP
     @Published public var showCreateOTPVerifyView: Bool = false
     @Published public var createOTPText: String = ""
+    
+    // MARK: Create Account
+    @Published public var createAccountIsRunning: Bool = false
+    @Published private(set) public var showCreateAccountButton: Bool = false
+    
+    // MARK: Optionals -
+    // MARK: Display Name
+    @Published public var showDisplayNameView: Bool = false
+    @Published public var displayName: String = ""
+    @Published public var editDisplayNameTaskIsRunning: Bool = false
+    
+    // MARK: Biography
+    @Published public var showBiographyView: Bool = false
+    @Published public var biography: String = ""
+    @Published public var editBiographyTaskIsRunning: Bool = false
+    
+    @Published public var showProfilePictureView: Bool = false
+    
+    private var checkPhoneAndSendOTPTask: Task<Void, Never>?
+    private var verifyOTPAndLoginTask: Task<Void, Never>?
+    private var checkPhoneNumberTask: Task<Void, Never>?
+    private var checkUsernameTask: Task<Void, Never>?
+    private var reserveUsernameAndSendOTPTask: Task<Void, Never>?
+    private var createAccountTask: Task<Void, Never>?
+    private var editDisplayNameTask: Task<Void, Never>?
+    private var editBiographyTask: Task<Void, Never>?
     
     public func showCreateAction() {
         showCreateView = true
     }
     
-    public func onChangeShowAgreeAndContinueButton(_ value: String) {
+    public func onChangeShowLoginVerifyOTPButton(_ value: String) {
+        if loginOTPResponse != nil {
+            loginOTPResponse = nil
+        }
         withAnimation(.easeInOut(duration: 0.2)) {
-            showAgreeAndContinueButton = value != ""
+            checkLoginPhoneNumberError = false
+            if value != "" && loginOTPResponse == nil {
+                showLoginVerifyOTPButton = true
+            } else {
+                showLoginVerifyOTPButton = false
+            }
+        }
+    }
+    
+    public func onChangeLoginButton(_ value: String) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            if loginOTPText.count == 6 {
+                showLoginButton = true
+            } else {
+                showLoginButton = false
+            }
+        }
+    }
+    
+    public func onChangeShowAgreeAndContinueButton(_ value: String) {
+        if checkPhoneNumberResult != nil {
+            checkPhoneNumberResult = nil
+        }
+        withAnimation(.easeInOut(duration: 0.2)) {
+            if value != "" && checkPhoneNumberResult == nil {
+                showAgreeAndContinueButton = true
+            } else {
+                showAgreeAndContinueButton = false
+            }
         }
     }
     
@@ -60,40 +134,165 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    public func onChangeCreateAccountButton(_ value: String) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            if createOTPText.count == 6 {
+                showCreateAccountButton = true
+            } else {
+                showCreateAccountButton = false
+            }
+        }
+    }
+    
+    // MARK: Tasks -
+    // MARK: Login
+    public func checkPhoneAndSendOTP() {
+        checkPhoneAndSendOTPTask?.cancel()
+        checkPhoneAndSendOTPTask = Task {
+            await checkPhoneAndSendOTPTask()
+            checkPhoneAndSendOTPTask?.cancel()
+        }
+    }
+    
+    public func verifyOTPAndLogin() {
+        verifyOTPAndLoginTask?.cancel()
+        verifyOTPAndLoginTask = Task {
+            await verifyOTPAndLoginTask()
+            verifyOTPAndLoginTask?.cancel()
+        }
+    }
+    
+    // MARK: Create
+    public func checkPhoneNumber() {
+        checkPhoneNumberTask?.cancel()
+        checkPhoneNumberTask = Task {
+            await checkPhoneNumberTask()
+            checkPhoneNumberTask?.cancel()
+        }
+    }
     
     public func checkUsername() {
-        if let checkUsernameTask, !checkUsernameTask.isCancelled {
-            checkUsernameTask.cancel()
-        }
-        
+        checkUsernameTask?.cancel()
         checkUsernameTask = Task {
             await checkUsernameTask()
             checkUsernameTask?.cancel()
         }
     }
     
+    public func reserveUsernameAndSendOTP() {
+        reserveUsernameAndSendOTPTask?.cancel()
+        reserveUsernameAndSendOTPTask = Task {
+            await reserveUsernameAndSendOTPTask()
+            reserveUsernameAndSendOTPTask?.cancel()
+        }
+    }
     
+    public func createAccount() {
+        createAccountTask?.cancel()
+        createAccountTask = Task {
+            await createAccountTask()
+            createAccountTask?.cancel()
+        }
+    }
     
-    public func checkPhoneNumber() async throws {
+    // MARK: Edit
+    public func editDisplayName() {
+        editDisplayNameTask?.cancel()
+        editDisplayNameTask = Task {
+            await editDisplayNameTask()
+            editDisplayNameTask?.cancel()
+        }
+    }
+    
+    public func editBiography() {
+        editBiographyTask?.cancel()
+        editBiographyTask = Task {
+            await editBiographyTask()
+            editBiographyTask?.cancel()
+        }
+    }
+}
+
+// MARK: Login
+private extension AuthViewModel {
+    
+    @MainActor
+    func checkPhoneAndSendOTPTask() async {
+        checkLoginPhoneNumberIsRunning = true
+        
+        let countryCode = loginPhoneNumber.countryCode
+        let nationalNumber = loginPhoneNumber.nationalNumber
+        let phoneNumber = String(countryCode) + String(nationalNumber)
+        
+        do {
+            let result = try await authAPI.checkPhoneAndSendOTP(phoneNumber)
+            loginOTPResponse = result
+            try await Task.sleep(seconds: 0.5)
+            showLoginOTPVerifyView = true
+            try await Task.sleep(seconds: 0.5)
+            checkLoginPhoneNumberIsRunning = false
+        } catch {
+            checkLoginPhoneNumberError = true
+            checkLoginPhoneNumberIsRunning = false
+        }
+    }
+    
+    @MainActor
+    func verifyOTPAndLoginTask() async {
+        loginVerifyOTPIsRunning = true
+        
+        let countryCode = loginPhoneNumber.countryCode
+        let nationalNumber = loginPhoneNumber.nationalNumber
+        let phoneNumber = String(countryCode) + String(nationalNumber)
+        
+        do {
+            try await authAPI.verifyOTPAndLogin(phoneNumber, code: loginOTPText)
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.loggedIn)
+            try await Task.sleep(seconds: 0.5)
+            showLoginOTPVerifyView = false
+            UIDevice.current.setStatusBar(style: .lightContent, animation: true)
+            try await Task.sleep(seconds: 0.5)
+            loginVerifyOTPIsRunning = false
+        } catch {
+            loginVerifyOTPError = true
+            loginVerifyOTPIsRunning = false
+        }
+    }
+    
+}
+
+// MARK: Create
+private extension AuthViewModel {
+    
+    @MainActor
+    func checkPhoneNumberTask() async {
         checkPhoneNumberIsRunning = true
         
         let countryCode = createPhoneNumber.countryCode
         let nationalNumber = createPhoneNumber.nationalNumber
         let phoneNumber = String(countryCode) + String(nationalNumber)
         
-        let result = try await authAPI.checkPhoneNumber(phoneNumber)
-        
-        await MainActor.run {
+        do {
+            let result = try await authAPI.checkPhoneNumber(phoneNumber)
+            
+            try await Task.sleep(seconds: 0.5)
+            
             checkPhoneNumberResult = result
+            
             if let result = checkPhoneNumberResult, !result.error {
                 showDateOfBirthView = true
             }
+            
+            try await Task.sleep(seconds: 0.5)
+            
+            checkPhoneNumberIsRunning = false
+        } catch {
             checkPhoneNumberIsRunning = false
         }
     }
     
-    @Sendable
-    private func checkUsernameTask() async {
+    @MainActor
+    func checkUsernameTask() async {
         guard !username.isEmpty else {
             return
         }
@@ -124,8 +323,8 @@ class AuthViewModel: ObservableObject {
         
     }
     
-    @Sendable
-    public func reserveUsernameAndSendOTP() async {
+    @MainActor
+    func reserveUsernameAndSendOTPTask() async {
         reserveUsernameSendOTPIsRunning = true
         
         let countryCode = createPhoneNumber.countryCode
@@ -133,25 +332,112 @@ class AuthViewModel: ObservableObject {
         let phoneNumber = String(countryCode) + String(nationalNumber)
         
         do {
-            let result: OTPResponse.V1 = try await {
-                if let otp {
-                    return try await authAPI.reserveUsernameAndSendOTP(phone: phoneNumber, username: username, otpToken: otp.otp.token)
-                } else {
-                    return try await authAPI.reserveUsernameAndSendOTP(phone: phoneNumber, username: username)
-                }
-            }()
-            
-            UserDefaults.standard.set(result.otp.id, forKey: VNVCEHeaders.otpID)
+            let result = try await authAPI.reserveUsernameAndSendOTP(
+                phone: phoneNumber,
+                username: username)
+            try await Task.sleep(seconds: 1)
+            try keychain.set(result.otp.id, key: KeychainKey.otpID)
+            try keychain.set(result.otp.token, key: KeychainKey.otpToken)
             
             await MainActor.run {
                 otp = result
-                print(otp)
                 showCreateOTPVerifyView = true
                 reserveUsernameSendOTPIsRunning = false
+                print(showCreateOTPVerifyView)
             }
-        } catch {
+        } catch let error {
+            print(error.localizedDescription)
             reserveUsernameSendOTPIsRunning = false
         }
     }
     
+    @MainActor
+    func createAccountTask() async{
+        if let country = createPhoneNumber.country {
+            createAccountIsRunning = true
+            do {
+                let verifier = await pkce.generateCodeVerifier()
+                let challenge = try await pkce.generateCodeChallenge(fromVerifier: verifier)
+                let calendar = Calendar.current
+                let day = calendar.component(.day, from: dateOfBirth)
+                let month = calendar.component(.month, from: dateOfBirth)
+                let year = calendar.component(.year, from: dateOfBirth)
+                
+                let payload = VNVCECore.CreateAccountPayload.V1(
+                    username: username,
+                    dateOfBirth: .init(
+                        day: day,
+                        month: try month.convertToMonth(),
+                        year: year),
+                    phoneNumber: .init(
+                        country: country,
+                        countryCode: createPhoneNumber.countryCode,
+                        nationalNumber: createPhoneNumber.nationalNumber),
+                    code: createOTPText,
+                    codeChallenge: challenge)
+                
+                try keychain.set(verifier, key: KeychainKey.codeVerifier)
+                try keychain.set(challenge, key: KeychainKey.codeChallenge)
+                
+                let result = try await authAPI.createAccount(payload)
+                
+                try await Task.sleep(seconds: 1)
+                
+                try keychain.set(result.userID, key: KeychainKey.userID)
+                try keychain.set(result.authCode, key: KeychainKey.authCode)
+                try keychain.set(result.authID, key: KeychainKey.authID)
+                
+                let tokensPayload = VNVCECore.GenerateTokensPayload.V1(
+                    authCode: result.authCode,
+                    codeVerifier: verifier)
+                
+                try keychain.remove(KeychainKey.otpToken)
+                try keychain.remove(KeychainKey.otpID)
+                
+                try await authAPI.generateTokens(tokensPayload)
+                
+                UserDefaults.standard.set(true, forKey: UserDefaultsKey.accountIsCreated)
+                
+                showDisplayNameView = true
+                
+                try await Task.sleep(seconds: 0.5)
+                
+                createAccountIsRunning = false
+            } catch {
+                createAccountIsRunning = false
+            }
+        }
+        
+    }
+    
 }
+
+// MARK: Edit
+private extension AuthViewModel {
+    
+    @MainActor
+    func editDisplayNameTask() async {
+        editDisplayNameTaskIsRunning = true
+        let displayName = self.displayName == "" ? nil : self.displayName
+        try? await meAPI.editDisplayName(displayName)
+        UserDefaults.standard.set(true, forKey: UserDefaultsKey.loggedIn)
+        try? await Task.sleep(seconds: 0.5)
+//        showBiographyView = true
+        showDisplayNameView = false
+        UIDevice.current.setStatusBar(style: .lightContent, animation: true)
+        try? await Task.sleep(seconds: 0.5)
+        editDisplayNameTaskIsRunning = false
+    }
+    
+    @MainActor
+    func editBiographyTask() async {
+        editBiographyTaskIsRunning = true
+        let biography = self.biography == "" ? nil : self.biography
+        try? await meAPI.editBiography(biography)
+        try? await Task.sleep(seconds: 0.5)
+        UserDefaults.standard.set(true, forKey: UserDefaultsKey.loggedIn)
+        try? await Task.sleep(seconds: 0.5)
+        editBiographyTaskIsRunning = false
+    }
+}
+

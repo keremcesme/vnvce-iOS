@@ -24,17 +24,30 @@ extension FeedView {
     
     @ViewBuilder
     private var NB_Leading: some View {
-        HStack {
-            Image("vnvceLOGO")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(22)
-            Text("vnvce".lowercased())
-                .font(.system(size: 34, weight: .heavy, design: .default))
-                .foregroundColor(.white)
-                .yOffset(-4)
+        Button {
+            let api = AuthAPI()
+            Task {
+               await api.logout()
+                await MainActor.run {
+                    UserDefaults.standard.set(false, forKey: UserDefaultsKey.loggedIn)
+                    UserDefaults.standard.set(false, forKey: UserDefaultsKey.accountIsCreated)
+                }
+            }
+        } label: {
+            HStack {
+                Image("vnvceLOGO")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(22)
+                Text("vnvce".lowercased())
+                    .font(.system(size: 34, weight: .heavy, design: .default))
+                    .foregroundColor(.white)
+                    .yOffset(-4)
+            }
+            .padding(.leading, 17)
         }
-        .padding(.leading, 17)
+
+        
     }
     
     @ViewBuilder

@@ -11,7 +11,7 @@ import SwiftUI
 class CurrentUserViewModel: ObservableObject {
     @AppStorage("profilePictureURL") var profilePictureURL: String = ""
     
-    private let meAPI = MeAPI.shared
+    private let meAPI = MeAPIOLD.shared
     
     @Published private(set) public var user: User? = nil
     

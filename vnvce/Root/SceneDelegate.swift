@@ -9,10 +9,11 @@ import Foundation
 import SwiftUI
 import UIKit
 import Cache
+import KeychainAccess
 
 class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject {
     
-    @Published var accountIsCreated: Bool = false
+//    @Published var accountIsCreated: Bool = false
     
     private let diskConfig = DiskConfig(name: "Moment",
                                         maxSize: 1_073_741_824,
@@ -44,9 +45,14 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject {
         // Release any resources associated with this scene that can be re-created the next time the scene connects.
         // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
         let userDefaults = UserDefaults.standard
-        if accountIsCreated {
-            userDefaults.set(true, forKey: "loggedIn")
+        
+        if let accountIsCreated = userDefaults.value(forKey: UserDefaultsKey.accountIsCreated) as? Bool, accountIsCreated {
+            userDefaults.set(true, forKey: UserDefaultsKey.loggedIn)
         }
+        
+//        if accountIsCreated {
+//            userDefaults.set(true, forKey: "loggedIn")
+//        }
         
         removeMomentsCache()
         

@@ -12,7 +12,7 @@ import KeychainAccess
 import FirebaseAppCheck
 
 class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
-    
+    private let userDefaults = UserDefaults.standard
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
         FirebaseApp.configure()
@@ -32,6 +32,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
 //            print("AppCheck Token: \(tokenString)")
         }
         
+//        print(try? Keychain().get(KeychainKey.authCode))
+//        print(try? Keychain().get(KeychainKey.authID))
+//        print(try? Keychain().get(KeychainKey.refreshToken))
+        
+        
         setup()
         
         return true
@@ -48,8 +53,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
       }
     
     private func setup() {
+        
         setupFirstTimeOpening()
         setupSound()
+        if let accountIsCreated = userDefaults.value(forKey: UserDefaultsKey.accountIsCreated) as? Bool, accountIsCreated {
+            userDefaults.set(true, forKey: UserDefaultsKey.loggedIn)
+        }
     }
     
     private func setupSound() {
@@ -64,10 +73,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     
     private func setupFirstTimeOpening() {
         let userDefaults = UserDefaults.standard
-        if userDefaults.value(forKey: "appFirstTimeOpen") == nil {
+        if userDefaults.value(forKey: UserDefaultsKey.appFirstTimeOpen) == nil {
             UIApplication.shared.applicationIconBadgeNumber = 0
-            userDefaults.set(true, forKey: "appFirstTimeOpen")
-            userDefaults.set(false, forKey: "loggedIn")
+            userDefaults.set(true, forKey: UserDefaultsKey.appFirstTimeOpen)
+            userDefaults.set(false, forKey: UserDefaultsKey.loggedIn)
+            userDefaults.set(false, forKey: UserDefaultsKey.accountIsCreated)
             userDefaults.removeObject(forKey: "notificationToken")
             userDefaults.removeObject(forKey: "currentUserID")
             userDefaults.removeObject(forKey: "profilePictureURL")

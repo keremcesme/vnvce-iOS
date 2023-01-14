@@ -4,9 +4,9 @@ import SwiftUIX
 import PureSwiftUI
 
 struct AuthView: View {
-    @StateObject private var authVM: AuthViewModel
+    @Environment(\.colorScheme) var colorScheme
     
-    @State private var showContinueButton = false
+    @StateObject private var authVM: AuthViewModel
     
     init() {
         self._authVM = StateObject(wrappedValue: AuthViewModel())
@@ -20,7 +20,6 @@ struct AuthView: View {
         .environmentObject(authVM)
     }
     
-    @ViewBuilder
     private var BodyView: some View {
         ZStack(alignment: .bottom){
             ColorfulBackgroundView()
@@ -33,6 +32,9 @@ struct AuthView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 18)
             .ignoresSafeArea(.keyboard, edges: .bottom)
+            .fullScreenCover(isPresented: $authVM.showLoginOTPVerifyView) {
+                LoginVerifyOTPView().environmentObject(authVM)
+            }
         }
     }
     
@@ -60,11 +62,7 @@ struct AuthView: View {
             }
         }
         .padding(.top, 44)
-        .onChange(of: authVM.loginPhoneNumber.number) { num in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                showContinueButton = num != ""
-            }
-        }
+        .onChange(of: authVM.loginPhoneNumber.number, perform: authVM.onChangeShowLoginVerifyOTPButton)
     }
     
     @ViewBuilder
@@ -77,34 +75,70 @@ struct AuthView: View {
     
     @ViewBuilder
     private var PhoneNumberField: some View {
-        PhoneNumberFieldUI($authVM.loginPhoneNumber)
-            .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 60, alignment: .center)
-            .padding(.horizontal, 15)
-            .background {
-                RoundedRectangle(12, style: .continuous)
-                    .foregroundColor(.primary)
-                    .opacity(0.05)
+        HStack(spacing: 5) {
+            PhoneNumberFieldUI($authVM.loginPhoneNumber)
+                .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 60, alignment: .center)
+            if authVM.checkLoginPhoneNumberError {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.red)
             }
+        }
+        .padding(.horizontal, 15)
+        .background {
+            RoundedRectangle(12, style: .continuous)
+                .foregroundColor(.primary)
+                .opacity(0.05)
+        }
     }
     
     @ViewBuilder
     private var ContinueButton: some View {
-        if showContinueButton {
-            Button {
-                
-            } label: {
+        Button(action: authVM.checkPhoneAndSendOTP) {
+            ZStack {
                 RoundedRectangle(12, style: .continuous)
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity, maxHeight: 60, alignment: .center)
-                    .overlay {
-                        Text("Continue")
-                            .colorInvert()
-                            .foregroundColor(.primary)
-                            .font(.system(size: 22, weight: .semibold, design: .default))
-                    }
-                    .transition(.opacity)
+                    .opacity(buttonDisabled() ? 0.1 : 1)
+                if !authVM.checkLoginPhoneNumberIsRunning {
+                    ButtonText
+                } else {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.secondary)
+                }
+                
             }
         }
+        .disabled(buttonDisabled())
+        .padding(.bottom, 18)
+    }
+    
+    private func buttonDisabled() -> Bool {
+        if !authVM.showLoginVerifyOTPButton || authVM.checkLoginPhoneNumberIsRunning || authVM.checkLoginPhoneNumberError {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    @ViewBuilder
+    private var ButtonText: some View {
+        let text = "Continue"
+        Group {
+            if authVM.showLoginVerifyOTPButton && !authVM.checkLoginPhoneNumberError {
+                Text(text)
+                    .foregroundStyle(.linearGradient(
+                        colors: [Color.init(hex: "53E6CA"), Color.init(hex: "6A3FFB")],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing))
+            } else {
+                Text(text)
+                    .foregroundColor(colorScheme == .dark ? .black : .white)
+                    .opacity(0.4)
+            }
+        }
+        .font(.system(size: 22, weight: .semibold, design: .default))
     }
     
     @ViewBuilder

@@ -12,17 +12,14 @@ import Introspect
 struct CACheckPhoneNumberView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var createAccountVM: CreateAccountViewModel
     
     @EnvironmentObject var authVM: AuthViewModel
     
     @State var navigation = NavigationCoordinator()
     
     private func continueButton() {
-        Task {
-            hideKeyboard()
-            try await authVM.checkPhoneNumber()
-        }
+        hideKeyboard()
+        authVM.checkPhoneNumber()
     }
     
     var body: some View {
@@ -31,6 +28,7 @@ struct CACheckPhoneNumberView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Description
                     PhoneNumberField
+                    ErrorMessage
                     Spacer()
                     TermsAndPrivacy
                     ContinueButton
@@ -54,37 +52,31 @@ struct CACheckPhoneNumberView: View {
     
     @ViewBuilder
     private var PhoneNumberField: some View {
-        PhoneNumberFieldUI($authVM.createPhoneNumber)
-            .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 60, alignment: .center)
-            .padding(.horizontal, 15)
-            .background {
-                RoundedRectangle(12, style: .continuous)
-                    .foregroundColor(.primary)
-                    .opacity(0.05)
+        HStack(spacing: 5) {
+            PhoneNumberFieldUI($authVM.createPhoneNumber)
+                .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 60, alignment: .center)
+            if let result = authVM.checkPhoneNumberResult, result.error {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.red)
             }
-            .onChange(of: authVM.createPhoneNumber.number, perform: authVM.onChangeShowAgreeAndContinueButton)
+        }
+        .padding(.horizontal, 15)
+        .background {
+            RoundedRectangle(12, style: .continuous)
+                .foregroundColor(.primary)
+                .opacity(0.05)
+        }
+        .onChange(of: authVM.createPhoneNumber.number, perform: authVM.onChangeShowAgreeAndContinueButton)
     }
     
     @ViewBuilder
     private var ErrorMessage: some View {
-        if case let .error(error) = createAccountVM.phoneNumberPhase {
-            Text(returnError(error))
+        if let result = authVM.checkPhoneNumberResult, result.error {
+            Text("This phone number cannot be used. Please try again later.")
                 .foregroundColor(.red)
                 .font(.system(size: 12, weight: .medium, design: .default))
                 .multilineTextAlignment(.leading)
-        }
-    }
-    
-    private func returnError(_ error: CheckPhoneNumberError) -> String {
-        switch error {
-            case .otpExist:
-                return error.rawValue
-            case .alreadyTaken:
-                return error.rawValue
-            case .invalidNumber:
-                return error.rawValue
-            case .taskCancelled, .unknown:
-                return error.rawValue
         }
     }
     
@@ -119,7 +111,6 @@ struct CACheckPhoneNumberView: View {
         }
     }
     
-    
     @ViewBuilder
     private var ButtonText: some View {
         let text = "Agree & Continue"
@@ -137,14 +128,6 @@ struct CACheckPhoneNumberView: View {
             }
         }
         .font(.system(size: 22, weight: .semibold, design: .default))
-    }
-    
-    private func disabledCondition() -> Bool {
-        if createAccountVM.phoneNumberField == "" || createAccountVM.phoneNumberPhase != .none {
-            return true
-        } else {
-            return false
-        }
     }
     
     private var TermsAndPrivacy: some View {
@@ -212,8 +195,9 @@ extension CACheckPhoneNumberView {
         Button(action: dismiss) {
             Image(systemName: "chevron.backward")
                 .font(.system(size: 18, weight: .medium, design: .default))
-                .foregroundColor(.primary)
+                .foregroundColor(authVM.checkPhoneNumberIsRunning ? .secondary : .primary)
         }
+        .disabled(authVM.checkPhoneNumberIsRunning)
     }
     
     @ViewBuilder

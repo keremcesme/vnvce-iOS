@@ -18,9 +18,9 @@ enum APIVersion: String {
 }
 
 enum WebConstants {
-//    static let host = "vnvce.com" // PROD
-    
-    static let url = "b152-78-135-94-183.ngrok.io" // DEV
+    // MARK: Dev Variables
+    static let url = "0c3e-78-135-94-156.ngrok.io"
+    static let run: RunMode = .dev(url)
     
     static let storageURL = "gs://vnvce-" // FIREBASE STORAGE
     

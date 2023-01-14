@@ -16,6 +16,7 @@ extension CAVerifyPhoneNumberView {
                 .opacity(0.001)
                 .blendMode(.screen)
                 .focused($isKeyboardShowing)
+                .onChange(of: authVM.createOTPText, perform: authVM.onChangeCreateAccountButton)
         }
         .padding(15)
         .background {
@@ -26,6 +27,11 @@ extension CAVerifyPhoneNumberView {
         .contentShape(Rectangle())
         .onTapGesture {
             isKeyboardShowing.toggle()
+        }
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                isKeyboardShowing = true
+            }
         }
     }
     

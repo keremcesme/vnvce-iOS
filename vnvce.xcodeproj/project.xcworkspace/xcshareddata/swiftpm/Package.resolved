@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "6db6edb48bdd9943426562c7f042a5492de5ba3d",
-        "version" : "7.10.0"
+        "revision" : "0543562f85620b5b7c510c6bcbef75b562a5127b",
+        "version" : "7.11.0"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "b2c695c9aedc70edd8494e3ed0902a0817e57e41",
-        "version" : "3.5.3"
+        "revision" : "56f612ea0178406b1ff57846401bd68a57d96a80",
+        "version" : "3.5.4"
       }
     },
     {
@@ -276,7 +276,7 @@
       "location" : "https://github.com/socialayf/vnvce-core",
       "state" : {
         "branch" : "main",
-        "revision" : "3382a5b555b9451e5978dd6d1b702ae2b3d66328"
+        "revision" : "35dde7fdb57d6bb2c8183f0260ccf4bc7f354ce4"
       }
     }
   ],

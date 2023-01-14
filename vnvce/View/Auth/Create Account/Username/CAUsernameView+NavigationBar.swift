@@ -13,8 +13,9 @@ extension CAUsernameView {
         Button(action: dismiss) {
             Image(systemName: "chevron.backward")
                 .font(.system(size: 18, weight: .medium, design: .default))
-                .foregroundColor(.primary)
+                .foregroundColor(authVM.reserveUsernameSendOTPIsRunning ? .secondary : .primary)
         }
+        .disabled(authVM.reserveUsernameSendOTPIsRunning)
     }
     
     @ViewBuilder

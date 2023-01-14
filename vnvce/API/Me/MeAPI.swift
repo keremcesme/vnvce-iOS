@@ -1,90 +1,47 @@
-//
-//  MeAPI.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 22.08.2022.
-//
 
 import Foundation
-import KeychainAccess
-import Alamofire
-import NIOCore
+import VNVCECore
+import NIO
 
-struct MeAPI {
-    static let shared = MeAPI()
+actor MeAPI {
+    private let session = URLSession.shared
+    private let routes = MeRoutes.V1.shared
+    private var endpoint = Endpoint.shared
+    private let authAPI = AuthAPI()
+    private let jsonEncoder = JSONEncoder()
+    private let jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
     
-    private init() {}
-    
-    public let keychain = Keychain()
-    public let urlBuilder = URLBuilder.shared
-    public let encoder = JSONParameterEncoder.default
-}
-
-// MARK: Public Methods -
-extension MeAPI {
-    public func fetchProfile() async throws -> User? {
-        let result = try await fetchProfileTask()
-        
-        switch result {
-            case let .success(user):
-                return user
-            case let .failure(statusCode):
-                if statusCode == .unauthorized {
-                    var userResult: User?
-                    try await TokenAPI.shared.generateTokens {
-                        let result = try await fetchProfileTask()
-                        switch result {
-                            case let .success(user):
-                                userResult = user
-                            case let .failure(statusCode):
-                                throw generateError(code: Int(statusCode.code), description: statusCode.localizedDescription)
-                        }
-                    }
-                    
-                    return userResult
-                    
-                } else {
-                    throw generateError(code: Int(statusCode.code), description: statusCode.localizedDescription)
-                }
-                
-        }
+    public init() {
+        endpoint.run = WebConstants.run
     }
 }
 
-// MARK: Private Methods -
 extension MeAPI {
-    
-    private func fetchProfileTask() async throws -> Result<User, HTTPStatus>{
-        guard let token = try Keychain().get("accessToken") else {
-            fatalError()
-        }
+    public func editDisplayName(_ displayName: String?) async throws {
+        let url = endpoint.makeURL(routes.editDisplayName)
+        var request = try URLRequest(url: url, method: .patch)
+        let payload = EditDisplayNamePayload.V1(displayName)
+        let body = try jsonEncoder.encode(payload)
+        request.httpBody = body
+        request.setContentType(.json)
+        request.setAcceptVersion(.v1)
         
-        let route: MeRoute = .profile
-        let url = urlBuilder.meURL(route: route, version: .v1)
-        
-        var headers = HTTPHeaders()
-        headers.add(.authorization(bearerToken: token))
-        
-        let task = AF
-            .request(url, method: .get, headers: headers)
-            .serializingDecodable(Response<User>.self)
-        
-        let response = await task.response
-        
-        guard let statusCode = response.response?.statusCode else {
-            throw NSError(domain: "Status Code not Available", code: 1)
-        }
-        
-        switch response.result {
-            case let .success(user):
-                return .success(user.result!)
-            case .failure(_):
-                return .failure(HTTPStatus(statusCode: statusCode))
-        }
+        let result = try await authAPI.secureTask(request, decode: HTTPStatus.self)
     }
-   
-    // Handle Errors
-    private func generateError(code: Int = 1, description: String) -> Error {
-        NSError(domain: "MeAPI", code: code, userInfo: [NSLocalizedDescriptionKey: description])
+    
+    public func editBiography(_ biography: String?) async throws {
+        let url = endpoint.makeURL(routes.editBiography)
+        var request = try URLRequest(url: url, method: .patch)
+        let payload = EditBiographyPayload.V1(biography)
+        let body = try jsonEncoder.encode(payload)
+        request.httpBody = body
+        request.setContentType(.json)
+        request.setAcceptVersion(.v1)
+        
+        let result = try await authAPI.secureTask(request, decode: HTTPStatus.self)
     }
 }
