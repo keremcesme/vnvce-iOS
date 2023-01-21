@@ -123,16 +123,17 @@ extension PostsViewModel: PaginationProtocol {
     func loadFirstPageTask() async {
         if Task.isCancelled { return }
         do {
-            await pagingData.reset()
-            guard let result = try await pagingData.loadNextPage(dataFetchProvider: fetch) else {
-                return
-            }
-            if Task.isCancelled { return }
-            await MainActor.run {
-                self.postResults = result
-//                self.postResults.metadata = result.metadata
-//                self.postResults.items = result.items
-            }
+            return
+//            await pagingData.reset()
+//            guard let result = try await pagingData.loadNextPage(dataFetchProvider: fetch) else {
+//                return
+//            }
+//            if Task.isCancelled { return }
+//            await MainActor.run {
+//                self.postResults = result
+////                self.postResults.metadata = result.metadata
+////                self.postResults.items = result.items
+//            }
         } catch {
             if Task.isCancelled { return }
             print(error.localizedDescription)
@@ -146,17 +147,18 @@ extension PostsViewModel: PaginationProtocol {
 //        }
         if postResults.items.count < postResults.metadata.total {
             do {
-                try await Task.sleep(seconds: 0.5)
-                guard let result = try await pagingData.loadNextPage(dataFetchProvider: fetch) else {
-                    return
-                }
-                if Task.isCancelled { return }
-                postResults.metadata = result.metadata
-                postResults.items += result.items
-                let newResults = postResults
-                await MainActor.run {
-                    self.postResults = newResults
-                }
+                return
+//                try await Task.sleep(seconds: 0.5)
+//                guard let result = try await pagingData.loadNextPage(dataFetchProvider: fetch) else {
+//                    return
+//                }
+//                if Task.isCancelled { return }
+//                postResults.metadata = result.metadata
+//                postResults.items += result.items
+//                let newResults = postResults
+//                await MainActor.run {
+//                    self.postResults = newResults
+//                }
             } catch {
                 if Task.isCancelled { return }
                 print(error.localizedDescription)

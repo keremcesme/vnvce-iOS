@@ -59,6 +59,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
         if let accountIsCreated = userDefaults.value(forKey: UserDefaultsKey.accountIsCreated) as? Bool, accountIsCreated {
             userDefaults.set(true, forKey: UserDefaultsKey.loggedIn)
         }
+        
     }
     
     private func setupSound() {

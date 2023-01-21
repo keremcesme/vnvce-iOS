@@ -30,7 +30,7 @@ struct Pagination<T: Decodable>: Decodable {
     }
 }
 
-typealias PaginationResponse<T: Decodable> = Response<Pagination<T>>
+typealias PaginationResponseOLD<T: Decodable> = Response<Pagination<T>>
 
 //struct ResponseWithStatus<T: Decodable>: Decodable {
 //    let response: Response<T>?

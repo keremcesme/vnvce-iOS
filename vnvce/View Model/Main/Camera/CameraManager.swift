@@ -9,10 +9,22 @@ import SwiftUI
 import AVFoundation
 import UIKit
 
-fileprivate enum CameraConfiguration {
+enum CameraConfiguration {
     case success
     case failed
     case permissionDenied
+    case permissionNotDetermined
+    
+    var buttonTitle: String {
+        switch self {
+        case .permissionDenied:
+            return "Open Settings"
+        case .permissionNotDetermined:
+            return "Allow"
+        default:
+            return ""
+        }
+    }
 }
 
 enum BackCameraMode {
@@ -35,7 +47,7 @@ class CameraManager: NSObject, ObservableObject {
     private var videoDeviceInput: AVCaptureDeviceInput!
     private var photoOutput: AVCapturePhotoOutput!
     
-    private var configurationStatus: CameraConfiguration = .failed
+    @Published private(set) public var configurationStatus: CameraConfiguration = .failed
     
     @Published private(set) public var sessionIsRunning: Bool = false
     
@@ -107,20 +119,17 @@ class CameraManager: NSObject, ObservableObject {
     private func makeReadyPreviewView() {
         self.preview = AVCaptureVideoPreviewLayer(session: self.session)
         self.preview.frame.size = self.previewViewFrame()
+        self.preview.cornerRadius = 25
         self.preview.cornerCurve = .continuous
         self.preview.connection?.videoOrientation = .portrait
-        self.preview.videoGravity = .resizeAspect
+        self.preview.videoGravity = .resizeAspectFill
     }
     
     // [2] Preview View Frame
     public func previewViewFrame() -> CGSize {
-        if UIDevice.current.hasNotch() {
-            let width = UIScreen.main.bounds.width
-            let height = width * 16 / 9
-            return CGSize(width, height)
-        } else {
-            return UIScreen.main.bounds.size
-        }
+        let width = UIScreen.main.bounds.width
+        let height = width * 3 / 2
+        return CGSize(width, height)
     }
     
     
@@ -130,31 +139,46 @@ class CameraManager: NSObject, ObservableObject {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             self.configurationStatus = .success
-        case .notDetermined:
-            self.sessionQueue.suspend()
-            self.requestCameraAccess { granted in
-                self.sessionQueue.resume()
+            self.sessionQueue.async {
+                self.configureSession()
             }
+        case .notDetermined:
+            self.configurationStatus = .permissionNotDetermined
         case .denied:
             self.configurationStatus = .permissionDenied
         default:
             break
         }
         
-        self.sessionQueue.async {
-            self.configureSession()
+        
+    }
+    
+    public func openSettings() {
+        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        
+        if UIApplication.shared.canOpenURL(settingsUrl) {
+            UIApplication.shared.open(settingsUrl)
         }
     }
     
     // [2] Request Camera Access
-    private func requestCameraAccess(completion: @escaping (Bool) -> ()) {
-        AVCaptureDevice.requestAccess(for: .video) { (granted) in
-            if !granted {
-                self.configurationStatus = .permissionDenied
-            } else {
-                self.configurationStatus = .success
+    public func requestCameraAccess() {
+        self.sessionQueue.suspend()
+        AVCaptureDevice.requestAccess(for: .video) { authorized in
+            DispatchQueue.main.async {
+                if authorized {
+                    self.configurationStatus = .success
+                    self.sessionQueue.resume()
+                    self.sessionQueue.async {
+                        self.configureSession()
+                        self.startSession()
+                    }
+                } else {
+                    self.configurationStatus = .permissionDenied
+                }
             }
-            completion(granted)
         }
     }
     
@@ -258,19 +282,8 @@ class CameraManager: NSObject, ObservableObject {
     // Check Configuration and Start Session
     private func checkConfigurationAndStartSession() {
         sessionQueue.async {
-            switch self.configurationStatus {
-            case .success:
-                return
-//                self.addObservers()
+            if self.configurationStatus == .success {
                 self.startSession()
-            case .failed:
-                DispatchQueue.main.async {
-                    self.delegate?.presentVideoConfigurationErrorAlert()
-                }
-            case .permissionDenied:
-                DispatchQueue.main.async {
-                    self.delegate?.presentCameraPermissionsDeniedAlert()
-                }
             }
         }
     }

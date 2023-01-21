@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import VNVCECore
 
 //typealias PaginateArguments = (page: Int, per: Int)
 //typealias PaginationResult<T> = (items: [T], metadata: PageMetadata)
@@ -35,8 +36,8 @@ actor PagingData {
     }
     
     func loadNextPage<T>(
-        dataFetchProvider: @escaping (Int) async throws -> Pagination<T>?
-    ) async throws -> Pagination<T>? {
+        _ dataFetchProvider: @escaping (Int) async throws -> PaginationResponse<T>?
+    ) async throws -> PaginationResponse<T>? {
         
         if Task.isCancelled { return nil }
 //        print("PAGING: Current Page \(currentPage), nextPage: \(nextPage)")

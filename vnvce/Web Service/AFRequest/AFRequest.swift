@@ -129,7 +129,7 @@ extension AFRequest: AFRequestDataTaskProtocol {
         method: HTTPMethod,
         authorization: Bool,
         to: T.Type
-    ) throws -> DataTask<PaginationResponse<T>> {
+    ) throws -> DataTask<PaginationResponseOLD<T>> {
         var headers = HTTPHeaders()
         
         if authorization {
@@ -149,14 +149,14 @@ extension AFRequest: AFRequestDataTaskProtocol {
                     parameters: payload,
                     encoder: encoder,
                     headers: headers)
-                .serializingDecodable(PaginationResponse<T>.self)
+                .serializingDecodable(PaginationResponseOLD<T>.self)
         } else {
             return AF
                 .request(
                     url,
                     method: method,
                     headers: headers)
-                .serializingDecodable(PaginationResponse<T>.self)
+                .serializingDecodable(PaginationResponseOLD<T>.self)
         }
     }
 }
@@ -184,7 +184,7 @@ extension AFRequest: AFRequestResponseProtocol {
     }
     
     func paginationResponseTask<T: Decodable>(
-        dataTask: DataTask<PaginationResponse<T>>
+        dataTask: DataTask<PaginationResponseOLD<T>>
     ) async throws -> Result<Pagination<T>, HTTPStatus>  {
         let taskResponse = await dataTask.response
         

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import VNVCECore
 
 struct User: Codable, Equatable, Hashable {
     
@@ -16,12 +17,18 @@ struct User: Codable, Equatable, Hashable {
     let biography: String?
     let profilePicture: ProfilePicture?
     
-    struct Public: Codable, Equatable, Hashable {
+    struct PublicOLD: Codable, Equatable, Hashable {
         let id: UUID
         let username: String
         let displayName: String?
         let biography: String?
         let profilePicture: ProfilePicture?
     }
+    
+    typealias Public = VNVCECore.User.V1.Public
+    typealias Private = VNVCECore.User.V1.Private
 }
+
+
+
 

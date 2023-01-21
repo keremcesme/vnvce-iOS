@@ -54,15 +54,15 @@ extension AuthAPI {
                 case .ok:
                     return try await secureTask(request)
                 default:
-                    try forceLogout()
+                    try await forceLogout()
                     return nil
                 }
             default:
-                try forceLogout()
+                try await forceLogout()
                 return nil
             }
         default:
-            try forceLogout()
+            try await forceLogout()
             return nil
         }
     }
@@ -88,32 +88,42 @@ extension AuthAPI {
         switch status {
         case .ok:
             let result = try jsonDecoder.decode(to, from: data)
+            print("Burasi 1")
             return result
         case .unauthorized:
             switch try await generateAccessToken() {
             case .ok:
+                print("Burasi 2")
                 return try await secureTask(request, decode: to)
             case .unauthorized:
                 switch try await reauthorize() {
                 case .ok:
+                    print("Burasi 3")
                     return try await secureTask(request, decode: to)
                 default:
-                    try forceLogout()
+                    print("Burasi 4")
+                    try await forceLogout()
                     return nil
                 }
             default:
-                try forceLogout()
+                print("Burasi 5")
+                try await forceLogout()
                 return nil
             }
         default:
-            try forceLogout()
+            print("Burasi 6")
+            print(status)
+//            try await forceLogout()
             return nil
         }
     }
     
-    private func forceLogout() throws {
-        userDefaults.set(false, forKey: UserDefaultsKey.loggedIn)
-        userDefaults.set(false, forKey: UserDefaultsKey.accountIsCreated)
+    private func forceLogout() async throws {
+        await MainActor.run {
+            userDefaults.set(false, forKey: UserDefaultsKey.loggedIn)
+            userDefaults.set(false, forKey: UserDefaultsKey.accountIsCreated)
+        }
+        
         try keychain.removeAll()
     }
 }
@@ -182,7 +192,7 @@ extension AuthAPI {
             try keychain.set(tokens.refreshToken, key: KeychainKey.refreshToken)
             try keychain.set(tokens.accessToken, key: KeychainKey.accessToken)
         default:
-            try forceLogout()
+            try await forceLogout()
             return
         }
     }

@@ -20,21 +20,21 @@ struct UserAPI {
 // MARK: Public Methods -
 extension UserAPI {
     
-    public func fetchProfile(userID: String) async throws -> User.Public {
+    public func fetchProfile(userID: String) async throws -> User.PublicOLD {
         return try await secureAPI.task({
             try await fetchProfileTask(userID)
-        }, decode: User.Public.self)
+        }, decode: User.PublicOLD.self)
     }
     
 }
 
 // MARK: Private Methods -
 extension UserAPI {
-    private func fetchProfileTask(_ userID: String) async throws -> Result<User.Public, HTTPStatus> {
+    private func fetchProfileTask(_ userID: String) async throws -> Result<User.PublicOLD, HTTPStatus> {
         var url = urlBuilder.userURL(route: .profile(userID: userID), version: .v1)
         return try await request.task(
             url: url,
             method: .post,
-            to: User.Public.self)
+            to: User.PublicOLD.self)
     }
 }

@@ -13,13 +13,13 @@ class UserProfileViewModel: ObservableObject {
     private let userAPI = UserAPI.shared
     private let relationshipAPI = RelationshipAPI.shared
     
-    @Published public private(set) var user: User.Public
+    @Published public private(set) var user: User.PublicOLD
     
     @Published private(set) public var relationship: Relationship?
     @Published private(set) public var relationshipIsUpdating: Bool = false
     @Published public var showUpdateRelationshipAlert: Bool = false
     
-    init(user: User.Public){
+    init(user: User.PublicOLD){
         self.user = user
     }
     

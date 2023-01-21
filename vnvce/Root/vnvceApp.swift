@@ -1,58 +1,61 @@
-//
-//  vnvceApp.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 10.08.2022.
-//
 
 import SwiftUI
-import Firebase
-import DeviceCheck
-import KeychainAccess
-//import CryptoKit
-//import VNVCECore
 
 @main
 struct vnvceApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     
     @Environment(\.scenePhase) private var scenePhase
     
     @StateObject private var appState = AppState()
-    @StateObject var notificationCenter = NotificationController()
-    
-    init() { }
+    @StateObject private var notificationCenter = NotificationController()
     
     var body: some Scene {
-        WindowGroup {
-            Group {
-                switch appState.loggedIn {
-                case true:
-                    RootView()
-                case false:
-                    AuthView()
-                }
-            }
-            .environmentObject(appState)
+        WindowGroup(content: GroupView)
+    }
+    
+    @ViewBuilder
+    private func GroupView() -> some View {
+        Group(content: RootView).environmentObject(appState)
+    }
+    
+    @ViewBuilder
+    private func RootView() -> some View {
+        switch appState.loggedIn {
+        case true:
+            HomeView().colorScheme(.dark)
+        case false:
+            AuthView()
+        }
+    }
+}
+
+
+
+//    .onReceive(NotificationCenter.default.publisher(for: UIScreen.capturedDidChangeNotification)) { _ in
+//
+//    }
+//
+//    .onChange(of: notificationCenter.dumbData) { newValue in
+//
+//    }
+
+
+
 //            .onReceive(NotificationCenter.default.publisher(for: UIApplication.userDidTakeScreenshotNotification), perform: { _ in
 //                print("screen shot")
 //            })
-            .onReceive(NotificationCenter.default.publisher(for: UIScreen.capturedDidChangeNotification)) { _ in
-                //                            isRecordingScreen.toggle()
+//                            isRecordingScreen.toggle()
 //                print(isRecordingScreen ? "Started recording screen" : "Stopped recording screen")
-            }
-            .onAppear {
+//            .onAppear {
 //                print("Access Token: \(try? Keychain().get(KeychainKey.accessToken))")
 //                print("Refresh Token: \(try? Keychain().get(KeychainKey.refreshToken))")
 //                print("Logged In: \(appState.loggedIn)")
-                
+
 //                let deviceID = UIDevice.current.identifierForVendor?.uuidString ?? ""
-                
+
 //                print("Device ID: \(deviceID)")
-            }
-            .onChange(of: notificationCenter.dumbData) { newValue in
-                
-            }
+//            }
 //            .onChange(of: scenePhase, perform: appState.onChangeScenePhase)
 //                        .onChange(of: scenePhase) { newPhase in
 //                            if newPhase == .inactive {
@@ -63,6 +66,3 @@ struct vnvceApp: App {
 //                                print("Background")
 //                            }
 //                        }
-        }
-    }
-}

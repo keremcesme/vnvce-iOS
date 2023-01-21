@@ -56,7 +56,7 @@ protocol AFRequestDataTaskProtocol {
         method: HTTPMethod,
         authorization: Bool,
         to: T.Type
-    ) throws -> DataTask<PaginationResponse<T>>
+    ) throws -> DataTask<PaginationResponseOLD<T>>
 }
 
 protocol AFRequestResponseProtocol {
@@ -65,6 +65,6 @@ protocol AFRequestResponseProtocol {
     ) async throws -> Result<T, HTTPStatus>
     
     func paginationResponseTask<T: Decodable>(
-        dataTask: DataTask<PaginationResponse<T>>
+        dataTask: DataTask<PaginationResponseOLD<T>>
     ) async throws -> Result<Pagination<T>, HTTPStatus>
 }

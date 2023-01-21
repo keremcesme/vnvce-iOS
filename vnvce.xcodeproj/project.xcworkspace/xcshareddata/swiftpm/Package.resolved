@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "dce2e1abc6c0d5e830ff1cffe3f8633fda64001e",
-        "version" : "10.3.0"
+        "revision" : "0df86ea17d5d281415be74f2290df8431644f156",
+        "version" : "10.4.0"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "71eb6700dd53a851473c48d392f00a3ab26699a6",
-        "version" : "10.1.0"
+        "revision" : "9a09ece724128e8d1e14c5133b87c0e236844ac0",
+        "version" : "10.4.0"
       }
     },
     {
@@ -221,8 +221,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "9cc89f0170308b813af05dadcd26f9a2dee47713",
-        "version" : "2.2.3"
+        "revision" : "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
+        "version" : "2.2.4"
       }
     },
     {
@@ -239,8 +239,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "7e3b50b38e4e66f31db6cf4a784c6af148bac846",
-        "version" : "2.46.0"
+        "revision" : "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
+        "version" : "2.47.0"
       }
     },
     {
@@ -276,7 +276,7 @@
       "location" : "https://github.com/socialayf/vnvce-core",
       "state" : {
         "branch" : "main",
-        "revision" : "35dde7fdb57d6bb2c8183f0260ccf4bc7f354ce4"
+        "revision" : "f49f75a3a3315497109d3e428fe577e462f89143"
       }
     }
   ],

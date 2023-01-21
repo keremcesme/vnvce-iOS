@@ -20,7 +20,14 @@ class AppState: ObservableObject {
     
     @Published private(set) public var scenePhase: ScenePhase = .active
     
-    init() {}
+    init() {
+        if loggedIn {
+            UIDevice.current.setStatusBar(style: .lightContent, animation: false)
+        } else {
+            UIDevice.current.setStatusBar(style: .default, animation: false)
+        }
+        
+    }
     
     @Sendable
     public func onChangeScenePhase(_ newPhase: ScenePhase) {
