@@ -17,7 +17,7 @@ struct FeedView: View {
     
     @EnvironmentObject public var feedVM: FeedViewModel
     
-    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject public var camera: CameraManager
     @EnvironmentObject public var searchVM: SearchViewModelOLD
     

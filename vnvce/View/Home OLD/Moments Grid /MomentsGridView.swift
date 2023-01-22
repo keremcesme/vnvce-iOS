@@ -12,7 +12,7 @@ import Nuke
 import NukeUI
 
 struct MomentsGridView: View {
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     
     @StateObject private var momentsVM: MomentsViewModel
     

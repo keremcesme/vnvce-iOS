@@ -17,7 +17,7 @@ struct SearchViewOLD2: View {
     
     private let statusBarHeight = UIDevice.current.statusBarHeight()
     
-    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject public var searchVM: SearchViewModelOLD
     @EnvironmentObject public var camera: CameraManager
     

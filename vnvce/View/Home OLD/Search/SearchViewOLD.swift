@@ -11,7 +11,7 @@ import Nuke
 import NukeUI
 
 struct SearchViewOLD: View {
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject private var keyboardController: KeyboardController
     @EnvironmentObject private var navigationController: NavigationController
     @EnvironmentObject private var searchVM: SearchViewModelOLD

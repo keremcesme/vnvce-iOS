@@ -14,7 +14,7 @@ import NukeUI
 struct MainView: View {
     @EnvironmentObject private var searchVM: SearchViewModelOLD
     @EnvironmentObject private var tabBarVM: TabBarViewModel
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject public var camera: CameraManager
     
     @StateObject private var uploadVM = UploadMomentViewModel()

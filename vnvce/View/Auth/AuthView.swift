@@ -92,9 +92,14 @@ struct AuthView: View {
         }
     }
     
+    private func continueButton() {
+        hideKeyboard()
+        authVM.checkPhoneAndSendOTP()
+    }
+    
     @ViewBuilder
     private var ContinueButton: some View {
-        Button(action: authVM.checkPhoneAndSendOTP) {
+        Button(action: continueButton) {
             ZStack {
                 RoundedRectangle(12, style: .continuous)
                     .foregroundColor(.primary)

@@ -16,7 +16,7 @@ struct HomeViewOLD: View {
     @Environment(\.viewController) public var viewControllerHolder: ViewControllerHolder
     
     @EnvironmentObject public var rootVM: RootViewModel
-    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject public var searchVM: SearchViewModelOLD
     @EnvironmentObject public var camera: CameraManager
     

@@ -10,7 +10,7 @@ import SwiftUIX
 import PureSwiftUI
 
 struct ShareView: View {
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject private var uploadVM: UploadMomentViewModel
     @EnvironmentObject public var camera: CameraManager
     

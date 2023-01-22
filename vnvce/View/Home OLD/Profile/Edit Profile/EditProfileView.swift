@@ -15,7 +15,7 @@ import SwiftUIX
 struct EditProfileView: View {
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     
     var body: some View {
         NavigationView {
@@ -31,12 +31,12 @@ struct EditProfileView: View {
                                     if let profilePicture = currentUserVM.user?.profilePicture {
                                         LazyImage(url: URL(string: profilePicture.url)) { state in
                                             if let uiImage = state.imageContainer?.image {
-                                                Image(uiImage: uiImage)
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .frame(width: 100, height: 100, alignment: profilePicture.alignment.convert)
-                                                    .cornerRadius(7.5, style: .continuous)
-//                                                    .padding(.vertical, 10)
+//                                                Image(uiImage: uiImage)
+//                                                    .resizable()
+//                                                    .aspectRatio(contentMode: .fill)
+//                                                    .frame(width: 100, height: 100, alignment: profilePicture.alignment.convert)
+//                                                    .cornerRadius(7.5, style: .continuous)
+////                                                    .padding(.vertical, 10)
                                             }
                                         }
                                         .pipeline(.shared)

@@ -5,10 +5,21 @@ import Introspect
 struct HomeView: View {
     @Environment(\.viewController) public var viewControllerHolder: ViewControllerHolder
     
+    @EnvironmentObject private var notificationController: NotificationController
+    
+    @StateObject private var currentUserVM = CurrentUserViewModel()
+    
     @StateObject private var homeVM = HomeViewModel()
     @StateObject private var cameraManager = CameraManager()
     
     @StateObject private var searchVM = SearchViewModel()
+    
+    @StateObject private var contactsVM = ContactsViewModel()
+    
+    private func commonInit() async {
+        await notificationController.requestAuthorization()
+        await currentUserVM.fetchProfile()
+    }
     
     var body: some View {
         ZStack(alignment: .top){
@@ -29,6 +40,8 @@ struct HomeView: View {
         }
         .environmentObject(cameraManager)
         .environmentObject(homeVM)
+        .environmentObject(contactsVM)
+        .taskInit(commonInit)
     }
     
     func returnBGImage() -> String {
@@ -107,7 +120,7 @@ struct HomeView: View {
                     controller.present {
                         cameraManager.stopSession()
                     } content: {
-                        SearchView().environmentObject(searchVM)
+                        SearchView().environmentObject(searchVM).environmentObject(contactsVM)
                             
                     }
                 } label: {
@@ -115,7 +128,7 @@ struct HomeView: View {
                         .frame(width: height, height: height)
                         .clipShape(Circle())
                         .overlay {
-                            Image(systemName: "magnifyingglass")
+                            Image(systemName: "person.badge.plus")
                                 .foregroundColor(.white).opacity(0.9)
                                 .font(.system(size: 18, weight: .medium, design: .default))
                         }

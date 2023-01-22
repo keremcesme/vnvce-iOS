@@ -14,7 +14,7 @@ import NukeUI
 struct FeedPageView: View {
     @Environment(\.viewController) public var viewControllerHolder: ViewControllerHolder
     
-    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject public var camera: CameraManager
     @EnvironmentObject public var searchVM: SearchViewModelOLD
     

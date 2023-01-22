@@ -2,11 +2,14 @@
 import SwiftUI
 import SwiftUIX
 import PureSwiftUI
+import SwiftyContacts
+import PhoneNumberKit
 
 struct SearchView: View {
     @Environment(\.dismiss) public var dismiss
     
     @EnvironmentObject public var searchVM: SearchViewModel
+    @EnvironmentObject public var contactsVM: ContactsViewModel
     
     @FocusState public var focused: Bool
     
@@ -21,15 +24,7 @@ struct SearchView: View {
     var body: some View {
         ZStack(alignment: .top) {
             Background
-            ScrollView {
-                VStack(spacing: 20) {
-                    SearchResults
-                }
-                .offsetY(offsetTask)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 120)
-                .padding(.horizontal, 20)
-            }
+            ScrollView(content: ScrollContent)
             .onTapGesture(perform: hideKeyboard)
             TopBackground
             SearchField
@@ -40,11 +35,59 @@ struct SearchView: View {
         .onChange(of: searchVM.searchField, perform: searchVM.onChangeSearchField)
         .onReceive(searchVM.$searchText.debounce(for: 0.5, scheduler: RunLoop.main), perform: search)
         .taskInit {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                focused = true
-            }
+            
+//            Task {
+//                do {
+//                    if try await requestAccess() {
+//                        let status = authorizationStatus()
+//                        if status == .authorized {
+//
+//                            let contacts = try await fetchContacts()
+//                            let phoneNumberKit = PhoneNumberKit()
+//
+//                            print("Count: \(contacts.count)")
+//                            for user in contacts {
+//                                let name = "\(user.givenName) \(user.familyName)"
+//                                print("Name: \(name)")
+//                                let phoneNumbers = user.phoneNumbers.map({$0.value.stringValue})
+//
+////                                print("Raw Number: \(phoneNumbers.first ?? "null")")
+//
+//                                for (inx, number) in phoneNumbers.enumerated() {
+//                                    if let phoneNumber = try? phoneNumberKit.parse(number) {
+//                                        print("[\(inx + 1)] Phone Number: \(phoneNumber.regionID ?? "null") +\(phoneNumber.countryCode)\(phoneNumber.nationalNumber)")
+//                                    }
+//                                }
+//                                print("----------------------------------------------------------")
+//                            }
+//
+//                        }
+//                    }
+//                } catch {
+//                    print(error.localizedDescription)
+//                }
+//
+//            }
+            
         }
     }
+    
+    @ViewBuilder
+    private func ScrollContent() -> some View {
+        LazyVStack(alignment: .leading, spacing: 20) {
+            if !searchVM.searchText.isEmpty {
+                SearchResults
+            } else {
+                UsersFromContacts
+            }
+        }
+        .offsetY(offsetTask)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 120)
+        .padding(.horizontal, 18)
+    }
+    
+    
     
     @ViewBuilder
     private var Background: some View {

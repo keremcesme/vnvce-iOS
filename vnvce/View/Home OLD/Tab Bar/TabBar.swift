@@ -15,7 +15,7 @@ struct TabBar: View {
     @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject private var tabBarVM: TabBarViewModel
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject private var camera: CameraManager
     
     var body: some View {

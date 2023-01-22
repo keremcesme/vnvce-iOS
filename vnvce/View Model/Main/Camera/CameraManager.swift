@@ -149,8 +149,6 @@ class CameraManager: NSObject, ObservableObject {
         default:
             break
         }
-        
-        
     }
     
     public func openSettings() {

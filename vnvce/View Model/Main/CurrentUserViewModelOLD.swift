@@ -1,5 +1,5 @@
 //
-//  CurrentUserViewModel.swift
+//  CurrentUserViewModelOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 7.09.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class CurrentUserViewModel: ObservableObject {
+class CurrentUserViewModelOLD: ObservableObject {
     @AppStorage("profilePictureURL") var profilePictureURL: String = ""
     
     private let meAPI = MeAPIOLD.shared
@@ -20,7 +20,7 @@ class CurrentUserViewModel: ObservableObject {
     }
 }
 
-extension CurrentUserViewModel {
+extension CurrentUserViewModelOLD {
     
     private func fetchProfileTask() async {
         if Task.isCancelled { return }

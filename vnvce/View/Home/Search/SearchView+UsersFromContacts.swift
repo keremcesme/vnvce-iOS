@@ -1,22 +1,41 @@
-//
-//  SearchView+SearchResults.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 22.01.2023.
-//
 
 import SwiftUI
 
 extension SearchView {
+    
     @ViewBuilder
-    public var SearchResults: some View {
-        LazyVStack(alignment: .leading, spacing: 20) {
-            if !searchVM.searchText.isEmpty {
-                ForEach(searchVM.searchResults.items, id: \.id, content: UserCell)
-                if searchVM.isRunning {
-                    RedactedUserCell
-                }
+    public var UsersFromContacts: some View {
+        switch contactsVM.configuration {
+        case .permissionDenied, .permissionNotDetermined, .permissionRestricted:
+            LazyVStack(alignment: .leading, spacing: 5) {
+                Text("Friends on vnvce")
+                    .font(.system(size: 16, weight: .semibold, design: .default))
+                    .foregroundColor(.white)
+                    .padding(.leading, 10)
+                PermissionView
             }
+            
+        case .success:
+            Text("Friends on vnvce")
+                .font(.system(size: 16, weight: .semibold, design: .default))
+                .foregroundColor(.white)
+                .padding(.leading, 10)
+                .padding(.bottom, -10)
+            UsersView
+        default:
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    private var UsersView: some View {
+        LazyVStack(alignment: .leading, spacing: 20) {
+            ForEach(contactsVM.users, id: \.id, content: UserCell)
+        }
+        .padding(10)
+        .background {
+            RoundedRectangle(12, style: .continuous)
+                .fill(.white.opacity(0.05))
         }
     }
     
@@ -41,7 +60,6 @@ extension SearchView {
                                 .frame(width: 52, height: 52)
                         }
                         .clipShape(Circle())
-                        
                     } else {
                         Group {
                             Color.white.opacity(0.1)
@@ -77,7 +95,9 @@ extension SearchView {
                             .font(.system(size: 16, weight: .semibold, design: .default))
                             .foregroundColor(.white)
                     }
-                    
+                    Text("IN MY CONTACTS")
+                        .font(.system(size: 10, weight: .light, design: .default))
+                        .foregroundColor(.secondary)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
@@ -91,28 +111,50 @@ extension SearchView {
     }
     
     @ViewBuilder
-    public var RedactedUserCell: some View {
-        ForEach(1...15, id: \.self) { _ in
-            HStack(spacing:10){
-                Circle()
-                    .fill(.white)
-                    .frame(width: 60, height: 60)
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    Capsule()
-                        .frame(width: 175, height: 5, alignment: .center)
-                    Capsule()
-                        .frame(width: 100, height: 5, alignment: .center)
-                }
-                .foregroundColor(.white)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.white)
-                    .font(.system(size: 13, weight: .semibold, design: .default))
+    private var PermissionView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 5) {
+                Text("Allow vnvce to access your contacts")
+                    .font(.system(size: 16, weight: .semibold, design: .default))
+                    .foregroundColor(.primary)
+                Text("To be able to view your friends who have a vnvce account in their contacts.")
+                    .font(.system(size: 13, weight: .regular, design: .default))
+                    .multilineTextAlignment(.leading)
+                    .foregroundColor(.secondary)
+                PermissionButton
+                    .padding(.top, 5)
             }
-            .opacity(0.1)
+            Spacer()
         }
-        .shimmering()
+        .padding(10)
+        .background {
+            RoundedRectangle(12, style: .continuous)
+                .fill(.white.opacity(0.1))
+        }
+    }
+    
+    private func permissionButton() {
+        if contactsVM.configuration == .permissionNotDetermined {
+            Task {
+                await contactsVM.requestContactsAccess()
+            }
+        } else if contactsVM.configuration == .permissionDenied {
+            contactsVM.openSettings()
+        }
+    }
+    
+    @ViewBuilder
+    private var PermissionButton: some View{
+        Button(action: permissionButton) {
+            Text(contactsVM.configuration.buttonTitle)
+                .foregroundStyle(.linearGradient(
+                    colors: [Color.init(hex: "53E6CA"), Color.init(hex: "6A3FFB")],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing))
+                .font(.system(size: 14, weight: .semibold, design: .default))
+                .padding(.horizontal, 15)
+                .padding(.vertical, 10)
+                .background(Capsule().fill(.white))
+        }
     }
 }
-

@@ -13,7 +13,7 @@ import PureSwiftUI
 import SwiftUIX
 
 struct ProfileViewOLD: View {
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject private var postsVM: PostsViewModel
     @EnvironmentObject private var cameraVM: CameraViewModel
     @EnvironmentObject private var camera: CameraManager
@@ -88,31 +88,34 @@ struct ProfileViewOLD: View {
     
     @ViewBuilder
     private var DetailsView: some View {
-        if let user = currentUserVM.user {
-            VStack(alignment: .leading, spacing: 20){
-                if let url = user.profilePicture?.url {
-                    HStack {
-                        Spacer()
-                        ProfilePictureView(url)
-                    }
-                }
-                VStack(alignment: .leading, spacing: 5) {
-                    if let displayName = user.displayName {
-                        DisplayNameView(displayName)
-                    }
-                    if let biography = user.biography {
-                        BiographyView(biography)
-                    }
-                    EditProfileButton
-                }
-                
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-        } else {
-            ProgressView()
-                .frame(maxWidth: .infinity)
+        ZStack {
+            
         }
+//        if let user = currentUserVM.user {
+//            VStack(alignment: .leading, spacing: 20){
+//                if let url = user.profilePicture?.url {
+//                    HStack {
+//                        Spacer()
+//                        ProfilePictureView(url)
+//                    }
+//                }
+//                VStack(alignment: .leading, spacing: 5) {
+//                    if let displayName = user.displayName {
+//                        DisplayNameView(displayName)
+//                    }
+//                    if let biography = user.biography {
+//                        BiographyView(biography)
+//                    }
+//                    EditProfileButton
+//                }
+//
+//            }
+//            .padding(.horizontal, 20)
+//            .padding(.top, 20)
+//        } else {
+//            ProgressView()
+//                .frame(maxWidth: .infinity)
+//        }
     }
     
     @ViewBuilder

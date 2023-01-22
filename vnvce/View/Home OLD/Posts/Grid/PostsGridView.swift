@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PostsGridView: View {
-    @EnvironmentObject var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject var currentUserVM: CurrentUserViewModelOLD
     
     @StateObject private var postsVM: PostsViewModel
     

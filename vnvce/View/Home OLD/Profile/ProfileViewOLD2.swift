@@ -20,7 +20,7 @@ struct ProfileViewOLD2: View {
     
     @EnvironmentObject public var camera: CameraManager
     
-    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     
     @StateObject public var momentsVM = MomentsViewModel()
     

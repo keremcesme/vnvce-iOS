@@ -271,12 +271,21 @@
       }
     },
     {
+      "identity" : "swiftycontacts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyContacts/SwiftyContacts.git",
+      "state" : {
+        "revision" : "6671f40607f5a8c65e40fed90517967003ec11de",
+        "version" : "4.0.2"
+      }
+    },
+    {
       "identity" : "vnvce-core",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/socialayf/vnvce-core",
       "state" : {
         "branch" : "main",
-        "revision" : "f49f75a3a3315497109d3e428fe577e462f89143"
+        "revision" : "f268db02bfec443ff79694c4c97f03b1d2b15932"
       }
     }
   ],

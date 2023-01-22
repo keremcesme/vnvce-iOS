@@ -43,7 +43,7 @@ struct PostRootView: View {
 
 struct PostView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     @EnvironmentObject public var appState: AppState
     @EnvironmentObject var navigationController: NavigationController
     

@@ -1,41 +1,20 @@
-//
-//  AppDelegate.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 10.08.2022.
-//
 
 import SwiftUI
 import AVFoundation
 import Firebase
 import KeychainAccess
-import FirebaseAppCheck
 
 class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
+    
+    private let keychain = Keychain()
     private let userDefaults = UserDefaults.standard
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
+        let providerFactory = FirebaseAppCheckProviderFactory()
+        AppCheck.setAppCheckProviderFactory(providerFactory)
+        
         FirebaseApp.configure()
-        AppCheck.appCheck().token(forcingRefresh: false) { token, error in
-            guard error == nil else {
-                // Handle any errors if the token was not retrieved.
-                print("Unable to retrieve App Check token: \(error!)")
-                return
-            }
-            guard let token = token else {
-                print("Unable to retrieve App Check token.")
-                return
-            }
-            // Get the raw App Check token string.
-            let tokenString = token.token
-            
-//            print("AppCheck Token: \(tokenString)")
-        }
-        
-//        print(try? Keychain().get(KeychainKey.authCode))
-//        print(try? Keychain().get(KeychainKey.authID))
-//        print(try? Keychain().get(KeychainKey.refreshToken))
-        
         
         setup()
         
@@ -91,12 +70,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
 // MARK: Register Remote Notifications -
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let userDefaults = UserDefaults.standard
-        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
-        let token = tokenParts.joined()
-        print("Device Token: \(token)")
-        userDefaults.set(token, forKey: "notificationToken")
+        let token = deviceToken.map { data in String(format: "%02.2hhx", data) }.joined()
+        
+        storeToken(token)
     }
+    
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error.localizedDescription)
@@ -104,5 +82,17 @@ extension AppDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         completionHandler(.newData)
+    }
+    
+    private func storeToken(_ token: String) {
+        let tokenKey = UserDefaultsKey.notificationToken
+        userDefaults.set(token, forKey: tokenKey)
+    }
+    
+}
+
+class FirebaseAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
+    func createProvider(with app: FirebaseApp) -> AppCheckProvider? {
+        return AppAttestProvider(app: app)
     }
 }

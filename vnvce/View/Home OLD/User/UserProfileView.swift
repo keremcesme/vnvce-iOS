@@ -15,7 +15,7 @@ import SwiftUIX
 struct UserProfileView: View {
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     
     @StateObject public var userVM: UserProfileViewModel
     @StateObject private var postsVM: PostsViewModel

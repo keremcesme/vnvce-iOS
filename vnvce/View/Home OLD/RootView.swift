@@ -22,7 +22,7 @@ struct RootView: View {
     
     @StateObject private var tabBarVM = TabBarViewModel()
     
-    @StateObject private var currentUserVM = CurrentUserViewModel()
+    @StateObject private var currentUserVM = CurrentUserViewModelOLD()
     @StateObject private var profileVM = ProfileViewModel()
     @StateObject private var profileScrollViewDelegate = RefreshableScrollViewModel()
     

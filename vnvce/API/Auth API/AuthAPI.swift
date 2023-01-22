@@ -88,32 +88,26 @@ extension AuthAPI {
         switch status {
         case .ok:
             let result = try jsonDecoder.decode(to, from: data)
-            print("Burasi 1")
             return result
         case .unauthorized:
             switch try await generateAccessToken() {
             case .ok:
-                print("Burasi 2")
                 return try await secureTask(request, decode: to)
             case .unauthorized:
                 switch try await reauthorize() {
                 case .ok:
-                    print("Burasi 3")
                     return try await secureTask(request, decode: to)
                 default:
-                    print("Burasi 4")
                     try await forceLogout()
                     return nil
                 }
             default:
-                print("Burasi 5")
                 try await forceLogout()
                 return nil
             }
         default:
-            print("Burasi 6")
-            print(status)
 //            try await forceLogout()
+            print("Unknown Status Code: \(status.code)")
             return nil
         }
     }

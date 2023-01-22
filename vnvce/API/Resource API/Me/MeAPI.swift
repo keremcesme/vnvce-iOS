@@ -16,6 +16,14 @@ actor MeAPI {
 }
 
 extension MeAPI {
+    public func profile() async throws -> User.Private? {
+        let url = endpoint.makeURL(routes.profile)
+        var request = try URLRequest(url: url, method: .get)
+        request.setAcceptVersion(.v1)
+        
+        return try await authAPI.secureTask(request, decode: User.Private.self)
+    }
+    
     public func editDisplayName(_ displayName: String?) async throws {
         let url = endpoint.makeURL(routes.editDisplayName)
         var request = try URLRequest(url: url, method: .patch)

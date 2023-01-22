@@ -15,5 +15,7 @@ struct KeychainKey {
     static let refreshToken = "refreshToken"
     static let accessToken = "accessToken"
     
+    static let notificationToken = "notificationToken"
+    
     
 }

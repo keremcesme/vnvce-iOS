@@ -16,7 +16,9 @@ struct vnvceApp: App {
     
     @ViewBuilder
     private func GroupView() -> some View {
-        Group(content: RootView).environmentObject(appState)
+        Group(content: RootView)
+            .environmentObject(appState)
+            .environmentObject(notificationCenter)
     }
     
     @ViewBuilder

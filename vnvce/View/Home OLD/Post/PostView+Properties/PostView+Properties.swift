@@ -14,7 +14,7 @@ extension PostView {
     struct PostProperties: ViewModifier {
         @Environment(\.colorScheme) var colorScheme
         
-        @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+        @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
         
         @StateObject public var postsVM: PostsViewModel
         @StateObject public var postVM: PostViewModel
