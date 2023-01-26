@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension CameraView {
+extension CameraViewUI {
     struct CameraPreviewView: UIViewRepresentable {
         @EnvironmentObject public var camera: CameraManager
         

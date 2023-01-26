@@ -4,7 +4,7 @@ import SwiftUIX
 import PureSwiftUI
 import Colorful
 
-extension CameraView {
+extension CameraViewUI {
     @ViewBuilder
     public var PermissionLayer: some View {
         switch camera.configurationStatus {

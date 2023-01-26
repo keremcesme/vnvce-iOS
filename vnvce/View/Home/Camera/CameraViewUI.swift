@@ -10,19 +10,9 @@ import SwiftUIX
 import PureSwiftUI
 import Colorful
 
-struct CameraView: View {
-    @EnvironmentObject public var rootVM: RootViewModel
+struct CameraViewUI: View {
+    @EnvironmentObject public var homeVM: HomeViewModel
     @EnvironmentObject public var camera: CameraManager
-    
-//    private func blurViewOpacity() -> CGFloat {
-//        let width = UIScreen.main.bounds.width
-//        let value = abs(rootVM.offset) / (width / 2)
-//        if value >= 1 {
-//            return 1
-//        } else {
-//            return value
-//        }
-//    }
     
     internal var body: some View {
         CameraPreviewView()

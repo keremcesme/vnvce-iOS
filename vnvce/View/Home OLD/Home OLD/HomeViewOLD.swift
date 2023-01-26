@@ -32,12 +32,12 @@ struct HomeViewOLD: View {
                         .ignoresSafeArea()
                     if UIDevice.current.hasNotch() {
                         VStack(spacing:15) {
-                            CameraView()
+                            CameraViewUI()
                             BottomView
                             Spacer()
                         }
                     } else {
-                        CameraView()
+                        CameraViewUI()
                             .overlay(alignment: .bottom) {
                                 LinearGradient(colors: [.clear, .black.opacity(0.5)], startPoint: .top, endPoint: .bottom)
                                     .frame(height: 80)

@@ -71,10 +71,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let token = deviceToken.map { data in String(format: "%02.2hhx", data) }.joined()
-        
         storeToken(token)
     }
-    
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error.localizedDescription)

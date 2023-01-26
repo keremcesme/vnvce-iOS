@@ -14,7 +14,12 @@ class HomeViewModel: ObservableObject {
     
     public let screen: CGRect = UIScreen.main.bounds
     
-    @Published var tab: String = "CAMERA"
+    public let navBarHeight: CGFloat = 36
+    public let momentSize: CGSize
+    
+    public let cameraRaw = "CAMERA"
+    
+    @Published var tab: String
     
     @Published private(set) public var testUsers: [UserTestModel] = [
         .init(name: "Madelyn 💧", picture: "person1", count: 3, moment: "moment1"),
@@ -24,6 +29,13 @@ class HomeViewModel: ObservableObject {
         .init(name: "Jacob Miller", picture: "person5", count: 2, moment: "moment5"),
         .init(name: "Joel", picture: "person6", count: 1, moment: "moment6")
     ]
+    
+    init() {
+        let width = screen.width
+        let height = width * 3 / 2
+        momentSize = CGSize(width, height)
+        tab = cameraRaw
+    }
     
     public func scrollViewConnector(_ scrollView: UIScrollView) {
         scrollView.isPagingEnabled = true

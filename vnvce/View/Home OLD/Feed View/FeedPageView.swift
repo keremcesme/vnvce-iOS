@@ -32,7 +32,7 @@ struct FeedPageView: View {
     @ViewBuilder
     private func ScrolViewContent() -> some View {
         LazyHStack(spacing: 0) {
-            CameraView()
+            CameraViewUI()
                 .overlay(NavigationBar, alignment: .top)
             ForEach((0...30), id: \.self) { item in
                 Rectangle()

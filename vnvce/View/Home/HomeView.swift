@@ -1,5 +1,6 @@
 
 import SwiftUI
+import SwiftUIX
 import Introspect
 
 struct HomeView: View {
@@ -9,8 +10,9 @@ struct HomeView: View {
     
     @StateObject private var currentUserVM = CurrentUserViewModel()
     
-    @StateObject private var homeVM = HomeViewModel()
-    @StateObject private var cameraManager = CameraManager()
+    @StateObject public var homeVM = HomeViewModel()
+    
+    @StateObject public var cameraManager = CameraManager()
     
     @StateObject private var searchVM = SearchViewModel()
     
@@ -23,20 +25,9 @@ struct HomeView: View {
     
     var body: some View {
         ZStack(alignment: .top){
-            BlurView(style: .systemMaterialDark)
-                .background {
-                    ZStack {
-                        Color.black
-                        Image(returnBGImage())
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(UIScreen.main.bounds.size)
-                    }
-                    .animation(.default, value: homeVM.tab)
-                }
-                .overlay(.black.opacity(0.5))
-                .ignoresSafeArea()
-            HomePageView
+            Background
+//            HomePageView
+            PageView
         }
         .environmentObject(cameraManager)
         .environmentObject(homeVM)
@@ -44,122 +35,108 @@ struct HomeView: View {
         .taskInit(commonInit)
     }
     
-    func returnBGImage() -> String {
-        if let inx = homeVM.testUsers.firstIndex(where: {$0.id.uuidString == homeVM.tab}) {
-            return homeVM.testUsers[inx].moment
-        } else {
-            return "me"
-        }
-    }
+//    @ViewBuilder
+//    private var HomePageView: some View {
+//        GeometryReader { _ in
+//            VStack(spacing: 15){
+//                TabView(selection: $homeVM.tab){
+//                    Group {
+//                        CameraView
+//                            .tag("CAMERA")
+//                        Moments
+//                    }
+//                    .frame(width: UIScreen.main.bounds.width)
+//                    .introspectScrollView { $0.bounces = false }
+//                }
+//                .tabViewStyle(.page(indexDisplayMode: .never))
+//                .frame(height: cameraManager.preview.frame.height + 36 + 10)
+//                BottomView
+//            }
+//            .overlay(NavigationBar, alignment: .top)
+//            .padding(.top, 4)
+//        }
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
+//    }
+    
+//    @ViewBuilder
+//    private var Camera: some View {
+//        GeometryReader { proxy in
+//            VStack(spacing: 10){
+//                VNVCELogo.TextAndLogo()
+//                .frame(height: 36)
+//                .padding(.horizontal, 20)
+//                CameraViewUI()
+//                    .scaleEffect(homeVM.tab == "CAMERA" ? 1 : 0.99)
+//                    .overlay {
+//                        if homeVM.tab != "CAMERA" {
+//                            BlurView(style: .dark)
+//                                .cornerRadius(25, style: .continuous)
+//                        }
+//                    }
+//                    .animation(.default, value: homeVM.tab)
+//            }
+//        }
+//    }
+    
+//    @ViewBuilder
+//    private var NavigationBar: some View {
+//        GeometryReader {
+//            let height = $0.size.height
+//            HStack(spacing: 15) {
+//                Spacer()
+//                Button {
+//                    guard let controller = self.viewControllerHolder.value else {
+//                        return
+//                    }
+//                    controller.present(presentationStyle: .pageSheet) {
+//                        cameraManager.stopSession()
+//                    } content: {
+//                        SearchView().environmentObject(searchVM).environmentObject(contactsVM)
+//                    }
+//
+////                    controller.present {
+////                        cameraManager.stopSession()
+////                    } content: {
+////                        SearchView().environmentObject(searchVM).environmentObject(contactsVM)
+////
+////                    }
+//                } label: {
+//                    BlurView(style: .systemMaterialDark)
+//                        .frame(width: height, height: height)
+//                        .clipShape(Circle())
+//                        .overlay {
+//                            Image(systemName: "person.badge.plus")
+//                                .foregroundColor(.white).opacity(0.9)
+//                                .font(.system(size: 18, weight: .medium, design: .default))
+//                        }
+//                }
+//
+//
+//
+//                ZStack {
+//                    Group {
+//                        Image("me")
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(width: 35, height: 35)
+//                        BlurView(style: .dark)
+//                            .frame(width: 36, height: 36)
+//                        Image("me")
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(width: 31, height: 31)
+//                    }
+//                    .clipShape(Circle())
+//                }
+//
+//            }
+//        }
+//        .frame(height: 36)
+//        .padding(.horizontal, 20)
+//    }
     
     @ViewBuilder
-    private var HomePageView: some View {
-        GeometryReader { g in
-            VStack(spacing: 15){
-                TabView(selection: $homeVM.tab){
-                    Group {
-                        Camera
-                            .tag("CAMERA")
-                        Moments
-                    }
-                    .frame(width: UIScreen.main.bounds.width)
-                    .introspectScrollView { $0.bounces = false }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
-                .frame(height: cameraManager.preview.frame.height + 36 + 10)
-                BottomView
-            }
-            .overlay(NavigationBar, alignment: .top)
-            .padding(.top, 4)
-        }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-    }
-    
-    @ViewBuilder
-    private var Camera: some View {
-        GeometryReader { proxy in
-            VStack(spacing: 10){
-                    HStack {
-                        Image("logo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 24, height: 24)
-                            .colorScheme(.dark)
-                            .yOffset(2)
-                        Text("vnvce")
-                            .foregroundColor(.white)
-                            .font(.system(size: 36, weight: .heavy, design: .default))
-                            .yOffset(-2)
-                        Spacer()
-                    }
-                .frame(height: 36)
-                .padding(.horizontal, 20)
-                CameraView()
-                    .scaleEffect(homeVM.tab == "CAMERA" ? 1 : 0.99)
-                    .overlay {
-                        if homeVM.tab != "CAMERA" {
-                            BlurView(style: .dark)
-                                .cornerRadius(25, style: .continuous)
-                        }
-                    }
-                    .animation(.default, value: homeVM.tab)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var NavigationBar: some View {
-        GeometryReader {
-            let height = $0.size.height
-            HStack(spacing: 15) {
-                Spacer()
-                Button {
-                    guard let controller = self.viewControllerHolder.value else {
-                        return
-                    }
-                    controller.present {
-                        cameraManager.stopSession()
-                    } content: {
-                        SearchView().environmentObject(searchVM).environmentObject(contactsVM)
-                            
-                    }
-                } label: {
-                    BlurView(style: .systemMaterialDark)
-                        .frame(width: height, height: height)
-                        .clipShape(Circle())
-                        .overlay {
-                            Image(systemName: "person.badge.plus")
-                                .foregroundColor(.white).opacity(0.9)
-                                .font(.system(size: 18, weight: .medium, design: .default))
-                        }
-                }
-
-                
-                
-                ZStack {
-                    Group {
-                        Image("me")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 35, height: 35)
-                        BlurView(style: .dark)
-                            .frame(width: 36, height: 36)
-                        Image("me")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 31, height: 31)
-                    }
-                    .clipShape(Circle())
-                }
-
-            }
-        }
-        .frame(height: 36)
-        .padding(.horizontal, 20)
-    }
-    
-    @ViewBuilder
-    private var BottomView: some View {
+    private var BottomViewOLD: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 15){
@@ -291,7 +268,6 @@ struct HomeView: View {
                         .scaleEffect(getScale(proxy: proxy))
                         .animation(.default, value: homeVM.tab)
                 }
-                
             }
             .tag(user.id.uuidString)
         }

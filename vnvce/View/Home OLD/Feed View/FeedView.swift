@@ -67,7 +67,7 @@ struct FeedView: View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 0) {
-                    CameraView()
+                    CameraViewUI()
                         .id(-1)
                     let width = UIScreen.main.bounds.width
                     let height = width * 16 / 9

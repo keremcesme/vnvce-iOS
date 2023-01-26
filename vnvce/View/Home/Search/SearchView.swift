@@ -29,7 +29,7 @@ struct SearchView: View {
             TopBackground
             SearchField
         }
-        .cornerRadius(UIDevice.current.screenCornerRadius, corners: [.topLeft, .topRight])
+//        .cornerRadius(UIDevice.current.screenCornerRadius, corners: [.topLeft, .topRight])
         .ignoresSafeArea()
         .colorScheme(.dark)
         .onChange(of: searchVM.searchField, perform: searchVM.onChangeSearchField)
@@ -92,13 +92,13 @@ struct SearchView: View {
     @ViewBuilder
     private var Background: some View {
         BlurView(style: .systemMaterialDark)
-            .background {
-                Image("me")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(UIScreen.main.bounds.size)
-            }
-            .background(.black)
+//            .background {
+//                Image("me")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fill)
+//                    .frame(UIScreen.main.bounds.size)
+//            }
+//            .background(.black)
             .overlay(.black.opacity(0.5))
             .ignoresSafeArea()
     }

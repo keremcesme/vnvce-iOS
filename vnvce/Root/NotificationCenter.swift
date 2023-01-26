@@ -3,8 +3,8 @@ import UIKit
 import UserNotifications
 import KeychainAccess
 
-
 class NotificationController: NSObject, ObservableObject {
+    
     private let application = UIApplication.shared
     private let center = UNUserNotificationCenter.current()
     private let keycahin = Keychain()
@@ -27,15 +27,13 @@ class NotificationController: NSObject, ObservableObject {
     }
 }
 
-extension NotificationController: UNUserNotificationCenterDelegate  {
-    
+extension NotificationController: UNUserNotificationCenterDelegate {
     // Receive
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         print("RECEIVE")
         let userInfo = notification.request.content.userInfo
         guard let aps = userInfo[AnyHashable("aps")] as? NSDictionary else { return }
         print(userInfo)
-        
         completionHandler([.banner, .sound, .badge])
     }
     
@@ -47,5 +45,8 @@ extension NotificationController: UNUserNotificationCenterDelegate  {
         completionHandler()
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) { }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
+        
+    }
+    
 }
