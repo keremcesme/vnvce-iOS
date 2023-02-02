@@ -1,36 +1,44 @@
 
 import SwiftUI
+import Introspect
 
 extension HomeView {
     
     @ViewBuilder
     public var BottomView: some View {
-        ScrollViewReader(content: _BottomView)
-    }
-    
-    @ViewBuilder
-    private func _BottomView(_ proxy: ScrollViewProxy) -> some View {
         ScrollView(.horizontal, showsIndicators: false, content: ShutterAndUserMoments)
-            .onChange(of: homeVM.tab) { onChangeTab($0, proxy) }
+            .padding(.top, topPadding())
+            .onChange(of: homeVM.tab, perform: onChangeTab)
     }
     
-    private func onChangeTab(_ id: String, _ proxy: ScrollViewProxy) {
+    private func topPadding() -> CGFloat {
+        if UIDevice.current.hasNotch() {
+            return homeVM.momentSize.height + homeVM.navBarHeight + 10 + 15
+        } else {
+            return homeVM.momentSize.height + 10
+        }
+    }
+    
+    private func onChangeTab(_ id: String) {
         if id == homeVM.cameraRaw {
             cameraManager.startSession()
+            homeVM.bottomResetScroll()
         } else {
             cameraManager.stopSession()
-        }
-        withAnimation(.easeInOut(duration: 0.2)) {
-            proxy.scrollTo(id, anchor: .center)
+            if let index = homeVM.testUsers.firstIndex(where: { $0.id.uuidString == homeVM.tab }) {
+                homeVM.bottomScrollTo(index)
+            }
         }
     }
+    
     @ViewBuilder
     private func ShutterAndUserMoments() -> some View {
         HStack(alignment: .top, spacing: 15) {
             ShutterButton.id(homeVM.cameraRaw)
             Users
         }
-        .padding(.horizontal, 200 )
+        .padding(.horizontal, homeVM.bottomPadding)
+        .introspectScrollView(customize: homeVM.bottomScrollViewConnector)
     }
     
     @ViewBuilder
@@ -42,6 +50,7 @@ extension HomeView {
                 }
             } else {
                 homeVM.tab = "CAMERA"
+                homeVM.bottomResetScroll()
             }
         } label: {
             ZStack {

@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleDataTransport.git",
       "state" : {
-        "revision" : "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
-        "version" : "9.2.0"
+        "revision" : "f6b558e3f801f2cac336b04f615ce111fa9ddaa0",
+        "version" : "9.2.1"
       }
     },
     {
@@ -150,7 +150,7 @@
       "location" : "https://github.com/kean/Nuke",
       "state" : {
         "branch" : "master",
-        "revision" : "b187456fffa045e7dfc03fec1db86164ae0c0dc1"
+        "revision" : "707b8247c6ac4501873086889dbf4e0439bd7455"
       }
     },
     {
@@ -158,8 +158,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "56f612ea0178406b1ff57846401bd68a57d96a80",
-        "version" : "3.5.4"
+        "revision" : "cf6e49fe76a8577763be1c321f6a24efe30bfd2b",
+        "version" : "3.5.5"
+      }
+    },
+    {
+      "identity" : "photoselectandcrop",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rillieux/PhotoSelectAndCrop",
+      "state" : {
+        "revision" : "26eec466026a99ebde07e653ea325d7492f949d9",
+        "version" : "2.0.4"
       }
     },
     {
@@ -169,6 +178,15 @@
       "state" : {
         "revision" : "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
         "version" : "2.1.1"
+      }
+    },
+    {
+      "identity" : "prynttrimmerview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/HHK1/PryntTrimmerView",
+      "state" : {
+        "revision" : "ac1b60a22c7e6a6514de7a66d2f3d5b537c956d5",
+        "version" : "4.0.2"
       }
     },
     {
@@ -196,6 +214,15 @@
       "state" : {
         "revision" : "39f80d64136d90faf85956bf876967242b0f4663",
         "version" : "0.1.1"
+      }
+    },
+    {
+      "identity" : "stevia",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/freshOS/Stevia",
+      "state" : {
+        "revision" : "cfb1a1d2159277bb553c3dc46f3f742c0275566d",
+        "version" : "5.1.2"
       }
     },
     {
@@ -239,8 +266,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
-        "version" : "2.47.0"
+        "revision" : "45167b8006448c79dda4b7bd604e07a034c15c49",
+        "version" : "2.48.0"
       }
     },
     {
@@ -258,7 +285,7 @@
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "branch" : "master",
-        "revision" : "d3cbf32788250741d397cfb5bcd532c37aa1096d"
+        "revision" : "63a079f102964a6987eaaf70f8fdc39b84feeece"
       }
     },
     {
@@ -286,6 +313,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "f268db02bfec443ff79694c4c97f03b1d2b15932"
+      }
+    },
+    {
+      "identity" : "ypimagepicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/socialayf/YPImagePicker",
+      "state" : {
+        "branch" : "master",
+        "revision" : "db768a27c820692d17459be4c7f1abbf90f7ecdb"
       }
     }
   ],

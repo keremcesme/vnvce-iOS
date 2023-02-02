@@ -4,16 +4,16 @@ import SwiftUI
 extension HomeView {
     @ViewBuilder
     public var NavigationBar: some View {
-        GeometryReader(content: NavigationBar)
+        GeometryReader(alignment: .trailing, content: NavigationBar)
             .frame(height: homeVM.navBarHeight)
             .padding(.horizontal, 20)
+            .padding(.top, !UIDevice.current.hasNotch() ? UIDevice.current.statusBarHeight() + 4 : 0)
     }
     
     @ViewBuilder
     private func NavigationBar(_ proxy: GeometryProxy) -> some View {
         let height = proxy.size.height
         HStack(spacing: 15){
-            Spacer()
             AddFriendButton(height)
             ProfileButton(height)
         }
@@ -22,26 +22,36 @@ extension HomeView {
     @ViewBuilder
     private func AddFriendButton(_ height: CGFloat) -> some View {
         Button {
-            
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            self.homeVM.showSearchView = true
+            self.cameraManager.stopSession()
         } label: {
             Circle()
                 .fill(.ultraThinMaterial)
                 .colorScheme(.dark)
-//            BlurView(style: .systemThickMaterialDark)
                 .frame(width: height, height: height)
-//                .clipShape(Circle())
                 .overlay {
                     Image(systemName: "person.badge.plus")
                         .foregroundColor(.white).opacity(0.9)
                         .font(.system(size: 18, weight: .medium, design: .default))
                 }
         }
+        .buttonStyle(ScaledButtonStyle())
+        .fullScreenCover(isPresented: $homeVM.showSearchView) {
+            SearchView()
+                .clearBackground()
+                .environmentObject(searchVM)
+                .environmentObject(contactsVM)
+                
+        }
     }
     
     @ViewBuilder
     private func ProfileButton(_ height: CGFloat) -> some View {
         Button {
-            
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            self.homeVM.showProfileView = true
+            self.cameraManager.stopSession()
         } label: {
             ZStack {
                 Group {
@@ -56,9 +66,14 @@ extension HomeView {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: height - 5, height: height - 5)
                 }
-                .clipShape(Circle())
             }
-            
+            .clipShape(Circle())
+        }
+        .fullScreenCover(isPresented: $homeVM.showProfileView) {
+            ProfileView()
+                .clearBackground()
+                .environmentObject(currentUserVM)
         }
     }
 }
+

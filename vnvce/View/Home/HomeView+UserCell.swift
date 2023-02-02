@@ -7,6 +7,7 @@ extension HomeView {
     public func UserCell(_ inx: Int, _ user: UserTestModel) -> some View {
         Button {
             homeVM.tab = user.id.uuidString
+            homeVM.bottomScrollTo(inx)
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
             VStack(spacing: 7) {
@@ -22,8 +23,6 @@ extension HomeView {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(isSelected(user) ? 51 : 64)
-//                        BlurView(style: .dark)
-//                            .frame(isSelected(user) ? 52 : 0)
                         Circle()
                             .strokeBorder(.white, lineWidth: isSelected(user) ? 6 : 0)
                             .foregroundColor(Color.clear)
@@ -53,7 +52,6 @@ extension HomeView {
                         .font(.system(size: 12, weight: .regular, design: .default))
                         .frame(maxWidth: 79.5)
                         .transition(.opacity)
-//                        .opacity(homeVM.tab == user.id.uuidString ? 0.00001 : 1)
                 }
                
                 

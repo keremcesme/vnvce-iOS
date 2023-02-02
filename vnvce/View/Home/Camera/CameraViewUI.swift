@@ -15,10 +15,18 @@ struct CameraViewUI: View {
     @EnvironmentObject public var camera: CameraManager
     
     internal var body: some View {
+#if targetEnvironment(simulator)
+        Color.red
+            .overlay {
+                Text("Simulator").foregroundColor(.black)
+            }
+            .frame(homeVM.momentSize)
+#else
         CameraPreviewView()
             .frame(camera.previewViewFrame())
             .overlay(FocusAnimationView)
             .overlay(PermissionLayer)
+#endif
     }
     
     @ViewBuilder
@@ -34,8 +42,6 @@ struct CameraViewUI: View {
                 .shadow(radius: 5)
         }
     }
-    
-    
     
     private struct CornerRadiusModifier: ViewModifier {
         internal func body(content: Content) -> some View {

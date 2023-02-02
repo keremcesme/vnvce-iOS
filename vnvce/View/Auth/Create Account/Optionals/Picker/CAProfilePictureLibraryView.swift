@@ -161,7 +161,7 @@ extension CAProfilePictureLibraryView {
         }
         
         private func fetchAsset() {
-            fetchAssetTask()
+//            fetchAssetTask()
         }
        
         private func fetchAssetTask() {

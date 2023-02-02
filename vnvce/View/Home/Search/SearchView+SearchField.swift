@@ -5,12 +5,13 @@ import PureSwiftUI
 
 extension SearchView {
     private func onPress() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         focused = true
     }
     
     @ViewBuilder
     public var SearchField: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 0) {
             HStack(spacing: 10) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(searchVM.searchField.isEmpty ? .secondary : .primary)
@@ -22,32 +23,37 @@ extension SearchView {
                     .focused($focused)
                     .accentColor(.blue)
                     .disableAutocorrection(true)
-                    .frame(maxWidth: .infinity)
                     .frame(height: 50)
                     .onSubmit { searchVM.searchFirstPage(searchVM.searchText) }
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
             .padding(.horizontal, 18)
-            .background {
-                ZStack {
-                    Color.white.opacity(min(1.0 - searchVM.scrollOffset / 10, 0.1))
-                    BlurView(style: .dark).opacity(searchVM.scrollOffset / 10)
-                }
-                .cornerRadius(12, style: .continuous)
-            }
+            .background(.white.opacity(0.1))
+            .cornerRadius(12, style: .continuous)
             .contentShape(Rectangle())
             .onPress(perform: onPress)
+            .buttonStyle(ScaledButtonStyle())
             .overlay(LoadingIndicator, alignment: .trailing)
             
-            Button(action: dismiss) {
-                Text("Cancel")
-                    .foregroundColor(.white)
-                    .font(.system(size: 16, weight: .semibold, design: .default))
+            if focused {
+                Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    focused = false
+                } label: {
+                    Text("Cancel")
+                        .foregroundColor(.white)
+                        .font(.system(size: 16, weight: .semibold, design: .default))
+                }
+                .buttonStyle(ScaledButtonStyle())
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+                .padding(.leading, 18)
             }
             
         }
         .padding(.horizontal, 18)
-        .padding(.top, UIDevice.current.statusBarHeight() + 4)
-        
+        .padding(.top, 10)
+        .animation(.easeOut(duration: 0.2), value: focused)
     }
     
     @ViewBuilder

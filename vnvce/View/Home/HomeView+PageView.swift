@@ -11,19 +11,24 @@ extension HomeView {
     
     @ViewBuilder
     private func _PageView(_ proxy: GeometryProxy) -> some View {
-        VStack(spacing: 15) {
+        if UIDevice.current.hasNotch() {
             _TabView
-            BottomView
+                .overlay(BottomView, alignment: .top)
+                .overlay(NavigationBar, alignment: .top)
+                .padding(.top, 4)
+        } else {
+            _TabView
+                .overlay(BottomView, alignment: .top)
+                .overlay(NavigationBar, alignment: .top)
+                .ignoresSafeArea()
         }
-        .overlay(NavigationBar, alignment: .top)
-        .padding(.top, 4)
+        
     }
     
     @ViewBuilder
     private var _TabView: some View {
         TabView(selection: $homeVM.tab, content: _TabViewContent)
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: height())
     }
     
     private func height() -> CGFloat {

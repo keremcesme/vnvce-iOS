@@ -66,6 +66,11 @@ class ImageSaver: NSObject {
     }
     
     @objc private func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        print("Image saved succesfully.")
+        if let error {
+            print(error.localizedDescription)
+        } else {
+            print("Image saved succesfully.")
+        }
+        
     }
 }

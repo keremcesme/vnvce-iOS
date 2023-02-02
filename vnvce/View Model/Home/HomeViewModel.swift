@@ -9,10 +9,12 @@ struct UserTestModel: Identifiable {
     let moment: String
 }
 
+
 class HomeViewModel: ObservableObject {
-    public var scrollView: UIScrollView!
+    public var bottomScrollView: UIScrollView!
     
     public let screen: CGRect = UIScreen.main.bounds
+    public let bottomPadding: CGFloat
     
     public let navBarHeight: CGFloat = 36
     public let momentSize: CGSize
@@ -20,6 +22,9 @@ class HomeViewModel: ObservableObject {
     public let cameraRaw = "CAMERA"
     
     @Published var tab: String
+    
+    @Published public var showSearchView: Bool = false
+    @Published public var showProfileView: Bool = false
     
     @Published private(set) public var testUsers: [UserTestModel] = [
         .init(name: "Madelyn 💧", picture: "person1", count: 3, moment: "moment1"),
@@ -35,20 +40,22 @@ class HomeViewModel: ObservableObject {
         let height = width * 3 / 2
         momentSize = CGSize(width, height)
         tab = cameraRaw
+        bottomPadding = screen.width / 2 - 36
     }
     
-    public func scrollViewConnector(_ scrollView: UIScrollView) {
-        scrollView.isPagingEnabled = true
-        scrollView.bounces = false
-        scrollView.contentInsetAdjustmentBehavior = .never
-        scrollView.setContentOffset(.init(x: screen.width, y: 0), animated: false)
-        self.scrollView = scrollView
+    public func bottomScrollViewConnector(_ scrollView: UIScrollView) {
+        self.bottomScrollView = scrollView
     }
     
-//    public func onChangeScrollOffset(_ value: CGFloat?) {
-//        if value == 0 {
-//            scrollView?.isScrollEnabled = false
-//        }
-//    }
+    public func bottomScrollTo(_ inx: Int) {
+        let index = CGFloat(inx + 1)
+        let offset = 72 * index + 15 * index
+        
+        self.bottomScrollView.setContentOffset(.init(offset, 0), animated: true)
+    }
+    
+    public func bottomResetScroll() {
+        self.bottomScrollView.setContentOffset(.zero, animated: true)
+    }
     
 }

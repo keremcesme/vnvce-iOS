@@ -7,6 +7,16 @@ import Colorful
 extension CameraViewUI {
     @ViewBuilder
     public var PermissionLayer: some View {
+        if UIDevice.current.hasNotch() {
+            _PermissionLayer
+                .clipShape(RoundedRectangle(25, style: .continuous))
+        } else {
+            _PermissionLayer
+        }
+    }
+    
+    @ViewBuilder
+    private var _PermissionLayer: some View {
         switch camera.configurationStatus {
         case .permissionDenied, .permissionNotDetermined:
             ZStack {
@@ -28,7 +38,6 @@ extension CameraViewUI {
                 }
             }
             .frame(camera.previewViewFrame())
-            .clipShape(RoundedRectangle(25, style: .continuous))
             .colorScheme(.dark)
         default:
             EmptyView()

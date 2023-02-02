@@ -30,4 +30,9 @@ extension View {
         self
             .introspectView(customize: { $0.addGestureRecognizer(gesture) })
     }
+    
+    func gesture(_ gesture: UIGestureRecognizer) -> some View {
+        self
+            .introspectView(customize: { $0.addGestureRecognizer(gesture) })
+    }
 }

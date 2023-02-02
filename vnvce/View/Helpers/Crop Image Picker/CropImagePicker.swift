@@ -101,6 +101,7 @@ struct CropView: View {
     @State private var lastScale: CGFloat = 0
     @State private var offset: CGSize = .zero
     @State private var lastStoredOffset: CGSize = .zero
+    
     @GestureState private var isInteracting: Bool = false
     
     var body: some View {
@@ -135,108 +136,116 @@ struct CropView: View {
     
     @ViewBuilder
     private func ImageView(_ hideGrids: Bool = false) -> some View {
-        GeometryReader {
-            let size = $0.size
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .overlay{
-                        GeometryReader{
-                            let rect = $0.frame(in: .named("CROP_VIEW"))
-                            Color.clear
-                                .onChange(of: isInteracting) {
-                                    
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        if rect.minX > 0 {
-                                            offset.width = (offset.width - rect.minX)
-                                            haptic()
+        ZStack {
+            GeometryReader {
+                let size = $0.size
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .overlay{
+                            GeometryReader{
+                                let rect = $0.frame(in: .named("CROP_VIEW"))
+                                Color.clear
+                                    .onChange(of: isInteracting) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            if rect.minX > 0 {
+                                                offset.width = (offset.width - rect.minX)
+                                                haptic()
+                                            }
+                                            
+                                            if rect.minY > 0 {
+                                                offset.height = (offset.height - rect.minY)
+                                                haptic()
+                                            }
+                                            
+                                            if rect.maxX < size.width {
+                                                offset.width = (rect.minX - offset.width)
+                                                haptic()
+                                            }
+                                            
+                                            if rect.maxY < size.height {
+                                                offset.height = (rect.minY - offset.height)
+                                                haptic()
+                                            }
                                         }
                                         
-                                        if rect.minY > 0 {
-                                            offset.height = (offset.height - rect.minY)
-                                            haptic()
-                                        }
-                                        
-                                        if rect.maxX < size.width {
-                                            offset.width = (rect.minX - offset.width)
-                                            haptic()
-                                        }
-                                        
-                                        if rect.maxY < size.height {
-                                            offset.height = (rect.minY - offset.height)
-                                            haptic()
+                                        if !$0 {
+                                            lastStoredOffset = offset
                                         }
                                     }
-                                    
-                                    if !$0 {
-                                        lastStoredOffset = offset
-                                    }
-                                }
+                            }
+                        }
+                        .frame(size)
+                }
+            }
+            .scaleEffect(scale)
+            .offset(offset)
+            .overlay {
+                if !hideGrids {
+                    Grids
+                }
+            }
+            .coordinateSpace(name: "CROP_VIEW")
+            .gesture(
+                DragGesture()
+                    .updating($isInteracting) { _, out, _ in
+                        out = true
+                    }
+                    .onChanged{ value in
+                        let translation = value.translation
+                        offset = CGSize(translation.width + lastStoredOffset.width, translation.height + lastStoredOffset.height)
+                    }
+            )
+            .gesture(
+                MagnificationGesture()
+                    .updating($isInteracting) { _, out, _ in
+                        out = true
+                    }
+                    .onChanged{ value in
+                        let updatedScale = value + lastScale
+                        scale = (updatedScale < 1 ? 1 : updatedScale)
+                    }
+                    .onEnded{ _ in
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            if scale < 1 {
+                                scale = 1
+                                lastScale = 0
+                            } else {
+                                lastScale = scale - 1
+                            }
                         }
                     }
-                    .frame(size)
-            }
+            )
+            .frame(width: 300, height: 300)
+            Rectangle()
+                .fill(Color.black).opacity(0.55)
+                .mask(HoleShapeMask().fill(style: FillStyle(eoFill: true)))
         }
-        .scaleEffect(scale)
-        .offset(offset)
-        .overlay {
-            if !hideGrids {
-                Grids
-            }
-        }
-        .coordinateSpace(name: "CROP_VIEW")
-        .gesture(
-            DragGesture()
-                .updating($isInteracting) { _, out, _ in
-                    out = true
-                }
-                .onChanged{ value in
-                    let translation = value.translation
-                    offset = CGSize(translation.width + lastStoredOffset.width, translation.height + lastStoredOffset.height)
-                }
-        )
-        .gesture(
-            MagnificationGesture()
-                .updating($isInteracting) { _, out, _ in
-                    out = true
-                }
-                .onChanged{ value in
-                    let updatedScale = value + lastScale
-                    scale = (updatedScale < 1 ? 1 : updatedScale)
-                }
-                .onEnded{ _ in
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        if scale < 1 {
-                            scale = 1
-                            lastScale = 0
-                        } else {
-                            lastScale = scale - 1
-                        }
-                    }
-                }
-        )
-        .frame(width: 300, height: 300)
-        .clipShape(Circle())
+        
+//        .clipShape(Circle())
+        
     }
     
     @ViewBuilder
     private var Grids: some View {
         ZStack {
             HStack {
-                ForEach(1...5, id: \.self) {_ in
+                ForEach(1...3, id: \.self) {_ in
                     Rectangle()
                         .fill(.white.opacity(0.7))
                         .frame(width: 1)
                         .frame(maxWidth: .infinity)
+                        .shadow(radius: 4)
                 }
             }
             VStack {
-                ForEach(1...5, id: \.self) {_ in
+                ForEach(1...3, id: \.self) {_ in
                     Rectangle()
                         .fill(.white.opacity(0.7))
                         .frame(height: 1)
                         .frame(maxHeight: .infinity)
+                        .shadow(radius: 4)
                 }
             }
         }
@@ -245,6 +254,14 @@ struct CropView: View {
     private func haptic() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
+}
+
+func HoleShapeMask() -> Path {
+    let rect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    let insetRect = CGRect(x: 15, y: 15, width: UIScreen.main.bounds.width - ( 15 * 2 ), height: UIScreen.main.bounds.height - ( 15 * 2 ))
+    var shape = Rectangle().path(in: rect)
+    shape.addPath(Circle().path(in: insetRect))
+    return shape
 }
 
 extension View {

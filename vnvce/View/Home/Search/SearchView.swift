@@ -22,69 +22,42 @@ struct SearchView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .top) {
-            Background
-            ScrollView(content: ScrollContent)
-            .onTapGesture(perform: hideKeyboard)
-            TopBackground
-            SearchField
+        NavigationView {
+            ZStack(alignment: .top) {
+                Background
+                VStack(alignment: .leading, spacing: 0){
+                    SearchField
+                    
+                    Divider()
+                        .padding(.top, 10)
+                    
+                    ScrollView(content: ScrollContent)
+                        .onTapGesture(perform: hideKeyboard)
+                }
+            }
+            .clearBackground()
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(Toolbar)
         }
-//        .cornerRadius(UIDevice.current.screenCornerRadius, corners: [.topLeft, .topRight])
+        .cornerRadius(UIDevice.current.screenCornerRadius, corners: [.topLeft, .topRight])
         .ignoresSafeArea()
         .colorScheme(.dark)
         .onChange(of: searchVM.searchField, perform: searchVM.onChangeSearchField)
         .onReceive(searchVM.$searchText.debounce(for: 0.5, scheduler: RunLoop.main), perform: search)
-        .taskInit {
-            
-//            Task {
-//                do {
-//                    if try await requestAccess() {
-//                        let status = authorizationStatus()
-//                        if status == .authorized {
-//
-//                            let contacts = try await fetchContacts()
-//                            let phoneNumberKit = PhoneNumberKit()
-//
-//                            print("Count: \(contacts.count)")
-//                            for user in contacts {
-//                                let name = "\(user.givenName) \(user.familyName)"
-//                                print("Name: \(name)")
-//                                let phoneNumbers = user.phoneNumbers.map({$0.value.stringValue})
-//
-////                                print("Raw Number: \(phoneNumbers.first ?? "null")")
-//
-//                                for (inx, number) in phoneNumbers.enumerated() {
-//                                    if let phoneNumber = try? phoneNumberKit.parse(number) {
-//                                        print("[\(inx + 1)] Phone Number: \(phoneNumber.regionID ?? "null") +\(phoneNumber.countryCode)\(phoneNumber.nationalNumber)")
-//                                    }
-//                                }
-//                                print("----------------------------------------------------------")
-//                            }
-//
-//                        }
-//                    }
-//                } catch {
-//                    print(error.localizedDescription)
-//                }
-//
-//            }
-            
-        }
     }
     
     @ViewBuilder
     private func ScrollContent() -> some View {
-        LazyVStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 20) {
             if !searchVM.searchText.isEmpty {
                 SearchResults
             } else {
                 UsersFromContacts
             }
         }
-        .offsetY(offsetTask)
         .frame(maxWidth: .infinity)
-        .padding(.top, 120)
         .padding(.horizontal, 18)
+        .padding(.top, 10)
     }
     
     
@@ -98,19 +71,42 @@ struct SearchView: View {
 //                    .aspectRatio(contentMode: .fill)
 //                    .frame(UIScreen.main.bounds.size)
 //            }
-//            .background(.black)
-            .overlay(.black.opacity(0.5))
+//            .background(.black )
+            .overlay(.black.opacity(0.2))
+//        ZStack {
+//            Color.black
+//            ColorfulBackgroundView()
+//                .overlay(.black.opacity(0.2))
+//        }
+        
             .ignoresSafeArea()
     }
     
-    
+}
+
+extension SearchView {
+    @ToolbarContentBuilder
+    public var Toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) { Title }
+        ToolbarItem(placement: .navigationBarTrailing) { DismissButton }
+    }
     
     @ViewBuilder
-    private var TopBackground: some View {
-        LinearGradient(colors: [.black.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom)
-            .frame(maxWidth: .infinity)
-            .frame(height: UIDevice.current.statusBarHeight() + 70)
-            .opacity(searchVM.scrollOffset / 10)
-            .ignoresSafeArea()
+    private var Title: some View {
+        Text("Add your friends")
+            .foregroundColor(.white)
+            .font(.system(size: 22, weight: .bold, design: .default))
+            .padding(.leading, 12)
+    }
+    
+    @ViewBuilder
+    private var DismissButton: some View {
+        Button(action: dismiss) {
+            Image(systemName: "xmark")
+                .foregroundColor(.white)
+                .font(.system(size: 18, weight: .semibold, design: .default))
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(ScaledButtonStyle())
     }
 }

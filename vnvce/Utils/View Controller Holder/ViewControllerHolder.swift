@@ -47,6 +47,7 @@ extension UIViewController {
         
         toPresent.view.backgroundColor = backgroundColor // This line is modified
         self.present(toPresent, animated: animated, completion: completion)
+        self.isModalInPresentation = true
     }
     
 }

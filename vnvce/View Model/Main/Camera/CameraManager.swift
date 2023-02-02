@@ -89,11 +89,15 @@ class CameraManager: NSObject, ObservableObject {
         self.telephotoValue = device.setTelephoto()
         self.ultraWideIsSupported = device.setUltraWide()
         super.init()
+        
+#if !targetEnvironment(simulator)
         self.session.sessionPreset = .high
         self.initalizeZoomFactors()
         self.makeReadyPreviewView()
         self.attemtToConfigureSession()
         self.checkConfigurationAndStartSession()
+#endif
+        
     }
     
     private func initalizeZoomFactors() {
@@ -119,8 +123,10 @@ class CameraManager: NSObject, ObservableObject {
     private func makeReadyPreviewView() {
         self.preview = AVCaptureVideoPreviewLayer(session: self.session)
         self.preview.frame.size = self.previewViewFrame()
-        self.preview.cornerRadius = 25
-        self.preview.cornerCurve = .continuous
+        if UIDevice.current.hasNotch() {
+            self.preview.cornerRadius = 25
+            self.preview.cornerCurve = .continuous
+        }
         self.preview.connection?.videoOrientation = .portrait
         self.preview.videoGravity = .resizeAspectFill
     }

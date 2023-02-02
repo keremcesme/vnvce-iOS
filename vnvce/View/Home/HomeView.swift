@@ -8,15 +8,15 @@ struct HomeView: View {
     
     @EnvironmentObject private var notificationController: NotificationController
     
-    @StateObject private var currentUserVM = CurrentUserViewModel()
+    @StateObject public var currentUserVM = CurrentUserViewModel()
     
     @StateObject public var homeVM = HomeViewModel()
     
     @StateObject public var cameraManager = CameraManager()
     
-    @StateObject private var searchVM = SearchViewModel()
+    @StateObject public var searchVM = SearchViewModel()
     
-    @StateObject private var contactsVM = ContactsViewModel()
+    @StateObject public var contactsVM = ContactsViewModel()
     
     private func commonInit() async {
         await notificationController.requestAuthorization()
