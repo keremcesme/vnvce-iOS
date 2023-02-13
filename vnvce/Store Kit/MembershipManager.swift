@@ -152,6 +152,7 @@ private extension MembershipManager {
         }
     }
     
+    
     private func retriveProducts() async {
         do {
             let products = try await Product.products(for: productIDs)
