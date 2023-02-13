@@ -27,6 +27,7 @@ extension HomeView {
                             .strokeBorder(.white, lineWidth: isSelected(user) ? 6 : 0)
                             .foregroundColor(Color.clear)
                             .frame(width: 72, height: 72, alignment: .center)
+                            .opacity(isSelected(user) ? 1 : 0.0001)
                     }
                     .clipShape(Circle())
                 }

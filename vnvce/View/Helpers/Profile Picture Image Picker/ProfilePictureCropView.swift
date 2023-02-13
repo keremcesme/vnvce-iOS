@@ -2,20 +2,18 @@
 import SwiftUI
 import PureSwiftUI
 
-enum CropOrientation {
-    case square
-    case landscape
-    case portrait
-}
 
 struct ProfilePictureCropView: View {
     @Environment(\.dismiss) var dismiss
+    
+    @EnvironmentObject private var currentUserVM: CurrentUserViewModel
     
     @StateObject private var gestureController = ProfilePictureCropGestureController()
     
     private let screen = UIScreen.main.bounds
     
     @State private var isInteracting: Bool = false
+    @State private var isUploading: Bool = false
     
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
@@ -26,31 +24,60 @@ struct ProfilePictureCropView: View {
     @State private var renderSize: CGSize = .zero
     @State private var renderRect: CGRect = .zero
     
-    @State var orientation: CropOrientation
-    
     let image: UIImage
+    let dismissPicker: () -> ()
     
-    init(image: UIImage) {
+    init(image: UIImage, dismiss: @escaping () -> ()) {
         self.image = image
-        
-        let size = image.size
-        
-        if size.width > size.height {
-            self.orientation = .landscape
-        } else if size.width < size.height {
-            self.orientation = .portrait
-        } else {
-            self.orientation = .square
-        }
+        self.dismissPicker = dismiss
     }
     
-    func render() {
-        let image = self.image.cropsToSquare2(rect: self.renderRect, size: self.renderSize)
-            .resized(toWidth: 300)!
+    private func cropToSquare(_ rect: CGRect, _ size: CGSize) -> UIImage {
         
-        ImageSaver().writeToPhotoAlbum(image: image)
+        let refWidth = CGFloat((self.image.cgImage!.width))
+        let refHeight = CGFloat((self.image.cgImage!.height))
         
+        let cropSize = refWidth > refHeight ? refHeight : refWidth
+        let absSize = rect.width > rect.height ? rect.height : rect.width
         
+        let ratio = cropSize / absSize
+        
+        let x = abs(rect.minX * ratio)
+        let y = abs(rect.minY * ratio)
+        
+        let scaleRatio = rect.width / size.width
+        let crop = cropSize / scaleRatio
+        
+        let cropRect = CGRect(x: x, y: y, width: crop, height: crop)
+        let imageRef = self.image.cgImage?.cropping(to: cropRect)
+        let cropped = UIImage(cgImage: imageRef!, scale: 0.0, orientation: self.image.imageOrientation)
+        
+        return cropped
+    }
+    
+    @MainActor
+    private func upload(_ rect: CGRect, _ size: CGSize) async {
+        guard let image = cropToSquare(rect, size).resized(toWidth: 300) else {
+            return
+        }
+        
+        do {
+//            if let name = currentUserVM.user?.profilePicture?.name {
+//                try await StorageAPI().deleteProfilePicture(name)
+//            }
+            
+            let url = try await StorageAPI().uploadProfilePicture(image)
+            try await MeAPI().editProfilePicture(.init(url: url))
+            self.currentUserVM.user!.profilePictureURL = url
+            
+            self.isUploading = false
+            
+            dismissPicker()
+        } catch {
+            print(error.localizedDescription)
+            self.isUploading = false
+            return
+        }
     }
     
     var body: some View {
@@ -58,21 +85,12 @@ struct ProfilePictureCropView: View {
             Background
             CropArea.overlay(MaskView)
             GestureView(isInteracting: $isInteracting, offset: $offset, lastOffset: $lastOffset, scale: $scale, lastScale: $lastScale)
-            VStack {
-                Spacer()
-                Button {
-                    self.render()
-                } label: {
-                    Text("Render")
-                        .padding()
-                        .contentShape(Rectangle())
-                }
-            }
+            SaveButton
+            UploadingView
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(Toolbar)
         .ignoresSafeArea()
-        
     }
     
     @ViewBuilder
@@ -92,24 +110,24 @@ struct ProfilePictureCropView: View {
         .frame(width: width, height: width)
     }
     
-    private func haptic() {
-        if !isInteracting {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        }
-    }
-    
     @ViewBuilder
     private func GestureOnEndOverlay(_ size: CGSize) -> some View {
         GeometryReader {
             let rect = $0.frame(in: .named("CROP_VIEW"))
             let absSize = $0.size
             Color.clear
-                .taskInit {
-                    self.renderRect = rect
-                    self.renderSize = absSize
-                }
-                .onChange(of: offset) { _ in
-//                    print(rect)
+                .onChange(of: isUploading) {
+                    if $0 {
+                        Task {
+                            await upload(rect, absSize)
+                        }
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                            let image = cropToSquare(rect: rect, size: absSize).resized(toWidth: 300)
+//
+//                            ImageSaver().writeToPhotoAlbum(image: image!)
+//                            self.isUploading = false
+//                        }
+                    }
                 }
                 .onChange(of: isInteracting) { value in
                     DispatchQueue.main.async {
@@ -137,16 +155,49 @@ struct ProfilePictureCropView: View {
                             }
                             
                             lastOffset = offset
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                self.renderRect = rect
-                                self.renderSize = absSize
-                            }
-                            
                         }
                     }
                     
                 }
         }
+    }
+    
+    @ViewBuilder
+    private var SaveButton: some View {
+        VStack {
+            Spacer()
+            Button {
+                self.isUploading = true
+            } label: {
+                Text("Save")
+                    .foregroundStyle(.linearGradient(
+                        colors: [Color.init(hex: "53E6CA"), Color.init(hex: "6A3FFB")],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing))
+                    .font(.system(size: 14, weight: .semibold, design: .default))
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+                    .background(Capsule().fill(.white))
+                    .contentShape(Rectangle())
+                    .padding(.bottom, UIDevice.current.bottomSafeAreaHeight() + 15)
+            }
+            .buttonStyle(ScaledButtonStyle())
+            .disabled(isUploading)
+        }
+    }
+    
+    @ViewBuilder
+    private var UploadingView: some View {
+        if isUploading {
+            Color.black.opacity(0.6)
+                .overlay {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.secondary)
+                }
+                .colorScheme(.dark)
+        }
+        
     }
     
     @ViewBuilder
@@ -161,6 +212,12 @@ struct ProfilePictureCropView: View {
                         .frame(UIScreen.main.bounds.size)
                 }
             }
+    }
+    
+    private func haptic() {
+        if !isInteracting {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        }
     }
 }
 
@@ -207,59 +264,53 @@ extension ProfilePictureCropView {
                 .font(.system(size: 18, weight: .semibold, design: .default))
                 .contentShape(Rectangle())
         }
+        .disabled(isUploading)
     }
 }
 
-extension UIImage {
-    func cropsToSquare(offset: CGSize, scale: CGFloat) -> UIImage {
-        let refWidth = CGFloat((self.cgImage!.width))
-        let refHeight = CGFloat((self.cgImage!.height))
-        let cropSize = refWidth > refHeight ? refHeight : refWidth
-        
-        var x = (refWidth - cropSize) / 2.0
-        var y = (refHeight - cropSize) / 2.0
-        
-        let ratio = -cropSize / (UIScreen.main.bounds.width - 29)
-        
-        x = x + offset.x * ratio
-        y = y + offset.y * ratio
-        
-        let cropRect = CGRect(x: x, y: y, width: cropSize, height: cropSize)
-        let imageRef = self.cgImage?.cropping(to: cropRect)
-        let cropped = UIImage(cgImage: imageRef!, scale: 0.0, orientation: self.imageOrientation)
-        
-        return cropped
-    }
-    
-    func cropsToSquare2(rect: CGRect, size: CGSize) -> UIImage {
-        
-        let refWidth = CGFloat((self.cgImage!.width))
-        let refHeight = CGFloat((self.cgImage!.height))
-        
-        let cropSize = refWidth > refHeight ? refHeight : refWidth
-        let absSize = rect.width > rect.height ? rect.height : rect.width
-        
-        let scaleRatio = rect.width / size.width
-        
-        let ratio = cropSize / absSize
-        
-        var x = abs(rect.minX * ratio)
-        var y = abs(rect.minY * ratio)
-        
-        let cropRect = CGRect(x: x, y: y, width: cropSize / scaleRatio, height: cropSize / scaleRatio)
-        let imageRef = self.cgImage?.cropping(to: cropRect)
-        let cropped = UIImage(cgImage: imageRef!, scale: 0.0, orientation: self.imageOrientation)
-        
-        return cropped
-    }
-    
-    func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage? {
-        let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
-        let format = imageRendererFormat
-        format.opaque = isOpaque
-        return UIGraphicsImageRenderer(size: canvas, format: format).image {
-            _ in draw(in: CGRect(origin: .zero, size: canvas))
-        }
-    }
-    
-}
+//extension UIImage {
+//    func cropsToSquare(offset: CGSize, scale: CGFloat) -> UIImage {
+//        let refWidth = CGFloat((self.cgImage!.width))
+//        let refHeight = CGFloat((self.cgImage!.height))
+//        let cropSize = refWidth > refHeight ? refHeight : refWidth
+//
+//        var x = (refWidth - cropSize) / 2.0
+//        var y = (refHeight - cropSize) / 2.0
+//
+//        let ratio = -cropSize / (UIScreen.main.bounds.width - 29)
+//
+//        x = x + offset.x * ratio
+//        y = y + offset.y * ratio
+//
+//        let cropRect = CGRect(x: x, y: y, width: cropSize, height: cropSize)
+//        let imageRef = self.cgImage?.cropping(to: cropRect)
+//        let cropped = UIImage(cgImage: imageRef!, scale: 0.0, orientation: self.imageOrientation)
+//
+//        return cropped
+//    }
+//
+//    func cropsToSquare2(rect: CGRect, size: CGSize) -> UIImage {
+//
+//        let refWidth = CGFloat((self.cgImage!.width))
+//        let refHeight = CGFloat((self.cgImage!.height))
+//
+//        let cropSize = refWidth > refHeight ? refHeight : refWidth
+//        let absSize = rect.width > rect.height ? rect.height : rect.width
+//
+//        let scaleRatio = rect.width / size.width
+//
+//        let ratio = cropSize / absSize
+//
+//        var x = abs(rect.minX * ratio)
+//        var y = abs(rect.minY * ratio)
+//
+//        let cropRect = CGRect(x: x, y: y, width: cropSize / scaleRatio, height: cropSize / scaleRatio)
+//        let imageRef = self.cgImage?.cropping(to: cropRect)
+//        let cropped = UIImage(cgImage: imageRef!, scale: 0.0, orientation: self.imageOrientation)
+//
+//        return cropped
+//    }
+//
+//
+//
+//}

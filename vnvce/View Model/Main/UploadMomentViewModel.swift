@@ -10,7 +10,7 @@ import UIKit
 
 class UploadMomentViewModel: ObservableObject {
     private let momentAPI = MomentAPI.shared
-    private let storageAPI = StorageAPI.shared
+    private let storageAPI = StorageAPIOLD.shared
     
     @Published var uploading = false
     @Published var progress: Double = 0

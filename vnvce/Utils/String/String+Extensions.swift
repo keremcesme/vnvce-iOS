@@ -26,4 +26,22 @@ extension String {
         let end = index(start, offsetBy: range.upperBound - range.lowerBound)
         return String(self[start ..< end])
     }
+    
+    enum StorageMediaType: String {
+        case image = "image"
+        case movie = "movie"
+        
+        var `extension`: String {
+            switch self {
+            case .image:
+                return "jpg"
+            case .movie:
+                return "mp4"
+            }
+        }
+    }
+    
+    func convertStorageName(_ type: StorageMediaType = .image) -> String {
+        return "\(type.rawValue)-\(self).\(type.extension)"
+    }
 }

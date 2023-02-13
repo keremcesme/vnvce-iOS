@@ -10,7 +10,7 @@ import UIKit
 
 class UploadPostViewModel: ObservableObject {
     private let postAPI = PostAPI.shared
-    private let storageAPI = StorageAPI.shared
+    private let storageAPI = StorageAPIOLD.shared
     
     @Published public var showUploadPostView: Bool = false
     @Published public var showOutputView: Bool = false

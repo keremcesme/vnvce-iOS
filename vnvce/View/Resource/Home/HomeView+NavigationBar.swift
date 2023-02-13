@@ -1,5 +1,8 @@
 
 import SwiftUI
+import Nuke
+import NukeUI
+
 
 extension HomeView {
     @ViewBuilder
@@ -32,7 +35,7 @@ extension HomeView {
                 .frame(width: height, height: height)
                 .overlay {
                     Image(systemName: "person.badge.plus")
-                        .foregroundColor(.white).opacity(0.9)
+                        .foregroundColor(.white).opacity(0.65)
                         .font(.system(size: 18, weight: .medium, design: .default))
                 }
         }
@@ -53,27 +56,53 @@ extension HomeView {
             self.homeVM.showProfileView = true
             self.cameraManager.stopSession()
         } label: {
-            ZStack {
-                Group {
-                    Image("me")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: height - 1, height: height - 1)
-                    BlurView(style: .dark)
-                        .frame(width: height, height: height)
-                    Image("me")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: height - 5, height: height - 5)
+            if let url = currentUserVM.user?.profilePictureURL {
+                LazyImage(url: URL(string: url)) { state in
+                    if let uiImage = state.imageContainer?.image {
+                        ZStack {
+                            Group {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: height - 1, height: height - 1)
+                                BlurView(style: .dark)
+                                    .frame(width: height, height: height)
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: height - 5, height: height - 5)
+                            }
+                            .clipShape(Circle())
+                        }
+                    } else {
+                        EmptyProfilePicture(height)
+                    }
                 }
+                .pipeline(.shared)
+                .processors([ImageProcessors.Resize(width: height)])
+                .priority(.veryHigh)
+            } else {
+                EmptyProfilePicture(height)
             }
-            .clipShape(Circle())
         }
         .fullScreenCover(isPresented: $homeVM.showProfileView) {
             ProfileView()
                 .clearBackground()
                 .environmentObject(currentUserVM)
         }
+    }
+    
+    @ViewBuilder
+    private func EmptyProfilePicture(_ height: CGFloat) -> some View {
+        Circle()
+            .fill(.ultraThinMaterial)
+            .colorScheme(.dark)
+            .frame(width: height, height: height)
+            .overlay {
+                Image(systemName: "person.crop.circle")
+                    .foregroundColor(.white).opacity(0.65)
+                    .font(.system(size: height - 10, weight: .light, design: .default))
+            }
     }
 }
 

@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "cf6e49fe76a8577763be1c321f6a24efe30bfd2b",
-        "version" : "3.5.5"
+        "revision" : "4766ff8089c49b4af0206ab82ff3117613b82972",
+        "version" : "3.5.6"
       }
     },
     {
@@ -312,7 +312,7 @@
       "location" : "https://github.com/socialayf/vnvce-core",
       "state" : {
         "branch" : "main",
-        "revision" : "f268db02bfec443ff79694c4c97f03b1d2b15932"
+        "revision" : "ac2d0e2be7d23a23ad70c8589d4d694f0a85b208"
       }
     },
     {

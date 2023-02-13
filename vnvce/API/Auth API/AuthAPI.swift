@@ -106,7 +106,7 @@ extension AuthAPI {
                 return nil
             }
         default:
-//            try await forceLogout()
+            try await forceLogout()
             print("Unknown Status Code: \(status.code)")
             return nil
         }

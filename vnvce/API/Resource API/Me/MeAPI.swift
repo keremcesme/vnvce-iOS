@@ -33,7 +33,7 @@ extension MeAPI {
         request.setContentType(.json)
         request.setAcceptVersion(.v1)
         
-        let result = try await authAPI.secureTask(request, decode: HTTPStatus.self)
+        _ = try await authAPI.secureTask(request, decode: HTTPStatus.self)
     }
     
     public func editBiography(_ biography: String?) async throws {
@@ -45,6 +45,18 @@ extension MeAPI {
         request.setContentType(.json)
         request.setAcceptVersion(.v1)
         
-        let result = try await authAPI.secureTask(request, decode: HTTPStatus.self)
+        _ = try await authAPI.secureTask(request, decode: HTTPStatus.self)
+    }
+    
+    public func editProfilePicture(_ payload: VNVCECore.EditProfilePicturePayload.V1) async throws {
+        let url = endpoint.makeURL(routes.editProfilePicture)
+        var request = try URLRequest(url: url, method: .patch)
+        let body = try jsonEncoder.encode(payload)
+     
+        request.httpBody = body
+        request.setContentType(.json)
+        request.setAcceptVersion(.v1)
+        
+        try await authAPI.secureTask(request)
     }
 }

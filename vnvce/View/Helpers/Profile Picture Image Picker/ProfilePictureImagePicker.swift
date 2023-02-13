@@ -22,7 +22,7 @@ struct ProfilePictureImagePicker: View {
             .ignoresSafeArea()
             .background {
                 NavigationLink("", isActive: $showCropView) {
-                    ProfilePictureCropView(image: selectedImage)
+                    ProfilePictureCropView(image: selectedImage, dismiss: dismiss)
                 }
             }
         }
@@ -66,9 +66,11 @@ struct ProfilePictureImagePicker: View {
                           picker.dismiss(animated: true)
                     return
                 }
+                
                 provider.loadObject(ofClass: UIImage.self) { image, error in
                     guard error == nil,
-                    let image = image as? UIImage
+                          let img = image as? UIImage,
+                          let image = img.fixedOrientation()
                     else {
                         picker.dismiss(animated: true)
                         return
@@ -93,9 +95,7 @@ struct ProfilePictureImagePicker: View {
             return imagePicker
         }
         
-        func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
-            
-        }
+        func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
         
         func makeCoordinator() -> Coordinator {
             Coordinator(self)
@@ -110,7 +110,9 @@ struct ProfilePictureImagePicker: View {
             
             func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
                 
-                guard let image = info[.originalImage] as? UIImage else {
+                guard let img = info[.originalImage] as? UIImage,
+                      let image = img.fixedOrientation()
+                else {
                     picker.dismiss(animated: true)
                     return
                 }

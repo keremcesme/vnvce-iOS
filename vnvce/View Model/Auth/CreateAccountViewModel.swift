@@ -13,7 +13,7 @@ import KeychainAccess
 @MainActor
 class CreateAccountViewModel: ObservableObject {
     private let authAPI = AuthAPIOLD.shared
-    private let storageAPI = StorageAPI.shared
+    private let storageAPI = StorageAPIOLD.shared
     private let meAPI = MeAPIOLD.shared
     
     // MARK: Show Create Account View

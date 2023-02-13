@@ -8,7 +8,7 @@ class CurrentUserViewModel: ObservableObject {
     private let keychain = Keychain()
     private let userDefaults = UserDefaults.standard
     
-    @Published private(set) public var user: User.Private?
+    @Published public var user: User.Private?
     
     init() {
 //        Task { await fetchProfile() }
@@ -26,7 +26,7 @@ class CurrentUserViewModel: ObservableObject {
             
             await MainActor.run {
                 self.user = user
-                print(self.user!)
+//                print(self.user!)
             }
         } catch {
             print(error.localizedDescription)

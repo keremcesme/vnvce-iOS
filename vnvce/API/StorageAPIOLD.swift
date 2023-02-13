@@ -25,18 +25,18 @@ enum UploadMomentMediaPhase {
     case success(UploadMomentPayload)
 }
 
-struct StorageAPI {
-    static let shared = StorageAPI()
+struct StorageAPIOLD {
+    static let shared = StorageAPIOLD()
     
     private init() {}
     
-    private let pathBuilder = FirebaseStoragePathBuilder.shared
+    private let pathBuilder = FirebaseStoragePathBuilderOLD.shared
     private let userDefaults = UserDefaults.standard
     
 }
 
 // MARK: Public Methods -
-extension StorageAPI {
+extension StorageAPIOLD {
     public func uploadProfilePicture(image: UIImage) async throws -> UploadedImage {
         return try await uploadProfilePictureTask(image)
     }
@@ -61,7 +61,7 @@ extension StorageAPI {
 }
 
 // MARK: Private Methods -
-private extension StorageAPI {
+private extension StorageAPIOLD {
     private func uploadProfilePictureTask(_ image: UIImage) async throws -> UploadedImage {
         guard let userID = UserDefaults.standard.value(forKey: "currentUserID") as? String else {
             fatalError()
