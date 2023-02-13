@@ -1,0 +1,86 @@
+{
+  "identifier" : "F89A0508",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1639102068",
+    "_askToBuyEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_compatibilityTimeRate" : 6,
+    "_developerTeamID" : "4FWPM5P32R",
+    "_lastSynchronizedDate" : 697768384.99845898,
+    "_locale" : "tr",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "TUR",
+    "_timeRate" : 15
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21209932",
+      "localizations" : [
+
+      ],
+      "name" : "VNVCE Membership",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6445675139",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Cancel anytime",
+              "displayName" : "Membership (Annual)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "vnvce.membership.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual",
+          "subscriptionGroupID" : "21209932",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6445675163",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Cancel anytime",
+              "displayName" : "Membership (Monthly)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "vnvce.membership.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly",
+          "subscriptionGroupID" : "21209932",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}
