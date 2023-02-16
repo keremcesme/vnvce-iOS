@@ -12,7 +12,7 @@
     "_billingIssuesEnabled" : false,
     "_compatibilityTimeRate" : 6,
     "_developerTeamID" : "4FWPM5P32R",
-    "_lastSynchronizedDate" : 697768384.99845898,
+    "_lastSynchronizedDate" : 698010375.57920504,
     "_locale" : "tr",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "TUR",
@@ -33,15 +33,15 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "9.99",
+          "displayPrice" : "23.99",
           "familyShareable" : false,
-          "groupNumber" : 2,
+          "groupNumber" : 1,
           "internalID" : "6445675139",
           "introductoryOffer" : null,
           "localizations" : [
             {
               "description" : "Cancel anytime",
-              "displayName" : "Membership (Annual)",
+              "displayName" : "Annual",
               "locale" : "en_US"
             }
           ],
@@ -58,15 +58,15 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "0.99",
+          "displayPrice" : "2.99",
           "familyShareable" : false,
-          "groupNumber" : 1,
+          "groupNumber" : 2,
           "internalID" : "6445675163",
           "introductoryOffer" : null,
           "localizations" : [
             {
               "description" : "Cancel anytime",
-              "displayName" : "Membership (Monthly)",
+              "displayName" : "Monthly",
               "locale" : "en_US"
             }
           ],

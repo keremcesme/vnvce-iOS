@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "asn1swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tikhop/ASN1Swift",
+      "state" : {
+        "revision" : "b53bee03a942623db25afc5bfb80227b2cb3b425",
+        "version" : "1.2.4"
+      }
+    },
+    {
       "identity" : "boringssl-swiftpm",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
@@ -59,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "0df86ea17d5d281415be74f2290df8431644f156",
-        "version" : "10.4.0"
+        "revision" : "f567ed9a2b30e29159df258049a9c662c517688e",
+        "version" : "10.5.0"
       }
     },
     {
@@ -149,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kean/Nuke",
       "state" : {
-        "branch" : "master",
-        "revision" : "707b8247c6ac4501873086889dbf4e0439bd7455"
+        "branch" : "main",
+        "revision" : "67bd45931180f652159e3342575277a7f197b3ab"
       }
     },
     {
@@ -158,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "4766ff8089c49b4af0206ab82ff3117613b82972",
-        "version" : "3.5.6"
+        "revision" : "434a7432cceca19829bc6e34bdcfc0b0ee4c6801",
+        "version" : "3.5.7"
       }
     },
     {
@@ -176,8 +185,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
       "state" : {
-        "revision" : "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
-        "version" : "2.1.1"
+        "revision" : "ec957ccddbcc710ccc64c9dcbd4c7006fcf8b73a",
+        "version" : "2.2.0"
       }
     },
     {
@@ -285,7 +294,7 @@
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "branch" : "master",
-        "revision" : "63a079f102964a6987eaaf70f8fdc39b84feeece"
+        "revision" : "fc40fb11d4922d6e936a3d2abaa54bcab4fc877e"
       }
     },
     {
@@ -307,12 +316,21 @@
       }
     },
     {
+      "identity" : "tpinappreceipt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tikhop/TPInAppReceipt",
+      "state" : {
+        "revision" : "5b830d6ce6c34bb4bb976917576ab560e7945037",
+        "version" : "3.3.4"
+      }
+    },
+    {
       "identity" : "vnvce-core",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/socialayf/vnvce-core",
       "state" : {
         "branch" : "main",
-        "revision" : "ac2d0e2be7d23a23ad70c8589d4d694f0a85b208"
+        "revision" : "8d3c76e43ebe1163e1c31795beea0fd850b99ed5"
       }
     },
     {

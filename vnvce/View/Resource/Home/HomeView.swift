@@ -29,9 +29,12 @@ struct HomeView: View {
     
     @StateObject public var contactsVM = ContactsViewModel()
     
-    @StateObject private var membershipManager = MembershipManager()
+//    @StateObject private var membershipManager = MembershipManager()
+    @StateObject private var storeKit = StoreKitManager()
     
     @State var showSettings = false
+    
+    @State var showPaywall = false
     
     @Sendable
     private func commonInit() async {
@@ -46,52 +49,76 @@ struct HomeView: View {
         .environmentObject(cameraManager)
         .environmentObject(homeVM)
         .environmentObject(contactsVM)
+        .environmentObject(storeKit)
         .taskInit(commonInit)
-        .overlay {
-            if cameraManager.image != nil {
-                Color.black
-                    .overlay {
-                        VStack(spacing: 20) {
-                            Text("Products")
-                            ForEach(self.membershipManager.products.reversed()) { product in
-                                Button {
-                                    Task {
-                                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                        await membershipManager.purchase(product)
-                                    }
-                                } label: {
-                                    Text("\(product.displayPrice) - \(product.displayName)")
-                                }
-                            }
-                            
-                            Button {
-                                Task {
-                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                    await membershipManager.beginRefundProcess()
-                                }
-                            } label: {
-                                Text("Begin Refund")
-                            }
-                            
-                            Button {
-                                Task {
-                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                                    showSettings = true
-                                }
-                            } label: {
-                                Text("Show Subs")
-                            }
-                        }
-                    }
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        cameraManager.image = nil
-                        cameraManager.startSession()
-                    }
-            }
+        .onChange(of: cameraManager.image) {
+            showPaywall = $0 != nil
         }
-        .refundRequestSheet(for: membershipManager.currentTransactionID, isPresented: $membershipManager.showRefundRequestSheet)
-        .manageSubscriptionsSheet(isPresented: $showSettings)
+        .sheet(isPresented: $showPaywall) {
+            PurchaseView().environmentObject(storeKit)
+        }
+//        .refundRequestSheet(for: membershipManager.currentTransactionID, isPresented: $membershipManager.showRefundRequestSheet)
+//        .manageSubscriptionsSheet(isPresented: $showSettings)
     }
     
 }
+
+//    .overlay {
+//        if cameraManager.image != nil {
+//            Color.black
+//                .overlay {
+//                    VStack(spacing: 20) {
+//                        Group {
+//                            if let status = membershipManager.currrentStatus {
+//                                Text("Renewal State")
+//                                if #available(iOS 15.4, *) {
+//                                    Text(status.localizedDescription)
+//                                        .foregroundColor(.white)
+//                                } else {
+//                                    // Fallback on earlier versions
+//                                }
+//                            }
+//
+//                            Text("Transaction ID")
+//                            Text(membershipManager.transactionID)
+//                                .foregroundColor(.white)
+//                        }
+//
+//                        Text("Products")
+//                        ForEach(self.membershipManager.products.reversed()) { product in
+//                            Button {
+//                                Task {
+//                                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+//                                    await membershipManager.purchase(product)
+//                                }
+//                            } label: {
+//                                Text("\(product.displayPrice) - \(product.displayName)")
+//                            }
+//                        }
+//
+//                        Button {
+//                            Task {
+//                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+//                                await membershipManager.beginRefundProcess()
+//                            }
+//                        } label: {
+//                            Text("Begin Refund")
+//                        }
+//
+//                        Button {
+//                            Task {
+//                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+//                                showSettings = true
+//                            }
+//                        } label: {
+//                            Text("Show Subs")
+//                        }
+//                    }
+//                }
+//                .ignoresSafeArea()
+//                .onTapGesture {
+//                    cameraManager.image = nil
+//                    cameraManager.startSession()
+//                }
+//        }
+//    }
