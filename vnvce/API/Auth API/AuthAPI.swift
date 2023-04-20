@@ -22,8 +22,56 @@ actor AuthAPI {
     }
 }
 
-// Access Resource
+// Access Resources
 extension AuthAPI {
+    
+//    func secureTask(
+//        _ request: URLRequest
+//    ) async throws {
+//        var _request = request
+//        _request.setAccessToken()
+//        _request.setAuthID()
+//        _request.setClientID()
+//        _request.setClientOS()
+//
+//        let (_, rsp) = try await session.data(for: _request)
+//
+//        guard let response = rsp as? HTTPURLResponse else {
+//            fatalError()
+//        }
+//
+//        let status = HTTPStatus(statusCode: response.statusCode)
+//
+//        switch status {
+//        case .ok:
+//            return
+//        case .unauthorized:
+//            switch try await generateAccessToken() {
+//            case .ok:
+//                return try await secureTask(request)
+//            case .unauthorized:
+//                switch try await reauthorize() {
+//                case .ok:
+//                    return try await secureTask(request)
+//                case .forbidden:
+//                    try await forceLogout()
+//                default:
+//                    print("Unknown Status Code: \(status.code)")
+//                    return
+//                }
+//            case .forbidden:
+//                try await forceLogout()
+//            default:
+//                print("Unknown Status Code: \(status.code)")
+//                return
+//            }
+//        case .forbidden:
+//            try await forceLogout()
+//        default:
+//            print("Unknown Status Code: \(status.code)")
+//            return
+//        }
+//    }
     
     func secureTask(
         _ request: URLRequest
@@ -53,16 +101,25 @@ extension AuthAPI {
                 switch try await reauthorize() {
                 case .ok:
                     return try await secureTask(request)
-                default:
+                case .forbidden:
                     try await forceLogout()
                     return nil
+                default:
+                    print("Unknown Status Code: \(status.code)")
+                    return nil
                 }
-            default:
+            case .forbidden:
                 try await forceLogout()
                 return nil
+            default:
+                print("Unknown Status Code: \(status.code)")
+                return nil
             }
+        case .forbidden:
+            try await forceLogout()
+            return nil
         default:
-//            try await forceLogout()
+            print("Unknown Status Code: \(status.code)")
             return nil
         }
     }
@@ -97,16 +154,24 @@ extension AuthAPI {
                 switch try await reauthorize() {
                 case .ok:
                     return try await secureTask(request, decode: to)
-                default:
+                case .forbidden:
                     try await forceLogout()
                     return nil
+                default:
+                    print("Unknown Status Code: \(status.code)")
+                    return nil
                 }
-            default:
+            case .forbidden:
                 try await forceLogout()
                 return nil
+            default:
+                print("Unknown Status Code: \(status.code)")
+                return nil
             }
+        case .forbidden:
+            try await forceLogout()
+            return nil
         default:
-//            try await forceLogout()
             print("Unknown Status Code: \(status.code)")
             return nil
         }
@@ -114,8 +179,8 @@ extension AuthAPI {
     
     private func forceLogout() async throws {
         await MainActor.run {
-            userDefaults.set(false, forKey: UserDefaultsKey.loggedIn)
-            userDefaults.set(false, forKey: UserDefaultsKey.accountIsCreated)
+            UserDefaults.standard.set(false, forKey: UserDefaultsKey.loggedIn)
+            UserDefaults.standard.set(false, forKey: UserDefaultsKey.accountIsCreated)
         }
         
         try keychain.removeAll()
@@ -498,9 +563,11 @@ extension AuthAPI {
         _ = try? await session.data(for: request)
         
         try? keychain.removeAll()
-        
+    
         await MainActor.run {
             UIDevice.current.setStatusBar(style: .default, animation: true)
+            UserDefaults.standard.set(false, forKey: UserDefaultsKey.loggedIn)
+            UserDefaults.standard.set(false, forKey: UserDefaultsKey.accountIsCreated)
         }
     }
 }

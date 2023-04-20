@@ -1,5 +1,5 @@
 //
-//  RelationshipAPI.swift
+//  RelationshipAPIOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 25.09.2022.
@@ -8,8 +8,8 @@
 import Foundation
 import Alamofire
 
-struct RelationshipAPI {
-    static let shared = RelationshipAPI()
+struct RelationshipAPIOLD {
+    static let shared = RelationshipAPIOLD()
     
     private init() {}
  
@@ -19,7 +19,7 @@ struct RelationshipAPI {
 }
 
 // MARK: Public Methods -
-extension RelationshipAPI {
+extension RelationshipAPIOLD {
     
     public func fetchRelationship(userID: UUID) async throws -> Relationship {
         return try await secureAPI.task({
@@ -35,7 +35,7 @@ extension RelationshipAPI {
 }
 
 // MARK: Private Methods -
-private extension RelationshipAPI {
+private extension RelationshipAPIOLD {
     
     private func fetchRelationshipTask(userID: UUID) async throws -> Result<Relationship, HTTPStatus> {
         

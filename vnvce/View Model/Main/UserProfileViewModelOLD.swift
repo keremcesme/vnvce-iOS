@@ -1,5 +1,5 @@
 //
-//  UserProfileViewModel.swift
+//  UserProfileViewModelOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 25.09.2022.
@@ -8,10 +8,10 @@
 import SwiftUI
 
 @MainActor
-class UserProfileViewModel: ObservableObject {
+class UserProfileViewModelOLD: ObservableObject {
     
     private let userAPI = UserAPI.shared
-    private let relationshipAPI = RelationshipAPI.shared
+    private let relationshipAPI = RelationshipAPIOLD.shared
     
     @Published public private(set) var user: User.PublicOLD
     
@@ -68,7 +68,7 @@ class UserProfileViewModel: ObservableObject {
     }
 }
 
-private extension UserProfileViewModel {
+private extension UserProfileViewModelOLD {
     
     private func fetchProfileTask() async {
         if Task.isCancelled { return }

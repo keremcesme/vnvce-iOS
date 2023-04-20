@@ -1,5 +1,5 @@
 //
-//  UserMomentsView.swift
+//  UserMomentsViewOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 31.10.2022.
@@ -14,13 +14,13 @@ import NukeUI
 struct MomentsGridView: View {
     @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     
-    @StateObject private var momentsVM: MomentsViewModel
+    @StateObject private var momentsVM: MomentsViewModelOLD
     
     private let proxy: ScrollViewProxy
     
     private var relationship: Relationship?
     
-    init(proxy: ScrollViewProxy, momentsVM: MomentsViewModel, relationship: Relationship? = .me) {
+    init(proxy: ScrollViewProxy, momentsVM: MomentsViewModelOLD, relationship: Relationship? = .me) {
         self.proxy = proxy
         self._momentsVM = StateObject(wrappedValue: momentsVM)
         self.relationship = relationship
@@ -54,7 +54,7 @@ struct MomentsGridView: View {
 
 //@MainActor
 struct MomentsGridCellView: View {
-    @StateObject private var momentsVM: MomentsViewModel
+    @StateObject private var momentsVM: MomentsViewModelOLD
     
     @EnvironmentObject private var scrollViewDelegate: RefreshableScrollViewModel
     @EnvironmentObject public var navigationController: NavigationController
@@ -64,7 +64,7 @@ struct MomentsGridCellView: View {
     private var index: Int
     private let proxy: ScrollViewProxy
     
-    init(momentGroup: Binding<Moments>, index: Int, proxy: ScrollViewProxy, vm: MomentsViewModel) {
+    init(momentGroup: Binding<Moments>, index: Int, proxy: ScrollViewProxy, vm: MomentsViewModelOLD) {
         self._momentGroup = momentGroup
         self.index = index
         self.proxy = proxy
@@ -144,9 +144,9 @@ struct MomentsGridCellView: View {
         } else {
             LazyImage(url: moment.returnURL, content: LazyImageView)
                 .animation(nil)
-                .pipeline(.shared)
-                .processors([ImageProcessors.Resize(width: width)])
-                .priority(.veryHigh)
+//                .pipeline(.shared)
+//                .processors([ImageProcessors.Resize(width: width)])
+//                .priority(.veryHigh)
         }
     }
     

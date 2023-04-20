@@ -10,7 +10,7 @@ import SwiftUIX
 import PureSwiftUI
 
 struct UserMomentView: View {
-    @StateObject public var momentsVM: UserMomentsViewModel
+    @StateObject public var momentsVM: UserMomentsViewModelOLD
     
     public let size: CGSize
     
@@ -21,7 +21,7 @@ struct UserMomentView: View {
         size: CGSize,
         moment: Binding<Moment>,
         momentsDayIndex: Int,
-        momentsVM: UserMomentsViewModel
+        momentsVM: UserMomentsViewModelOLD
     ) {
         self.size = size
         self._moment = moment

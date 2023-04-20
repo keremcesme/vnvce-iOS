@@ -8,7 +8,7 @@
 import SwiftUI
 import PureSwiftUI
 
-extension UserMomentsView {
+extension UserMomentsViewOLD {
     
     private var previewImageAlignment: Alignment {
         switch momentsVM.openMomentsView {

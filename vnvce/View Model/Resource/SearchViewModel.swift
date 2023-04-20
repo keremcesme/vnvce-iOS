@@ -1,5 +1,5 @@
 
-import Foundation
+import SwiftUI
 import VNVCECore
 
 class SearchViewModel: ObservableObject {
@@ -15,6 +15,8 @@ class SearchViewModel: ObservableObject {
     
     @Published public var isRunning = false
     @Published public var isRunningNext = false
+    
+    @Published public var navigation = NavigationCoordinator()
     
     private var searchTask: Task<Void, Never>?
     
@@ -50,6 +52,13 @@ class SearchViewModel: ObservableObject {
         searchText = trimmedText
         isRunning = !value.isEmpty
     }
+    
+    public func navigationController(_ controller: UINavigationController) {
+        navigation.controller = controller
+        controller.delegate = navigation
+        controller.interactivePopGestureRecognizer?.delegate = navigation
+        controller.interactivePopGestureRecognizer?.isEnabled = true
+    }
 }
 
 extension SearchViewModel {
@@ -65,8 +74,6 @@ extension SearchViewModel {
             await MainActor.run {
                 self.searchResults.metadata = result.metadata
                 self.searchResults.items = result.items
-                let user = User.Public(id: UUID(), username: "ronaldo", displayName: nil, profilePictureURL: "")
-                self.searchResults.items.append(user)
                 print(result.items.count)
             }
         } catch {

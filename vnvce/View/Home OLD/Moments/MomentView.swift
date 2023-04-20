@@ -10,7 +10,7 @@ import SwiftUIX
 import PureSwiftUI
 
 struct MomentView: View {
-    @StateObject public var momentsVM: MomentsViewModel
+    @StateObject public var momentsVM: MomentsViewModelOLD
     
     @Binding private var moment: Moment
     @Binding private var moments: Moments
@@ -18,7 +18,7 @@ struct MomentView: View {
     init(
         moment: Binding<Moment>,
         moments: Binding<Moments>,
-        vm: MomentsViewModel
+        vm: MomentsViewModelOLD
     ) {
         self._moment = moment
         self._moments = moments

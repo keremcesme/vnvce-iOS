@@ -88,6 +88,7 @@ struct ProfilePictureCropView: View {
             SaveButton
             UploadingView
         }
+        .clipped()
         .navigationBarBackButtonHidden(true)
         .toolbar(Toolbar)
         .ignoresSafeArea()

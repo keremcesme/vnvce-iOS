@@ -31,8 +31,8 @@ struct RootView: View {
     @StateObject private var searchVM = SearchViewModelOLD()
     @StateObject private var postsVM = PostsViewModel()
     
-    @StateObject private var momentsVM = UserMomentsViewModel()
-    @StateObject private var momentsVM2 = MomentsViewModel()
+    @StateObject private var momentsVM = UserMomentsViewModelOLD()
+    @StateObject private var momentsVM2 = MomentsViewModelOLD()
     
     @StateObject private var uploadPostVM = UploadPostViewModel()
     

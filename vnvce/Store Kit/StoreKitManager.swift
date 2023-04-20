@@ -143,19 +143,19 @@ extension Transaction {
             appAccountToken: self.appAccountToken!,
             productID: self.productID,
             appBundleID: self.appBundleID,
-            purchaseDate: self.purchaseDate,
-            originalPurchaseDate: self.originalPurchaseDate,
+            purchaseDate: self.purchaseDate.timeIntervalSince1970,
+            originalPurchaseDate: self.originalPurchaseDate.timeIntervalSince1970,
             purchasedQuantity: self.purchasedQuantity,
             productType: .autoRenewable,
             ownershipType: .purchased,
             webOrderLineItemID: self.webOrderLineItemID,
             subscriptionGroupID: self.subscriptionGroupID,
-            expirationDate: self.expirationDate,
+            expirationDate: self.expirationDate?.timeIntervalSince1970,
             isUpgraded: self.isUpgraded,
             offerType: nil,
             offerID: self.offerID,
-            revocationDate: self.revocationDate,
+            revocationDate: self.revocationDate?.timeIntervalSince1970,
             revocationReason: nil,
-            signedDate: self.signedDate)
+            signedDate: self.signedDate.timeIntervalSince1970)
     }
 }

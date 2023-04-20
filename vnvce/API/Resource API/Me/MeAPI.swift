@@ -57,6 +57,6 @@ extension MeAPI {
         request.setContentType(.json)
         request.setAcceptVersion(.v1)
         
-        try await authAPI.secureTask(request)
+        _ = try await authAPI.secureTask(request)
     }
 }

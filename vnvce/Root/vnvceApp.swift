@@ -19,6 +19,7 @@ struct vnvceApp: App {
         Group(content: RootView)
             .environmentObject(appState)
             .environmentObject(notificationCenter)
+            .onChange(of: scenePhase, perform: appState.onChangeScenePhase)
     }
     
     @ViewBuilder
@@ -58,7 +59,7 @@ struct vnvceApp: App {
 
 //                print("Device ID: \(deviceID)")
 //            }
-//            .onChange(of: scenePhase, perform: appState.onChangeScenePhase)
+            
 //                        .onChange(of: scenePhase) { newPhase in
 //                            if newPhase == .inactive {
 //                                print("Inactive")

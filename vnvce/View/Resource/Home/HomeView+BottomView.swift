@@ -1,5 +1,6 @@
 
 import SwiftUI
+import SwiftUIX
 import Introspect
 
 extension HomeView {
@@ -23,9 +24,10 @@ extension HomeView {
         if id == homeVM.cameraRaw {
             cameraManager.startSession()
             homeVM.bottomResetScroll()
+            userMomentsStore.currentMoment = nil
         } else {
             cameraManager.stopSession()
-            if let index = homeVM.testUsers.firstIndex(where: { $0.id.uuidString == homeVM.tab }) {
+            if let index = userMomentsStore.usersWithMoments.firstIndex(where: { $0.owner.id.uuidString == homeVM.tab }) {
                 homeVM.bottomScrollTo(index)
             }
         }
@@ -60,7 +62,7 @@ extension HomeView {
                 Circle()
                     .strokeBorder(.white, lineWidth: 6)
                     .foregroundColor(Color.clear)
-                    .frame(width: 72, height: 72, alignment: .center)
+                    .frame(homeVM.cell.size)
                     .opacity(homeVM.tab == "CAMERA" ? 1 : 0.1)
                 if homeVM.tab != "CAMERA" {
                     Image("Home")
@@ -73,6 +75,9 @@ extension HomeView {
     
     @ViewBuilder
     private var Users: some View {
-        ForEach(Array(homeVM.testUsers.enumerated()), id: \.element.id, content: UserCell)
+        ForEach(Array(userMomentsStore.usersWithMoments.enumerated()), id: \.element.owner.id) {
+            UserCell($0, user: $1.owner, moments: $1.moments)
+        }
     }
+    
 }

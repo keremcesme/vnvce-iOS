@@ -3,12 +3,14 @@ import SwiftUI
 import PureSwiftUI
 
 extension HomeView {
+    
     @ViewBuilder
     public var Background: some View {
         BlurView(style: .systemMaterialDark)
             .background(_Background)
             .overlay(.black.opacity(homeVM.tab == homeVM.cameraRaw ? 1 : 0.5))
             .animation(.default, value: homeVM.tab)
+            .animation(.default, value: userMomentsStore.currentMoment)
             .ignoresSafeArea()
     }
     
@@ -24,10 +26,10 @@ extension HomeView {
     }
     
     private func returnImage() -> String {
-        if let inx = homeVM.testUsers.firstIndex(where: {$0.id.uuidString == homeVM.tab}) {
-            return homeVM.testUsers[inx].moment
+        if let moment = userMomentsStore.currentMoment {
+            return moment.media.url
         } else {
-            return "me"
+            return ""
         }
     }
     

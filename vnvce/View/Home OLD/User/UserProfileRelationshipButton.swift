@@ -9,11 +9,11 @@ import SwiftUI
 import ActionOver
 
 struct UserProfileRelationshipButton: View {
-    @StateObject public var userVM: UserProfileViewModel
+    @StateObject public var userVM: UserProfileViewModelOLD
     
     @State private var showAlert: Bool = false
     
-    init(userVM: UserProfileViewModel) {
+    init(userVM: UserProfileViewModelOLD) {
         self._userVM = StateObject(wrappedValue: userVM)
     }
     

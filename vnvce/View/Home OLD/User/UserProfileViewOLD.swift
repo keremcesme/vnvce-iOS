@@ -1,5 +1,5 @@
 //
-//  UserProfileView.swift
+//  UserProfileViewOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 11.09.2022.
@@ -12,14 +12,14 @@ import NukeUI
 import PureSwiftUI
 import SwiftUIX
 
-struct UserProfileView: View {
+struct UserProfileViewOLD: View {
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject private var currentUserVM: CurrentUserViewModelOLD
     
-    @StateObject public var userVM: UserProfileViewModel
+    @StateObject public var userVM: UserProfileViewModelOLD
     @StateObject private var postsVM: PostsViewModel
-    @StateObject private var momentsVM: MomentsViewModel
+    @StateObject private var momentsVM: MomentsViewModelOLD
     
     @StateObject private var scrollViewDelegate = RefreshableScrollViewModel()
     
@@ -28,9 +28,9 @@ struct UserProfileView: View {
 //    private let user: User.Public
     
     init(user: User.PublicOLD) {
-        self._userVM = StateObject(wrappedValue: UserProfileViewModel(user: user))
+        self._userVM = StateObject(wrappedValue: UserProfileViewModelOLD(user: user))
         self._postsVM = StateObject(wrappedValue: PostsViewModel(.user(userID: user.id)))
-        self._momentsVM = StateObject(wrappedValue: MomentsViewModel(payload: .user(userID: user.id)))
+        self._momentsVM = StateObject(wrappedValue: MomentsViewModelOLD(payload: .user(userID: user.id)))
     }
     
     @Sendable
@@ -153,7 +153,7 @@ struct UserProfileView: View {
     }
 }
 
-extension UserProfileView {
+extension UserProfileViewOLD {
     
     @ToolbarContentBuilder
     private var ToolBar: some ToolbarContent {

@@ -11,7 +11,6 @@ actor TransactionAPI {
     
     public init() {
         endpoint.run = WebConstants.run
-//        endpoint.run = .dev("3f6f-78-135-94-35.ngrok.io")
     }
     
 }
@@ -19,8 +18,7 @@ actor TransactionAPI {
 extension TransactionAPI {
     public func completeTransaction(_ transaction: AppStoreTransaction.V1) async throws {
         let body = try jsonEncoder.encode(transaction)
-//        let url = endpoint.makeURL(routes.transaction)
-        let url = URL(string: "https://3f6f-78-135-94-35.ngrok.io/api/membership/transaction")!
+        let url = endpoint.makeURL(routes.transaction)
         var request = try URLRequest(url: url, method: .post)
         request.setAcceptVersion(.v1)
         request.setClientOS()

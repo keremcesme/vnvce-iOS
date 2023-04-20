@@ -21,7 +21,7 @@ extension SearchViewOLD2 {
     @ViewBuilder
     private func UserCell(_ user: User.PublicOLD) -> some View {
         NavigationLink {
-            UserProfileView(user: user)
+            UserProfileViewOLD(user: user)
                 .environmentObject(currentUserVM)
                 .environmentObject(navigationController)
         } label: {

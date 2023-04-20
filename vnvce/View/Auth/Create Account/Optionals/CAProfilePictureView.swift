@@ -19,9 +19,9 @@ struct CAProfilePictureView: View {
                 .navigationBarTitleDisplayMode(.large)
                 .navigationBarBackButtonHidden(true)
                 .toolbar(ToolBar)
-                .fullScreenCover(isPresented: $showPicker) {
-                    CAProfilePictureLibraryView().environmentObject(picker)
-                }
+//                .fullScreenCover(isPresented: $showPicker) {
+//                    CAProfilePictureLibraryView().environmentObject(picker)
+//                }
 //                .cropImagePicker(show: $showPicker, croppedImage: $croppedImage)
         }
         

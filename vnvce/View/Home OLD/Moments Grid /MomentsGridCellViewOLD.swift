@@ -12,13 +12,13 @@ import Nuke
 import NukeUI
 
 struct MomentsGridCellViewOLD: View {
-    @StateObject private var momentsVM: UserMomentsViewModel
+    @StateObject private var momentsVM: UserMomentsViewModelOLD
     
     @Binding private var moments: Moments
     
     private var index: Int
     
-    init(moments: Binding<Moments>, index: Int, momentsVM: UserMomentsViewModel) {
+    init(moments: Binding<Moments>, index: Int, momentsVM: UserMomentsViewModelOLD) {
         self._moments = moments
         self.index = index
         self._momentsVM = StateObject(wrappedValue: momentsVM)
@@ -101,10 +101,10 @@ struct MomentsGridCellViewOLD: View {
                 Color.primary.opacity(0.05).shimmering()
             }
         }
-        .animation(nil)
-        .pipeline(.shared)
-        .processors([ImageProcessors.Resize(width: size.width)])
-        .priority(.veryHigh)
+//        .animation(nil)
+//        .pipeline(.shared)
+//        .processors([ImageProcessors.Resize(width: size.width)])
+//        .priority(.veryHigh)
     }
     
     @ViewBuilder

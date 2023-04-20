@@ -10,9 +10,9 @@ import SwiftUIX
 import PureSwiftUI
 
 struct MomentsRootView: View {
-    @StateObject private var momentsVM: MomentsViewModel
+    @StateObject private var momentsVM: MomentsViewModelOLD
     
-    init(_ vm: MomentsViewModel) {
+    init(_ vm: MomentsViewModelOLD) {
         self._momentsVM = StateObject(wrappedValue: vm)
     }
     
@@ -30,9 +30,9 @@ struct MomentsRootView: View {
 }
 
 struct MomentsView: View {
-    @StateObject public var momentsVM: MomentsViewModel
+    @StateObject public var momentsVM: MomentsViewModelOLD
     
-    init(_ vm: MomentsViewModel) {
+    init(_ vm: MomentsViewModelOLD) {
         self._momentsVM = StateObject(wrappedValue: vm)
     }
     

@@ -120,10 +120,10 @@ struct PostsGridCellView: View {
                     .shimmering()
             }
         }
-        .animation(nil)
-        .pipeline(.shared)
-        .processors([ImageProcessors.Resize(width: 100)])
-        .priority(.veryHigh)
+//        .animation(nil)
+//        .pipeline(.shared)
+//        .processors([ImageProcessors.Resize(width: 100)])
+//        .priority(.veryHigh)
     }
     
     private func opacity() -> Double {

@@ -17,7 +17,7 @@ struct ProfileViewOLD: View {
     @EnvironmentObject private var postsVM: PostsViewModel
     @EnvironmentObject private var cameraVM: CameraViewModel
     @EnvironmentObject private var camera: CameraManager
-    @EnvironmentObject private var momentsVM: UserMomentsViewModel
+    @EnvironmentObject private var momentsVM: UserMomentsViewModelOLD
     
     @StateObject var scrollDelegate: ScrollViewModel = .init()
     

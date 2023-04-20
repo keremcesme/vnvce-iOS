@@ -6,7 +6,7 @@ extension HomeView {
     @ViewBuilder
     public var PageView: some View {
         GeometryReader(content: _PageView)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     @ViewBuilder
@@ -14,21 +14,22 @@ extension HomeView {
         if UIDevice.current.hasNotch() {
             _TabView
                 .overlay(BottomView, alignment: .top)
-                .overlay(NavigationBar, alignment: .top)
                 .padding(.top, 4)
         } else {
             _TabView
                 .overlay(BottomView, alignment: .top)
-                .overlay(NavigationBar, alignment: .top)
                 .ignoresSafeArea()
         }
-        
     }
     
     @ViewBuilder
     private var _TabView: some View {
         TabView(selection: $homeVM.tab, content: _TabViewContent)
             .tabViewStyle(.page(indexDisplayMode: .never))
+//            .overlay {
+//                Color.red.opacity(0.5)
+//            }
+//            .addGestureRecognizer(homeVM.addGesture())
     }
     
     private func height() -> CGFloat {
@@ -46,6 +47,13 @@ extension HomeView {
     
     private func scrollViewConnector(_ scrollView: UIScrollView) {
         scrollView.bounces = false
+    }
+    
+    @ViewBuilder
+    private var MomentsView: some View {
+        ForEach(Array(userMomentsStore.usersWithMoments.enumerated()), id: \.element.owner.id) { index, _ in
+            UserMomentsView(index, $userMomentsStore.usersWithMoments[index])
+        }
     }
     
 }

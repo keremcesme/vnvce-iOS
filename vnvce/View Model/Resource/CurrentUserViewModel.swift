@@ -26,6 +26,7 @@ class CurrentUserViewModel: ObservableObject {
             
             await MainActor.run {
                 self.user = user
+                print("Test Value:")
 //                print(self.user!)
             }
         } catch {

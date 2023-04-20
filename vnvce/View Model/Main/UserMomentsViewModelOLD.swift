@@ -1,5 +1,5 @@
 //
-//  UserMomentsViewModel.swift
+//  UserMomentsViewModelOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 24.10.2022.
@@ -10,7 +10,7 @@ import SwiftUI
 import Nuke
 
 @MainActor
-class UserMomentsViewModel: NSObject, ObservableObject {
+class UserMomentsViewModelOLD: NSObject, ObservableObject {
     private let momentAPI = MomentAPI.shared
     private let imageLoader = ImageLoader()
     
@@ -184,7 +184,7 @@ class UserMomentsViewModel: NSObject, ObservableObject {
 }
 
 // MARK: Download Images
-extension UserMomentsViewModel {
+extension UserMomentsViewModelOLD {
 //    @Sendable
 //    public func downloadImages() async {
 //        for items in self.moments.enumerated() where items.element.first?.downloadedImage == nil {
@@ -263,7 +263,7 @@ extension UserMomentsViewModel {
 }
 
 // MARK: Gesture:
-extension UserMomentsViewModel: UIGestureRecognizerDelegate {
+extension UserMomentsViewModelOLD: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true

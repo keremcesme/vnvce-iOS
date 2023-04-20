@@ -100,7 +100,7 @@ extension UIDevice {
     
     var screenCornerRadius: CGFloat {
         let window = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        let radius = (window?.screen.displayCornerRadius ?? 0) - 1.5
+        let radius = (window?.screen.displayCornerRadius ?? 0) // - 1.5
         return radius
     }
     

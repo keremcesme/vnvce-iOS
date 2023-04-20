@@ -13,10 +13,10 @@ import NukeUI
 import Introspect
 
 struct UserMomentsRootView: View {
-    @StateObject private var momentsVM: UserMomentsViewModel
-    @StateObject private var momentsVM2: MomentsViewModel
+    @StateObject private var momentsVM: UserMomentsViewModelOLD
+    @StateObject private var momentsVM2: MomentsViewModelOLD
     
-    init(_ momentsVM: UserMomentsViewModel, momentsVM2: MomentsViewModel) {
+    init(_ momentsVM: UserMomentsViewModelOLD, momentsVM2: MomentsViewModelOLD) {
         self._momentsVM = StateObject(wrappedValue: momentsVM)
         self._momentsVM2 = StateObject(wrappedValue: momentsVM2)
     }
@@ -29,7 +29,7 @@ struct UserMomentsRootView: View {
                 if momentsVM.openMomentsView {
                     Color.black.opacity(momentsVM.onDragging ? 0.2 : 1).ignoresSafeArea()
                 }
-                UserMomentsView(momentsVM)
+                UserMomentsViewOLD(momentsVM)
             }
             
             
@@ -37,12 +37,12 @@ struct UserMomentsRootView: View {
     }
 }
 
-struct UserMomentsView: View {
+struct UserMomentsViewOLD: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @StateObject public var momentsVM: UserMomentsViewModel
+    @StateObject public var momentsVM: UserMomentsViewModelOLD
     
-    init(_ momentsVM: UserMomentsViewModel) {
+    init(_ momentsVM: UserMomentsViewModelOLD) {
         self._momentsVM = StateObject(wrappedValue: momentsVM)
     }
     

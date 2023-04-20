@@ -10,7 +10,7 @@ import SwiftUIX
 import PureSwiftUI
 
 struct MomentsDayView: View {
-    @StateObject public var momentsVM: MomentsViewModel
+    @StateObject public var momentsVM: MomentsViewModelOLD
     
     private var proxy: GeometryProxy
     private var index: Int
@@ -21,7 +21,7 @@ struct MomentsDayView: View {
         proxy: GeometryProxy,
         index: Int,
         moments: Binding<Moments>,
-        vm: MomentsViewModel
+        vm: MomentsViewModelOLD
     ) {
         self.proxy = proxy
         self.index = index

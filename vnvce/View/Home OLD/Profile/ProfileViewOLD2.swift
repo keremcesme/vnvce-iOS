@@ -22,7 +22,7 @@ struct ProfileViewOLD2: View {
     
     @EnvironmentObject public var currentUserVM: CurrentUserViewModelOLD
     
-    @StateObject public var momentsVM = MomentsViewModel()
+    @StateObject public var momentsVM = MomentsViewModelOLD()
     
     @EnvironmentObject private var scrollViewDelegate: RefreshableScrollViewModel
     

@@ -4,6 +4,7 @@ import SwiftUIX
 import PureSwiftUI
 import SwiftyContacts
 import PhoneNumberKit
+import Introspect
 
 struct SearchView: View {
     @Environment(\.dismiss) public var dismiss
@@ -38,6 +39,7 @@ struct SearchView: View {
             .clearBackground()
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(Toolbar)
+            .introspectNavigationController(customize: searchVM.navigationController)
         }
         .cornerRadius(UIDevice.current.screenCornerRadius, corners: [.topLeft, .topRight])
         .ignoresSafeArea()

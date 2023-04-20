@@ -26,11 +26,11 @@ struct PostRootView: View {
                 if postsVM.selectedPost.show {
                     Color.black.opacity(0.2).ignoresSafeArea()
                 }
-                if let posts = postsVM.postResults.items,
-                   let selectedPost = postsVM.selectedPost.post,
-                   let index = posts.firstIndex(where: { $0 == selectedPost }) {
-                    PostView(postsVM, post: $postsVM.postResults.items[index])
-                }
+//                if let posts = postsVM.postResults.items,
+//                   let selectedPost = postsVM.selectedPost.post,
+//                   let index = posts.firstIndex(where: { $0 == selectedPost }) {
+//                    PostView(postsVM, post: $postsVM.postResults.items[index])
+//                }
 //                if let post = postsVM.selectedPost.post {
 //                    PostView(postsVM, post: post)
 //                }

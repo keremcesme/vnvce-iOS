@@ -1,5 +1,5 @@
 //
-//  MomentsViewModel.swift
+//  MomentsViewModelOLD.swift
 //  vnvce
 //
 //  Created by Kerem Cesme on 7.11.2022.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 //@MainActor
-class MomentsViewModel: NSObject, ObservableObject {
+class MomentsViewModelOLD: NSObject, ObservableObject {
     private let momentAPI = MomentAPI.shared
     private let imageLoader = ImageLoader()
     private let imageDownloader = ImageDownloader()
@@ -51,7 +51,7 @@ class MomentsViewModel: NSObject, ObservableObject {
 
 // MARK: Actions:
 @MainActor
-extension MomentsViewModel {
+extension MomentsViewModelOLD {
     public func gridCellTapAction(index: Int, size: CGSize, frame: CGRect) async {
         guard !viewWillAppear else { return }
         self.onDragging = false
@@ -110,7 +110,7 @@ extension MomentsViewModel {
 }
 
 // MARK: Fetch Moments
-extension MomentsViewModel {
+extension MomentsViewModelOLD {
     
     @MainActor
     public func fetchMoments() async {
@@ -166,7 +166,7 @@ extension MomentsViewModel {
 }
 
 // MARK: Download Images
-extension MomentsViewModel {
+extension MomentsViewModelOLD {
     
     @Sendable
     public func downloadImages() async {
@@ -219,7 +219,7 @@ extension MomentsViewModel {
 }
 
 // MARK: Gesture PUBLIC -
-extension MomentsViewModel {
+extension MomentsViewModelOLD {
     // MARK: Adding Gesture
     public func addGesture() {
         let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(gesture))
@@ -244,7 +244,7 @@ extension MomentsViewModel {
 }
 
 // MARK: Gesture PRIVATE -
-extension MomentsViewModel: UIGestureRecognizerDelegate {
+extension MomentsViewModelOLD: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
