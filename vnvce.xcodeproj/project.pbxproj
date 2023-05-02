@@ -21,6 +21,7 @@
 		0C0A184A29F9C7E8007D6275 /* MomentOutputView+ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0A184929F9C7E8007D6275 /* MomentOutputView+ImageView.swift */; };
 		0C0B25A229DA106E00DFE2B5 /* RelationshipAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0B25A129DA106E00DFE2B5 /* RelationshipAPI.swift */; };
 		0C0B25A429DAF63F00DFE2B5 /* UserProfileView+RelationshipButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0B25A329DAF63F00DFE2B5 /* UserProfileView+RelationshipButton.swift */; };
+		0C0CDD272A01432F00C07FEB /* VNVCECore in Frameworks */ = {isa = PBXBuildFile; productRef = 0C0CDD262A01432F00C07FEB /* VNVCECore */; };
 		0C0D3EB528D8DFE9008BDC81 /* WithAnimation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB428D8DFE9008BDC81 /* WithAnimation+Extensions.swift */; };
 		0C0D3EB728D8E022008BDC81 /* CustomAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB628D8E022008BDC81 /* CustomAnimations.swift */; };
 		0C0D3EB928D8E2B7008BDC81 /* PostView+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0D3EB828D8E2B7008BDC81 /* PostView+Properties.swift */; };
@@ -115,7 +116,6 @@
 		0C6CF67029A4087200CFEA0D /* UserMomentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6CF66F29A4087200CFEA0D /* UserMomentsViewModel.swift */; };
 		0C6CF67329A40EE500CFEA0D /* UserMomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6CF67229A40EE400CFEA0D /* UserMomentsView.swift */; };
 		0C6CF67529A4163300CFEA0D /* UserMomentsView+NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6CF67429A4163300CFEA0D /* UserMomentsView+NavigationBar.swift */; };
-		0C6F80AF29561E2D003EBD2E /* VNVCECore in Frameworks */ = {isa = PBXBuildFile; productRef = 0C6F80AE29561E2D003EBD2E /* VNVCECore */; };
 		0C6F80B229562ACD003EBD2E /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0C6F80B129562ACD003EBD2E /* PhoneNumberKit */; };
 		0C6F80B829562B08003EBD2E /* PhoneNumberField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6F80B729562B08003EBD2E /* PhoneNumberField.swift */; };
 		0C6F80BB295650C2003EBD2E /* ColorfulBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6F80BA295650C2003EBD2E /* ColorfulBackgroundView.swift */; };
@@ -721,6 +721,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C0CDD272A01432F00C07FEB /* VNVCECore in Frameworks */,
 				0CCE6A1B28A3C40E00D65D56 /* SwiftUIX in Frameworks */,
 				0C4FC1B12985EE9E00776AAD /* YPImagePicker in Frameworks */,
 				0C2B8A77299AC6C500A9CA97 /* TPInAppReceipt in Frameworks */,
@@ -734,7 +735,6 @@
 				0CFC50CF28DCC3E1008730A5 /* NukeUI in Frameworks */,
 				0CCE6A1E28A3C41A00D65D56 /* Cache in Frameworks */,
 				0C12E7CC28AEC258006FE3E7 /* NIO in Frameworks */,
-				0C6F80AF29561E2D003EBD2E /* VNVCECore in Frameworks */,
 				0C6F80B229562ACD003EBD2E /* PhoneNumberKit in Frameworks */,
 				0C06619F297DF6F10038E7AA /* StoreKit.framework in Frameworks */,
 				0C5FA01328A6F6BB000BB20F /* Focuser in Frameworks */,
@@ -2347,13 +2347,13 @@
 				0CFC50CE28DCC3E1008730A5 /* NukeUI */,
 				0C1CB65A2919B284006EB109 /* ShapeBuilder */,
 				0C90049D291D720300CAC538 /* Colorful */,
-				0C6F80AE29561E2D003EBD2E /* VNVCECore */,
 				0C6F80B129562ACD003EBD2E /* PhoneNumberKit */,
 				0C066193297D77A40038E7AA /* SwiftyContacts */,
 				0C4FC1A72985DDCA00776AAD /* PhotoSelectAndCrop */,
 				0C4FC1B02985EE9E00776AAD /* YPImagePicker */,
 				0C2B8A76299AC6C500A9CA97 /* TPInAppReceipt */,
 				0C22DFD629A9210B001152AB /* DeviceKit */,
+				0C0CDD262A01432F00C07FEB /* VNVCECore */,
 			);
 			productName = vnvce;
 			productReference = 0CCE69E628A3C3A500D65D56 /* vnvce.app */;
@@ -2475,13 +2475,13 @@
 				0CFC50C928DCC3E0008730A5 /* XCRemoteSwiftPackageReference "Nuke" */,
 				0C1CB6592919B284006EB109 /* XCRemoteSwiftPackageReference "ShapeBuilder" */,
 				0C90049C291D720200CAC538 /* XCRemoteSwiftPackageReference "Colorful" */,
-				0C6F80AD29561E2D003EBD2E /* XCRemoteSwiftPackageReference "vnvce-core" */,
 				0C6F80B029562ACD003EBD2E /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
 				0C066192297D77A40038E7AA /* XCRemoteSwiftPackageReference "SwiftyContacts" */,
 				0C4FC1A62985DDCA00776AAD /* XCRemoteSwiftPackageReference "PhotoSelectAndCrop" */,
 				0C4FC1AF2985EE9D00776AAD /* XCRemoteSwiftPackageReference "YPImagePicker" */,
 				0C2B8A75299AC6C500A9CA97 /* XCRemoteSwiftPackageReference "TPInAppReceipt" */,
 				0C22DFD529A9210B001152AB /* XCRemoteSwiftPackageReference "DeviceKit" */,
+				0C0CDD252A01432F00C07FEB /* XCRemoteSwiftPackageReference "vnvce-core" */,
 			);
 			productRefGroup = 0CCE69E728A3C3A500D65D56 /* Products */;
 			projectDirPath = "";
@@ -3242,6 +3242,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		0C0CDD252A01432F00C07FEB /* XCRemoteSwiftPackageReference "vnvce-core" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socialayf/vnvce-core.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		0C12E7CA28AEC257006FE3E7 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-nio.git";
@@ -3296,14 +3304,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.2.0;
-			};
-		};
-		0C6F80AD29561E2D003EBD2E /* XCRemoteSwiftPackageReference "vnvce-core" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/socialayf/vnvce-core";
-			requirement = {
-				branch = main;
-				kind = branch;
 			};
 		};
 		0C6F80B029562ACD003EBD2E /* XCRemoteSwiftPackageReference "PhoneNumberKit" */ = {
@@ -3410,6 +3410,11 @@
 			package = 0C066192297D77A40038E7AA /* XCRemoteSwiftPackageReference "SwiftyContacts" */;
 			productName = SwiftyContacts;
 		};
+		0C0CDD262A01432F00C07FEB /* VNVCECore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0C0CDD252A01432F00C07FEB /* XCRemoteSwiftPackageReference "vnvce-core" */;
+			productName = VNVCECore;
+		};
 		0C12E7CB28AEC258006FE3E7 /* NIO */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0C12E7CA28AEC257006FE3E7 /* XCRemoteSwiftPackageReference "swift-nio" */;
@@ -3449,11 +3454,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0C5FA01128A6F6BB000BB20F /* XCRemoteSwiftPackageReference "swift-focuser" */;
 			productName = Focuser;
-		};
-		0C6F80AE29561E2D003EBD2E /* VNVCECore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0C6F80AD29561E2D003EBD2E /* XCRemoteSwiftPackageReference "vnvce-core" */;
-			productName = VNVCECore;
 		};
 		0C6F80B129562ACD003EBD2E /* PhoneNumberKit */ = {
 			isa = XCSwiftPackageProductDependency;
