@@ -9,6 +9,8 @@ struct HomeView: View {
     
     @EnvironmentObject private var notificationController: NotificationController
     
+    @StateObject public var keyboardController = KeyboardController()
+    
     @StateObject public var currentUserVM = CurrentUserViewModel()
     @StateObject public var homeVM = HomeViewModel()
     @StateObject public var userMomentsStore = UserMomentsStore()
@@ -16,6 +18,9 @@ struct HomeView: View {
     @StateObject public var searchVM = SearchViewModel()
     @StateObject public var contactsVM = ContactsViewModel()
     @StateObject private var storeKit = StoreKitManager()
+    
+    @StateObject public var shareMomentVM = ShareMomentViewModel()
+    
     
     @State var showSettings = false
     @State var showPaywall = false
@@ -33,21 +38,31 @@ struct HomeView: View {
                 Background
                 PageView
             }
+            .ignoresSafeArea()
             .navigationBarHidden(true)
+            .overlay(MomentOutputViewRoot())
+            
+            .environmentObject(keyboardController)
             .environmentObject(currentUserVM)
             .environmentObject(homeVM)
             .environmentObject(userMomentsStore)
             .environmentObject(cameraManager)
             .environmentObject(contactsVM)
             .environmentObject(storeKit)
+            .environmentObject(shareMomentVM)
             .taskInit(commonInit)
+            
+
+        }
+    }
+}
+
+
+
+
 //            .onChange(of: cameraManager.image) {
 //                showPaywall = $0 != nil
 //            }
 //            .sheet(isPresented: $showPaywall) {
 //                PurchaseView().environmentObject(storeKit)
 //            }
-        }
-    }
-    
-}

@@ -13,6 +13,7 @@ class KeyboardController: ObservableObject {
     @Published var keyboardHeight: CGFloat = 0
     @Published var height: CGFloat = 0
     @Published var duration: CGFloat = 0
+    @Published var isShowed: Bool = false
     
     init() {
         self.listenForKeyboardNotifications()
@@ -28,12 +29,15 @@ class KeyboardController: ObservableObject {
                     let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
                     let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? CGFloat
                 else { return }
-                
-                self.duration = duration
-                self.height = keyboardRect.height
-                withAnimation(.spring(response: duration, dampingFraction: 1, blendDuration: 0)){
-                    self.keyboardHeight = keyboardRect.height
+                DispatchQueue.main.async {
+                    self.duration = duration
+                    self.height = keyboardRect.height
+                    self.isShowed = true
+                    withAnimation(.spring(response: duration, dampingFraction: 1, blendDuration: 0)){
+                        self.keyboardHeight = keyboardRect.height
+                    }
                 }
+                
             }
             
             NotificationCenter.default.addObserver(
@@ -45,10 +49,15 @@ class KeyboardController: ObservableObject {
                     let userInfo = notification.userInfo,
                     let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? CGFloat
                 else { return }
-                self.duration = duration
-                withAnimation(.spring(response: duration, dampingFraction: 1, blendDuration: 0)){
-                    self.keyboardHeight = 0
+                
+                DispatchQueue.main.async {
+                    self.duration = duration
+                    self.isShowed = false
+                    withAnimation(.spring(response: duration, dampingFraction: 1, blendDuration: 0)){
+                        self.keyboardHeight = 0
+                    }
                 }
+                
             }
             
         }

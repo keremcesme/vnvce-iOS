@@ -1,6 +1,9 @@
 
 import SwiftUI
 import SwiftUIX
+import PureSwiftUI
+import Nuke
+import NukeUI
 
 extension HomeView {
     @ViewBuilder
@@ -19,6 +22,11 @@ extension HomeView {
         return 1 - minX / homeVM.momentSize.width * 1.5
     }
     
+    private func getBlurOpacity(_ proxy: GeometryProxy) -> CGFloat {
+        let minX = abs(proxy.frame(in: .global).minX)
+        return  minX / homeVM.momentSize.width * 2
+    }
+    
     private func getCornerRadius(_ proxy: GeometryProxy)  -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
         let radius = minX / 12.5
@@ -29,18 +37,18 @@ extension HomeView {
     private func _CameraView(_ proxy: GeometryProxy) -> some View {
         if UIDevice.current.hasNotch() {
             VStack(spacing: 10){
-                NavigationTopLeading
+                CameraNavigationBar
                     .opacity(getOpacity(proxy))
                     .scaleEffect(getScale(proxy), anchor: .leading)
-                _CameraView
+                _CameraUIView(proxy)
                     .scaleEffect(getScale(proxy))
             }
         } else {
             ZStack(alignment: .topLeading){
-                _CameraView
+                _CameraUIView(proxy)
                 Group {
                     GradientForNoneNotch
-                    NavigationTopLeading
+                    CameraNavigationBar
                 }
                     .opacity(getOpacity(proxy))
             }
@@ -52,11 +60,106 @@ extension HomeView {
     }
     
     @ViewBuilder
-    private var NavigationTopLeading: some View {
-        VNVCELogo.TextAndLogo()
-            .frame(height: homeVM.navBarHeight)
-            .padding(.horizontal, 20)
-            .padding(.top, !UIDevice.current.hasNotch() ? UIDevice.current.statusBarHeight() + 4 : 0)
+    private var CameraNavigationBar: some View {
+        GeometryReader {
+            let height = $0.size.height
+            HStack(spacing: 15){
+                VNVCELogo.TextAndLogo()
+                    .frame(height: height)
+                Spacer()
+                _AddFriendButton(height)
+                _ProfileButton(height)
+            }
+        }
+        .frame(height: homeVM.navBarHeight)
+        .padding(.horizontal, 20)
+        .padding(.top, !UIDevice.current.hasNotch() ? UIDevice.current.statusBarHeight() + 4 : 0)
+        .opacity(!cameraManager.outputWillShowed ? 1 : 0.00001)
+        .animation(.default, value: cameraManager.outputWillShowed)
+    }
+    
+    @ViewBuilder
+    private func _AddFriendButton(_ height: CGFloat) -> some View {
+        Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            self.homeVM.showSearchView = true
+            self.cameraManager.stopSession()
+        } label: {
+            Circle()
+                .fill(.ultraThinMaterial)
+                .colorScheme(.dark)
+                .frame(width: height, height: height)
+                .overlay {
+                    Image(systemName: "person.badge.plus")
+                        .foregroundColor(.white).opacity(0.65)
+                        .font(.system(size: 18, weight: .medium, design: .default))
+                }
+        }
+        .buttonStyle(ScaledButtonStyle())
+        .fullScreenCover(isPresented: $homeVM.showSearchView) {
+            SearchView()
+                .clearBackground()
+                .environmentObject(searchVM)
+                .environmentObject(contactsVM)
+                
+        }
+    }
+    
+    @ViewBuilder
+    private func _ProfileButton(_ height: CGFloat) -> some View {
+        Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            self.homeVM.showProfileView = true
+            self.cameraManager.stopSession()
+        } label: {
+            if let url = currentUserVM.user?.profilePictureURL {
+                LazyImage(url: URL(string: url)) { state in
+                    if let uiImage = state.imageContainer?.image {
+                        ZStack {
+                            Group {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: height - 1, height: height - 1)
+                                BlurView(style: .dark)
+                                    .frame(width: height, height: height)
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: height - 5, height: height - 5)
+                            }
+                            .clipShape(Circle())
+                        }
+                    } else {
+                        EmptyProfilePicture(height)
+                    }
+                }
+                .pipeline(.shared)
+                .processors([ImageProcessors.Resize(width: height)])
+                .priority(.veryHigh)
+            } else {
+                EmptyProfilePicture(height)
+            }
+        }
+        .buttonStyle(ScaledButtonStyle())
+        .fullScreenCover(isPresented: $homeVM.showProfileView) {
+            ProfileView()
+                .clearBackground()
+                .environmentObject(currentUserVM)
+        }
+    }
+    
+    @ViewBuilder
+    private func EmptyProfilePicture(_ height: CGFloat) -> some View {
+        Circle()
+            .fill(.ultraThinMaterial)
+            .colorScheme(.dark)
+            .frame(width: height, height: height)
+            .overlay {
+                Image(systemName: "person.crop.circle")
+                    .foregroundColor(.white).opacity(0.65)
+                    .font(.system(size: height - 10, weight: .light, design: .default))
+            }
     }
     
     @ViewBuilder
@@ -66,28 +169,33 @@ extension HomeView {
     }
     
     @ViewBuilder
-    private var _CameraView: some View {
+    private func _CameraUIView(_ proxy: GeometryProxy) -> some View {
         Group {
             if UIDevice.current.hasNotch() {
                 CameraViewUI()
-                    .background(.white.opacity(0.05))
-                    .overlay(BlurLayer)
+                    .overlay(BlurLayer(proxy))
                     .cornerRadius(25, style: .continuous)
             } else {
                 CameraViewUI()
-                    .background(.white.opacity(0.05))
-                    .overlay(BlurLayer)
+                    .overlay(BlurLayer(proxy))
             }
         }
         .animation(.default, value: homeVM.tab)
         .animation(.default, value: cameraManager.sessionIsRunning)
+        .yOffsetToYPositionIf(keyboardController.isShowed, keyboardOffset())
+        .animation(.easeInOut(duration: keyboardController.duration), value: keyboardController.isShowed)
+    }
+    
+    func keyboardOffset() -> CGFloat {
+        let safeArea = UIScreen.main.bounds.height - keyboardController.height - userMomentsStore.momentSize.height / 2 - 15
+        return safeArea
     }
     
     @ViewBuilder
-    private var BlurLayer: some View {
-        if (homeVM.tab != homeVM.cameraRaw || !cameraManager.sessionIsRunning) && (cameraManager.configurationStatus == .success) {
+    private func BlurLayer(_ proxy: GeometryProxy) -> some View {
+        if !cameraManager.sessionIsRunning && cameraManager.configurationStatus == .success {
             BlurView(style: .dark)
-//                .cornerRadius(25, style: .continuous)
+                .opacity(getBlurOpacity(proxy))
         }
         
     }

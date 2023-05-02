@@ -26,6 +26,7 @@ struct CameraViewUI: View {
             .frame(camera.previewViewFrame())
             .overlay(FocusAnimationView)
             .overlay(PermissionLayer)
+            .background(.white.opacity(0.05))
 #endif
     }
     

@@ -15,6 +15,7 @@ extension HomeView {
             _TabView
                 .overlay(BottomView, alignment: .top)
                 .padding(.top, 4)
+                .ignoresSafeArea()
         } else {
             _TabView
                 .overlay(BottomView, alignment: .top)
@@ -29,6 +30,9 @@ extension HomeView {
 //            .overlay {
 //                Color.red.opacity(0.5)
 //            }
+            .animation(.default, value: homeVM.tab)
+            .transition(.slide)
+            .ignoresSafeArea()
 //            .addGestureRecognizer(homeVM.addGesture())
     }
     

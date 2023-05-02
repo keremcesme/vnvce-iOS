@@ -1,13 +1,10 @@
-//
-//  CameraController.swift
-//  vnvce
-//
-//  Created by Kerem Cesme on 16.10.2022.
-//
 
 import SwiftUI
 import AVFoundation
 import UIKit
+import Photos
+
+typealias CapturedPhoto = (image: UIImage, photoData: Data)
 
 enum CameraConfiguration {
     case success
@@ -40,7 +37,6 @@ class CameraManager: NSObject, ObservableObject {
     @Published var preview: AVCaptureVideoPreviewLayer!
     
     public let sessionQueue = DispatchQueue(label: "sessionQueue")
-    //    public var backgroundRecordingID: UIBackgroundTaskIdentifier?
     
     weak var delegate: CameraManagerDelegate?
     
@@ -76,11 +72,15 @@ class CameraManager: NSObject, ObservableObject {
     @Published public var focusScale: CGFloat = 0.8
     @Published public var focusPosition: CGPoint = .zero
     
-    @Published private(set) public var shutterAnimation: Bool = false
     @Published private(set) public var capturingPhoto: Bool = false
     
     // MARK: OUTPUT
     @Published public var image: UIImage? = nil
+    @Published public var photoData: Data? = nil
+    @Published public var capturedPhoto: CapturedPhoto? = nil
+    
+    @Published public var outputWillShowed: Bool = false
+    @Published public var outputDidShowed: Bool = false
     
     override init() {
         self.backCaptureDevice = device.setCaptureDevice()
@@ -91,7 +91,7 @@ class CameraManager: NSObject, ObservableObject {
         super.init()
         
 #if !targetEnvironment(simulator)
-        self.session.sessionPreset = .high
+        self.session.sessionPreset = .photo
         self.initalizeZoomFactors()
         self.makeReadyPreviewView()
         self.attemtToConfigureSession()
@@ -99,7 +99,9 @@ class CameraManager: NSObject, ObservableObject {
 #endif
         
     }
-    
+}
+
+extension CameraManager {
     private func initalizeZoomFactors() {
         switch self.backCameraType {
         case .triple, .wideAndUltraWide:
@@ -137,7 +139,6 @@ class CameraManager: NSObject, ObservableObject {
         let height = width * 3 / 2
         return CGSize(width, height)
     }
-    
     
     // MARK: STEP 2
     // [1] Attempt to Session Configuration
@@ -317,8 +318,12 @@ class CameraManager: NSObject, ObservableObject {
     // MARK: Resume Session
     public func resumeInterruptedSession() {
         sessionQueue.async {
-            self.startSession()
-            self.sessionIsRunning = self.session.isRunning
+            if !self.session.isRunning {
+                self.startSession()
+                DispatchQueue.main.async {
+                    self.sessionIsRunning = self.session.isRunning
+                }
+            }
         }
     }
     
@@ -335,9 +340,7 @@ class CameraManager: NSObject, ObservableObject {
             }
         }
     }
-    
 }
-
 
 // MARK: Camera Zoom Mods
 extension CameraManager {
@@ -488,15 +491,11 @@ extension CameraManager {
 
 // MARK: Take Photo
 extension CameraManager {
-    @Sendable
+    
     public func capturePhoto() {
-        if image == nil && !capturingPhoto {
-            self.capturingPhoto = true
-            self.shutterAnimation = true
+        if image == nil && !capturingPhoto && sessionIsRunning {
+            self.outputWillShowed = true
             self.takePhoto()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.shutterAnimation = false
-            }
         }
     }
     
@@ -505,6 +504,8 @@ extension CameraManager {
             guard let photoOutputConnection = self.photoOutput.connection(with: .video) else {
                 return
             }
+            
+            self.capturingPhoto = true
             
             photoOutputConnection.isVideoMirrored = self.cameraPosition == .front
             
@@ -529,6 +530,9 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         didFinishProcessingPhoto photo: AVCapturePhoto,
         error: Error?
     ) {
+        defer {
+            self.capturingPhoto = false
+        }
         guard error == nil else {
             print("Error capturing photo [1]: \(error!.localizedDescription)")
             return
@@ -545,13 +549,12 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         }
         
         DispatchQueue.main.async {
-            self.image = image
+            self.capturedPhoto = (image, photoData)
+            self.outputDidShowed = true
             self.capturingPhoto = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if self.image != nil {
-                    self.stopSession()
-                }
-            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+//                self.stopSession()
+//            }
         }
     }
 }

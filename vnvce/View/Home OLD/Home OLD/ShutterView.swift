@@ -21,9 +21,9 @@ struct ShutterView: View {
                     .foregroundColor(Color.clear)
                     .frame(width: 80, height: 80, alignment: .center)
             }
-            .scaleEffect(camera.shutterAnimation ? 0.7 : 1)
-            .animation(.easeInOut(duration: 0.2), value: camera.shutterAnimation)
-            .contentShape(Rectangle())
+//            .scaleEffect(camera.shutterAnimation ? 0.7 : 1)
+//            .animation(.easeInOut(duration: 0.2), value: camera.shutterAnimation)
+//            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
 

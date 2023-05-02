@@ -82,8 +82,8 @@ class HomeViewModel: NSObject, ObservableObject {
         self.bottomScrollView.setContentOffset(.init(offset, 0), animated: true)
     }
     
-    public func bottomResetScroll() {
-        self.bottomScrollView.setContentOffset(.zero, animated: true)
+    public func bottomResetScroll(animated: Bool = true) {
+        self.bottomScrollView.setContentOffset(.zero, animated: animated)
     }
     
 }
