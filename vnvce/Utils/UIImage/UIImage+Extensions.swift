@@ -91,7 +91,7 @@ extension UIImage {
             compression -= 0.05
             if let compressedImageData = self.jpegData(compressionQuality: compression) {
                 uploadImageData = compressedImageData
-                print(compressedImageData.count)
+//                print(compressedImageData.count)
             }
         }
         

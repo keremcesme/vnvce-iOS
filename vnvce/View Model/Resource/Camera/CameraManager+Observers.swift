@@ -51,14 +51,12 @@ extension CameraManager {
                 canResumeManually = false
             }
             
-            self.delegate?.sessionWasInterrupted(canResumeManually: canResumeManually)
             
         }
     }
     
     @objc func sessionInterruptionEnded(notification: Notification) {
         
-        self.delegate?.sessionInterruptionEnded()
     }
     
     @objc func sessionRuntimeErrorOccurred(notification: Notification) {
@@ -74,12 +72,11 @@ extension CameraManager {
                     self.startSession()
                 } else {
                     DispatchQueue.main.async {
-                        self.delegate?.sessionRunTimeErrorOccurred()
+                        
                     }
                 }
             }
         } else {
-            self.delegate?.sessionRunTimeErrorOccurred()
             
         }
     }

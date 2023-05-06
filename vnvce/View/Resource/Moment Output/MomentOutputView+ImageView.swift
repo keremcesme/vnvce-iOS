@@ -19,7 +19,7 @@ extension MomentOutputView {
     
     @ViewBuilder
     public var ImageView: some View {
-        Image(uiImage: capturedPhoto.image)
+        Image(uiImage: shareMomentVM.capturedPhoto.image)
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(momentsStore.momentSize)
@@ -30,7 +30,7 @@ extension MomentOutputView {
             .scaleEffect(scaleAmount())
             .mask(Mask)
             .yOffsetToYPositionIf(keyboardController.isShowed, keyboardOffset())
-            .offsetToPositionIf(shareMomentVM.viewWillDisappear, shareMomentVM.animationRect.origin)
+            .offsetToPositionIf(shareMomentVM.viewWillDisappear, currentUserVM.myMomentsRect.origin)
             .animation(.easeInOut(duration: keyboardController.duration), value: keyboardController.isShowed)
     }
     
@@ -39,6 +39,6 @@ extension MomentOutputView {
         RoundedRectangle(cornerRadius: shareMomentVM.viewWillDisappear ?
                          100 : 25,
                          style: .circular)
-        .frame(shareMomentVM.viewWillDisappear ? shareMomentVM.animationRect.size : momentsStore.momentSize)
+        .frame(shareMomentVM.viewWillDisappear ? currentUserVM.myMomentsRect.size : momentsStore.momentSize)
     }
 }

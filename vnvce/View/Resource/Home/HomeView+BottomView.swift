@@ -9,16 +9,16 @@ extension HomeView {
     public var BottomView: some View {
         ScrollView(.horizontal, showsIndicators: false, content: ShutterAndUserMoments)
             .padding(.top, topPadding())
-            .onChange(of: homeVM.tab, perform: onChangeTab)
+            .onChange(of: homeVM.currentTab, perform: onChangeTab)
             .opacity(!cameraManager.outputWillShowed ? 1 : 0.00001)
             .animation(.default, value: cameraManager.outputWillShowed)
     }
     
     private func topPadding() -> CGFloat {
         if UIDevice.current.hasNotch() {
-            return homeVM.momentSize.height + homeVM.navBarHeight + UIDevice.current.statusBarHeight() + 10 + 15
+            return homeVM.contentSize.height + homeVM.navBarHeight + UIDevice.current.statusBarHeight() + 10 + 15
         } else {
-            return homeVM.momentSize.height + 10
+            return homeVM.contentSize.height + 10
         }
     }
     
@@ -29,7 +29,7 @@ extension HomeView {
             userMomentsStore.currentMoment = nil
         } else {
             cameraManager.stopSession()
-            if let index = userMomentsStore.usersWithMoments.firstIndex(where: { $0.owner.id.uuidString == homeVM.tab }) {
+            if let index = homeVM.usersAndTheirMoments.firstIndex(where: { $0.owner.id.uuidString == homeVM.currentTab }) {
                 homeVM.bottomScrollTo(index)
             }
         }
@@ -39,19 +39,25 @@ extension HomeView {
     private func ShutterAndUserMoments() -> some View {
         HStack(alignment: .top, spacing: 15) {
             ShutterButton.id(homeVM.cameraRaw)
+//            HDiv
             Users
-            ReturnHomeButton
+//            ReturnHomeButton
         }
-        .padding(.horizontal, homeVM.bottomPadding)
+        .padding(.horizontal, homeVM.bottomScrollViewPadding)
         .introspectScrollView(customize: homeVM.bottomScrollViewConnector)
     }
     
-    
+    @ViewBuilder
+    private var HDiv: some View {
+        Rectangle()
+            .fill(.white.opacity(0.1))
+            .frame(1, 20)
+    }
     
     @ViewBuilder
     private var ReturnHomeButton: some View {
         Button {
-            homeVM.tab = "CAMERA"
+            homeVM.currentTab = homeVM.cameraRaw
             homeVM.bottomResetScroll()
         } label: {
             Image(systemName: "arrow.uturn.backward")
@@ -64,11 +70,10 @@ extension HomeView {
     
     @ViewBuilder
     private var Users: some View {
-        ForEach(Array(userMomentsStore.usersWithMoments.enumerated()), id: \.element.owner.id) {
+        ForEach(Array(homeVM.usersAndTheirMoments.enumerated()), id: \.element.owner.id) {
             UserCell($0, user: $1.owner, moments: $1.moments)
         }
     }
-    
 }
 
 // SHUTTER BUTTON
@@ -76,10 +81,10 @@ extension HomeView {
     
     private func shutterButtonAction() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        if homeVM.tab == homeVM.cameraRaw {
+        if homeVM.currentTab == homeVM.cameraRaw {
             cameraManager.capturePhoto()
         } else {
-            homeVM.tab = homeVM.cameraRaw
+            homeVM.currentTab = homeVM.cameraRaw
             homeVM.bottomResetScroll()
         }
     }
@@ -95,8 +100,8 @@ extension HomeView {
                     .strokeBorder(.white, lineWidth: 6)
                     .foregroundColor(Color.clear)
                     .frame(homeVM.cell.size)
-                    .opacity(homeVM.tab == homeVM.cameraRaw ? 1 : 0.1)
-                if homeVM.tab != homeVM.cameraRaw {
+                    .opacity(homeVM.currentTab == homeVM.cameraRaw ? 1 : 0.1)
+                if homeVM.currentTab != homeVM.cameraRaw {
                     Image("Home")
                         .foregroundColor(.white)
                         .frame(width: 30, height: 30)
@@ -114,12 +119,13 @@ extension HomeView {
                     .frame(size)
                     .taskInit {
                         let rect = CGRect(frame.center, size)
-                        self.shareMomentVM.setAnimationRect(rect)
+                        self.currentUserVM.setMyMomentsRect(rect)
                     }
             }
             .frame(48)
-            .xOffset(-homeVM.bottomPadding / 2 - 48 / 2)
+            .xOffset(-homeVM.bottomScrollViewPadding / 2 - 48 / 2)
         }
         
     }
+    
 }

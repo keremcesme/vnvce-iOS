@@ -10,6 +10,8 @@ class CurrentUserViewModel: ObservableObject {
     
     @Published public var user: User.Private?
     
+    @Published public var myMomentsRect: CGRect = .zero
+    
     init() {
 //        Task { await fetchProfile() }
     }
@@ -26,8 +28,6 @@ class CurrentUserViewModel: ObservableObject {
             
             await MainActor.run {
                 self.user = user
-                print("Test Value:")
-//                print(self.user!)
             }
         } catch {
             print(error.localizedDescription)
@@ -46,4 +46,7 @@ class CurrentUserViewModel: ObservableObject {
         }
     }
     
+    public func setMyMomentsRect(_ rect: CGRect) {
+        self.myMomentsRect = rect
+    }
 }

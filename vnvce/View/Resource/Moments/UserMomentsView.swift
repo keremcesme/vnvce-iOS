@@ -13,24 +13,24 @@ struct UserMomentsView: View {
     
     public var index: Int
     
-    @Binding public var userWithMoments: UserWithMoments.V1
+    @Binding public var usersAndTheirMoments: UserWithMoments.V1
     
-    public init(_ index: Int, _ userWithMoments: Binding<UserWithMoments.V1>) {
+    public init(_ index: Int, _ usersAndTheirMoments: Binding<UserWithMoments.V1>) {
         self.index = index
-        self._userWithMoments = userWithMoments
-        self._momentsVM = StateObject(wrappedValue: UserMomentsViewModel(first: userWithMoments.moments[0].wrappedValue))
+        self._usersAndTheirMoments = usersAndTheirMoments
+        self._momentsVM = StateObject(wrappedValue: UserMomentsViewModel(first: usersAndTheirMoments.moments[0].wrappedValue))
     }
     
     var body: some View {
         GeometryReader(content: ContentView)
-            .tag(userWithMoments.owner.id.uuidString)
-            .onChange(of: homeVM.tab) {
-                if $0 == userWithMoments.owner.id.uuidString {
+            .tag(usersAndTheirMoments.owner.id.uuidString)
+            .onChange(of: homeVM.currentTab) {
+                if $0 == usersAndTheirMoments.owner.id.uuidString {
                     momentsStore.currentMoment = momentsVM.currentMoment
                 }
             }
             .onChange(of: momentsVM.currentMomentIndex) {
-                let currentMoment = userWithMoments.moments[$0]
+                let currentMoment = usersAndTheirMoments.moments[$0]
                 momentsVM.currentMoment = currentMoment
                 momentsStore.currentMoment = currentMoment
             }
@@ -79,32 +79,8 @@ struct UserMomentsView: View {
     @ViewBuilder
     private func MomentView(_ proxy: GeometryProxy) -> some View {
         ImageView(minX: abs(proxy.frame(in: .global).minX),
-                  userWithMoments: $userWithMoments,
+                  userWithMoments: $usersAndTheirMoments,
                   momentsVM: momentsVM)
-//        Image(momentsVM.currentMoment.media.url)
-//            .resizable()
-//            .aspectRatio(contentMode: .fill)
-//            .blur(getBlur(proxy))
-//            .blur(homeVM.showBlur ? 50 : 0)
-//            .animation(.default, value: homeVM.showBlur)
-//            .frame(momentsStore.momentSize)
-//            .onChange(of: homeVM.touchesBegan) { value in
-//                if value || userWithMoments.owner.id.uuidString != homeVM.tab {
-//                    homeVM.showBlur = true
-//                } else {
-//                    let minX = abs(proxy.frame(in: .global).minX)
-//
-//                    if minX != 0 {
-//                        homeVM.showBlur = true
-//                    } else {
-//                        homeVM.showBlur = false
-//                    }
-//                }
-//            }
-//            .overlay {
-//                BlurView(style: .dark)
-//                    .opacity(getBlurOpacity2(proxy))
-//            }
     }
 }
 
@@ -112,12 +88,12 @@ extension UserMomentsView {
     
     public func getScale(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return abs(1 - minX / momentsStore.momentSize.width / 4)
+        return abs(1 - minX / homeVM.contentSize.width / 4)
     }
     
     public func getOpacity(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return 1 - minX / momentsStore.momentSize.width * 1.5
+        return 1 - minX / homeVM.contentSize.width * 1.5
     }
     
     private func blur(_ proxy: GeometryProxy) -> Bool {
@@ -133,14 +109,14 @@ extension UserMomentsView {
             return minX != 0 ? 50 : 0
         }
         
-//        let value = minX / momentsStore.momentSize.width * 200
+//        let value = minX / homeVM.contentSize.width * 200
 //
 //        return value <= 50 ? value : 50
     }
     
     private func getBlurOpacity2(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return minX / momentsStore.momentSize.width * 5
+        return minX / homeVM.contentSize.width * 5
     }
     
     public func getCornerRadius(_ proxy: GeometryProxy)  -> CGFloat {

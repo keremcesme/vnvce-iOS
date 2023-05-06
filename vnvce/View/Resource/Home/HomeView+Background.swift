@@ -9,11 +9,11 @@ extension HomeView {
     public var Background: some View {
         BlurView(style: .systemMaterialDark)
             .background(_Background)
-//            .overlay(.black.opacity(homeVM.tab == homeVM.cameraRaw && !cameraManager.outputDidShowed ? 1 : 0.5))
+//            .overlay(.black.opacity(homeVM.currentTab == homeVM.cameraRaw && !cameraManager.outputDidShowed ? 1 : 0.5))
             .overlay(.black.opacity(0.5))
-            .animation(.default, value: homeVM.tab)
+            .animation(.default, value: homeVM.currentTab)
             .animation(.default, value: userMomentsStore.currentMoment)
-            .animation(.easeInOut, value: shareMomentVM.viewWillAppear)
+            .animation(.default, value: cameraManager.capturedPhoto)
             .ignoresSafeArea()
     }
     
@@ -24,7 +24,7 @@ extension HomeView {
             Group {
                 ColorfulView()
                 
-                if let outputImage = cameraManager.capturedPhoto?.image, shareMomentVM.viewWillAppear {
+                if let outputImage = cameraManager.capturedPhoto?.image {
                     Image(uiImage: outputImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -41,7 +41,7 @@ extension HomeView {
     
     private func returnImage() -> String {
         if let moment = userMomentsStore.currentMoment {
-            return moment.media.url
+            return moment.url
         } else {
             return ""
         }

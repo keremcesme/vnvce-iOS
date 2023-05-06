@@ -2,6 +2,7 @@
 import SwiftUI
 import SwiftUIX
 import PureSwiftUI
+import VNVCECore
 
 struct MomentOutputViewRoot: View {
     @EnvironmentObject public var cameraManager: CameraManager
@@ -16,24 +17,32 @@ struct MomentOutputViewRoot: View {
                 MomentOutputView(capturedPhoto)
             }
         }
-        
     }
 }
 
 struct MomentOutputView: View {
+    @EnvironmentObject public var appState: AppState
+    
     @EnvironmentObject public var homeVM: HomeViewModel
     @EnvironmentObject public var cameraManager: CameraManager
-    @EnvironmentObject public var momentsStore: UserMomentsStore
     
-    @EnvironmentObject public var shareMomentVM: ShareMomentViewModel
+    @EnvironmentObject public var momentsStore: UserMomentsStore
+    @EnvironmentObject public var currentUserVM: CurrentUserViewModel
+    
     @EnvironmentObject public var keyboardController: KeyboardController
+
+    @StateObject public var locationManager = LocationManager()
+    @StateObject public var shareMomentVM: ShareMomentViewModel
     
     @StateObject public var textHelper = TextHelper()
     
-    public var capturedPhoto: CapturedPhoto
-    
     init(_ capturedPhoto: CapturedPhoto) {
-        self.capturedPhoto = capturedPhoto
+        self._shareMomentVM = StateObject(wrappedValue: .init(capturedPhoto))
+    }
+    
+    private func commonInit() {
+        shareMomentVM.viewWillAppear = true
+//        locationManager.uploadTask = shareMomentVM.upload
     }
     
     var body: some View {
@@ -65,6 +74,6 @@ struct MomentOutputView: View {
         .animation(.easeInOut(duration: keyboardController.duration), value: keyboardController.isShowed)
         .animation(.easeInOut, value: shareMomentVM.viewWillAppear)
         .animation(shareMomentVM.setAnimation(), value: shareMomentVM.viewWillDisappear)
-        .taskInit(shareMomentVM.initView)
+        .taskInit(commonInit)
     }
 }

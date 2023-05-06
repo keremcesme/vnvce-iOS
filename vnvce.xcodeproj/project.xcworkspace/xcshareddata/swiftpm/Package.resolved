@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "abseil-cpp-swiftpm",
+      "identity" : "abseil-cpp-binary",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/abseil-cpp-SwiftPM.git",
+      "location" : "https://github.com/google/abseil-cpp-binary.git",
       "state" : {
-        "revision" : "583de9bd60f66b40e78d08599cc92036c2e7e4e1",
-        "version" : "0.20220203.2"
+        "revision" : "a5f16ba68913840ee5df91b8dc06f5cc063579de",
+        "version" : "1.2021110200.0"
       }
     },
     {
@@ -34,15 +34,6 @@
       "state" : {
         "revision" : "b53bee03a942623db25afc5bfb80227b2cb3b425",
         "version" : "1.2.4"
-      }
-    },
-    {
-      "identity" : "boringssl-swiftpm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
-      "state" : {
-        "revision" : "dd3eda2b05a3f459fc3073695ad1b28659066eab",
-        "version" : "0.9.1"
       }
     },
     {
@@ -77,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "76de51f0e2be35ecb6ce05ed1ad0a73669b05a11",
-        "version" : "10.7.0"
+        "revision" : "4961c0b7eb5d794e47a58dbfdd258b4beca4263a",
+        "version" : "10.9.0"
       }
     },
     {
@@ -86,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "04351180d4c757c6c16127cb57b685fff9ef260b",
-        "version" : "10.6.0"
+        "revision" : "9209b95a2593985569918e5e5ee2bf4ef8ff3640",
+        "version" : "10.9.0"
       }
     },
     {
@@ -95,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleDataTransport.git",
       "state" : {
-        "revision" : "f6b558e3f801f2cac336b04f615ce111fa9ddaa0",
-        "version" : "9.2.1"
+        "revision" : "7874c1b48cbffd086ce8a052c4be873a78613775",
+        "version" : "9.2.3"
       }
     },
     {
@@ -104,17 +95,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "0543562f85620b5b7c510c6bcbef75b562a5127b",
-        "version" : "7.11.0"
+        "revision" : "871d43135925cde39ef7421d8723ce47edfdcc39",
+        "version" : "7.11.1"
       }
     },
     {
-      "identity" : "grpc-ios",
+      "identity" : "grpc-binary",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/grpc/grpc-ios.git",
+      "location" : "https://github.com/google/grpc-binary.git",
       "state" : {
-        "revision" : "8440b914756e0d26d4f4d054a1c1581daedfc5b6",
-        "version" : "1.44.3-grpc"
+        "revision" : "df37f6af8a273bc687e3166843ed86007de57d78",
+        "version" : "1.44.0"
       }
     },
     {
@@ -122,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "96d7cc73a71ce950723aa3c50ce4fb275ae180b8",
-        "version" : "3.1.0"
+        "revision" : "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
+        "version" : "3.1.1"
       }
     },
     {
@@ -168,7 +159,7 @@
       "location" : "https://github.com/kean/Nuke",
       "state" : {
         "branch" : "main",
-        "revision" : "92359a6eec89dca6d9c01e5523bf4c72477b958a"
+        "revision" : "fbad184f38eb628d57b5a4dca4aeaae652333d04"
       }
     },
     {
@@ -176,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "9b051490589ae4f2fa861287407a43a87be7226c",
-        "version" : "3.5.8"
+        "revision" : "6edd6e38a30aec087cb97f7377edf876c29a427e",
+        "version" : "3.5.9"
       }
     },
     {
@@ -248,8 +239,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-atomics.git",
       "state" : {
-        "revision" : "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
-        "version" : "1.0.3"
+        "revision" : "6c89474e62719ddcc1e9614989fff2f68208fe10",
+        "version" : "1.1.0"
       }
     },
     {
@@ -266,8 +257,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "da0fe44138ab86e380f40a2acbd8a611b07d3f64",
-        "version" : "2.4.0"
+        "revision" : "33a20e650c33f6d72d822d558333f2085effa3dc",
+        "version" : "2.5.0"
       }
     },
     {
@@ -284,8 +275,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "9b2848d76f5caad08b97e71a04345aa5bdb23a06",
-        "version" : "2.49.0"
+        "revision" : "546eaa261ec5028b9cc5c7fa883fba9dd5881a3b",
+        "version" : "2.52.0"
       }
     },
     {
@@ -303,7 +294,7 @@
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
         "branch" : "master",
-        "revision" : "54d0aa0d314e649a08b525717ae64da48d51c121"
+        "revision" : "a2b9069cb3738261a2f024a16d1de809b0eb0b01"
       }
     },
     {
@@ -336,10 +327,10 @@
     {
       "identity" : "vnvce-core",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/socialayf/vnvce-core",
+      "location" : "https://github.com/socialayf/vnvce-core.git",
       "state" : {
         "branch" : "main",
-        "revision" : "eec9378cb627a99e98abd3d99733fb2c217b2041"
+        "revision" : "92159cf491fdb2a140a7ea70af6cec81c5a058c0"
       }
     },
     {

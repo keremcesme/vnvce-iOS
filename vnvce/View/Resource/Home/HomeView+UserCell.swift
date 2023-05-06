@@ -2,38 +2,68 @@
 import SwiftUI
 import PureSwiftUI
 import VNVCECore
+import Nuke
+import NukeUI
 
 extension HomeView {
     @ViewBuilder
-    public func UserCell(_ inx: Int, user: VNVCECore.User.V1.Public, moments: [VNVCECore.Moment.V1]) -> some View {
+    public func UserCell(_ inx: Int, user: VNVCECore.User.V1.Public, moments: [VNVCECore.Moment.V1.Public]) -> some View {
         Button {
-            homeVM.tab = user.id.uuidString
+            homeVM.currentTab = user.id.uuidString
             homeVM.bottomScrollTo(inx)
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
             VStack(spacing: 7) {
                 ZStack {
-                    Group {
-                        Image(user.profilePictureURL!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(isSelected(user) ? homeVM.cell.backgroundSelectedImageSize : homeVM.cell.backgroundImageSize)
-                        BlurView(style: .dark)
-                            .frame(isSelected(user) ? homeVM.cell.selectedBlurSize : homeVM.cell.blurSize)
-                        Image(user.profilePictureURL!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(isSelected(user) ? homeVM.cell.selectedImageSize : homeVM.cell.imageSize)
-                        Circle()
-                            .strokeBorder(.white, lineWidth: isSelected(user) ? 6 : 0)
-                            .foregroundColor(Color.clear)
-                            .frame(homeVM.cell.size)
-                            .opacity(isSelected(user) ? 1 : 0.0001)
-                    }
-                    .clipShape(Circle())
+                    LazyImage(url: URL(string: user.profilePictureURL!)) { state in
+                        
+                        Group {
+                            if let uiImage = state.imageContainer?.image {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(isSelected(user) ? homeVM.cell.backgroundSelectedImageSize : homeVM.cell.backgroundImageSize)
+                                BlurView(style: .dark)
+                                    .frame(isSelected(user) ? homeVM.cell.selectedBlurSize : homeVM.cell.blurSize)
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(isSelected(user) ? homeVM.cell.selectedImageSize : homeVM.cell.imageSize)
+                                Circle()
+                                    .strokeBorder(.white, lineWidth: isSelected(user) ? 6 : 0)
+                                    .foregroundColor(Color.clear)
+                                    .frame(homeVM.cell.size)
+                                    .opacity(isSelected(user) ? 1 : 0.0001)
+                            } else {
+                                Circle()
+                                    .fill(.white.opacity(0.1))
+                                    .frame(homeVM.cell.size)
+                                    .shimmering()
+                            }
+                        }
+                        .clipShape(Circle())
+                    }.processors([ImageProcessors.Resize(width: 100)])
+//                    Group {
+//                        Image(user.profilePictureURL!)
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(isSelected(user) ? homeVM.cell.backgroundSelectedImageSize : homeVM.cell.backgroundImageSize)
+//                        BlurView(style: .dark)
+//                            .frame(isSelected(user) ? homeVM.cell.selectedBlurSize : homeVM.cell.blurSize)
+//                        Image(user.profilePictureURL!)
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(isSelected(user) ? homeVM.cell.selectedImageSize : homeVM.cell.imageSize)
+//                        Circle()
+//                            .strokeBorder(.white, lineWidth: isSelected(user) ? 6 : 0)
+//                            .foregroundColor(Color.clear)
+//                            .frame(homeVM.cell.size)
+//                            .opacity(isSelected(user) ? 1 : 0.0001)
+//                    }
+//                    .clipShape(Circle())
                 }
                 .overlay(alignment: .topTrailing) {
-                    if moments.count >= 2 && homeVM.tab != user.id.uuidString {
+                    if moments.count >= 2 && homeVM.currentTab != user.id.uuidString {
                         BlurView(style: .dark)
                             .frame(width: 25, height: 25)
                             .overlay {
@@ -47,7 +77,7 @@ extension HomeView {
                     }
                 }
                  
-                if homeVM.tab != user.id.uuidString {
+                if homeVM.currentTab != user.id.uuidString {
                     Text(user.displayName!)
                         .foregroundColor(.white)
                         .tracking(-0.25)
@@ -61,7 +91,7 @@ extension HomeView {
                         .transition(.opacity.combined(with: .scale))
                 }
             }
-            .animation(.easeInOut(duration: 0.3), value: homeVM.tab)
+            .animation(.easeInOut(duration: 0.3), value: homeVM.currentTab)
         }
         .buttonStyle(ScaledButtonStyle())
         .id(user.id.uuidString)
@@ -70,7 +100,7 @@ extension HomeView {
 //    @ViewBuilder
 //    public func UserCell(_ inx: Int, _ user: UserTestModel) -> some View {
 //        Button {
-//            homeVM.tab = user.id.uuidString
+//            homeVM.currentTab = user.id.uuidString
 //            homeVM.bottomScrollTo(inx)
 //            UIImpactFeedbackGenerator(style: .light).impactOccurred()
 //        } label: {
@@ -96,7 +126,7 @@ extension HomeView {
 //                    .clipShape(Circle())
 //                }
 //                .overlay(alignment: .topTrailing) {
-//                    if user.count >= 2 && homeVM.tab != user.id.uuidString {
+//                    if user.count >= 2 && homeVM.currentTab != user.id.uuidString {
 //                        BlurView(style: .dark)
 //                            .frame(width: 25, height: 25)
 //                            .overlay {
@@ -110,7 +140,7 @@ extension HomeView {
 //                    }
 //                }
 //
-//                if homeVM.tab != user.id.uuidString {
+//                if homeVM.currentTab != user.id.uuidString {
 //                    Text(user.name)
 //                        .foregroundColor(.white)
 //                        .tracking(-0.25)
@@ -121,13 +151,13 @@ extension HomeView {
 //
 //
 //            }
-//            .animation(.easeInOut(duration: 0.3), value: homeVM.tab)
+//            .animation(.easeInOut(duration: 0.3), value: homeVM.currentTab)
 //        }
 //        .buttonStyle(ScaledButtonStyle())
 //        .id(user.id.uuidString)
 //    }
     
     private func isSelected(_ user: VNVCECore.User.V1.Public) -> Bool {
-        return homeVM.tab == user.id.uuidString
+        return homeVM.currentTab == user.id.uuidString
     }
 }

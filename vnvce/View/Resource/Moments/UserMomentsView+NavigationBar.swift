@@ -13,7 +13,7 @@ extension UserMomentsView {
             } label: {
                 HStack(spacing: 10){
                     ProfilePicture
-                    Text(userWithMoments.owner.displayName!)
+                    Text(usersAndTheirMoments.owner.displayName!)
                         .foregroundColor(.white)
                         .font(.system(size: 16, weight: .medium, design: .default))
                     Spacer()
@@ -45,7 +45,7 @@ extension UserMomentsView {
             }
             .buttonStyle(.scaled)
             Button {
-                homeVM.tab = "CAMERA"
+                homeVM.currentTab = "CAMERA"
                 homeVM.bottomResetScroll()
             } label: {
                 Image(systemName: "xmark")
@@ -72,13 +72,13 @@ extension UserMomentsView {
     private var ProfilePicture: some View {
         ZStack {
             Group {
-                Image(userWithMoments.owner.profilePictureURL!)
+                Image(usersAndTheirMoments.owner.profilePictureURL!)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(momentsStore.navBarHeight - 1)
                 BlurView(style: .dark)
                     .frame(momentsStore.navBarHeight)
-                Image(userWithMoments.owner.profilePictureURL!)
+                Image(usersAndTheirMoments.owner.profilePictureURL!)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(momentsStore.navBarHeight - 5)

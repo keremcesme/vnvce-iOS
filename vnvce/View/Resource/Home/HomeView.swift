@@ -19,9 +19,6 @@ struct HomeView: View {
     @StateObject public var contactsVM = ContactsViewModel()
     @StateObject private var storeKit = StoreKitManager()
     
-    @StateObject public var shareMomentVM = ShareMomentViewModel()
-    
-    
     @State var showSettings = false
     @State var showPaywall = false
     @State var isRecordingScreen = false
@@ -30,6 +27,7 @@ struct HomeView: View {
     private func commonInit() async {
         await notificationController.requestAuthorization()
         await currentUserVM.fetchProfile()
+        await homeVM.fetchUsersAndTheirMoments()
     }
     
     var body: some View {
@@ -41,7 +39,7 @@ struct HomeView: View {
             .ignoresSafeArea()
             .navigationBarHidden(true)
             .overlay(MomentOutputViewRoot())
-            
+//            .environmentObject(locationManager)
             .environmentObject(keyboardController)
             .environmentObject(currentUserVM)
             .environmentObject(homeVM)
@@ -49,9 +47,8 @@ struct HomeView: View {
             .environmentObject(cameraManager)
             .environmentObject(contactsVM)
             .environmentObject(storeKit)
-            .environmentObject(shareMomentVM)
+//            .environmentObject(shareMomentVM)
             .taskInit(commonInit)
-            
 
         }
     }

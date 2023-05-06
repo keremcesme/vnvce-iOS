@@ -18,7 +18,7 @@ extension MomentOutputView {
     @ViewBuilder
     private var _BackgroundImage: some View {
 //        if shareMomentVM.viewDidAppear {
-            Image(uiImage: capturedPhoto.image)
+        Image(uiImage: shareMomentVM.capturedPhoto.image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(homeVM.screen.size)

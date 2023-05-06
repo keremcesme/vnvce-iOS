@@ -14,17 +14,17 @@ extension HomeView {
     
     private func getScale(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return abs(1 - minX / homeVM.momentSize.width / 4)
+        return abs(1 - minX / homeVM.contentSize.width / 4)
     }
     
     private func getOpacity(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return 1 - minX / homeVM.momentSize.width * 1.5
+        return 1 - minX / homeVM.contentSize.width * 1.5
     }
     
     private func getBlurOpacity(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return  minX / homeVM.momentSize.width * 2
+        return  minX / homeVM.contentSize.width * 2
     }
     
     private func getCornerRadius(_ proxy: GeometryProxy)  -> CGFloat {
@@ -180,14 +180,14 @@ extension HomeView {
                     .overlay(BlurLayer(proxy))
             }
         }
-        .animation(.default, value: homeVM.tab)
+        .animation(.default, value: homeVM.currentTab)
         .animation(.default, value: cameraManager.sessionIsRunning)
         .yOffsetToYPositionIf(keyboardController.isShowed, keyboardOffset())
         .animation(.easeInOut(duration: keyboardController.duration), value: keyboardController.isShowed)
     }
     
     func keyboardOffset() -> CGFloat {
-        let safeArea = UIScreen.main.bounds.height - keyboardController.height - userMomentsStore.momentSize.height / 2 - 15
+        let safeArea = UIScreen.main.bounds.height - keyboardController.height - homeVM.contentSize.height / 2 - 15
         return safeArea
     }
     

@@ -4,7 +4,12 @@ import AVFoundation
 import UIKit
 import Photos
 
-typealias CapturedPhoto = (image: UIImage, photoData: Data)
+//typealias CapturedPhoto = (image: UIImage, photoData: Data)
+
+struct CapturedPhoto: Equatable {
+    var image: UIImage
+    var photoData: Data
+}
 
 enum CameraConfiguration {
     case success
@@ -37,8 +42,6 @@ class CameraManager: NSObject, ObservableObject {
     @Published var preview: AVCaptureVideoPreviewLayer!
     
     public let sessionQueue = DispatchQueue(label: "sessionQueue")
-    
-    weak var delegate: CameraManagerDelegate?
     
     private var videoDeviceInput: AVCaptureDeviceInput!
     private var photoOutput: AVCapturePhotoOutput!
@@ -549,7 +552,7 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         }
         
         DispatchQueue.main.async {
-            self.capturedPhoto = (image, photoData)
+            self.capturedPhoto = .init(image: image, photoData: photoData)
             self.outputDidShowed = true
             self.capturingPhoto = false
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {

@@ -25,19 +25,17 @@ extension HomeView {
     
     @ViewBuilder
     private var _TabView: some View {
-        TabView(selection: $homeVM.tab, content: _TabViewContent)
+        TabView(selection: $homeVM.currentTab, content: _TabViewContent)
             .tabViewStyle(.page(indexDisplayMode: .never))
 //            .overlay {
 //                Color.red.opacity(0.5)
 //            }
-            .animation(.default, value: homeVM.tab)
-            .transition(.slide)
             .ignoresSafeArea()
 //            .addGestureRecognizer(homeVM.addGesture())
     }
     
     private func height() -> CGFloat {
-        return homeVM.momentSize.height + homeVM.navBarHeight + 10
+        return homeVM.contentSize.height + homeVM.navBarHeight + 10
     }
     
     @ViewBuilder
@@ -55,8 +53,8 @@ extension HomeView {
     
     @ViewBuilder
     private var MomentsView: some View {
-        ForEach(Array(userMomentsStore.usersWithMoments.enumerated()), id: \.element.owner.id) { index, _ in
-            UserMomentsView(index, $userMomentsStore.usersWithMoments[index])
+        ForEach(Array(homeVM.usersAndTheirMoments.enumerated()), id: \.element.owner.id) { index, _ in
+            UserMomentsView(index, $homeVM.usersAndTheirMoments[index])
         }
     }
     

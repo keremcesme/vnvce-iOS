@@ -52,7 +52,7 @@ extension MomentOutputView {
     @ViewBuilder
     private func _SaveButton(height: CGFloat) -> some View {
         Button {
-            Task{ await shareMomentVM.saveImage(capturedPhoto) }
+            Task{ await shareMomentVM.saveImage() }
         } label: {
             Group {
                 if shareMomentVM.imageDidSaved {

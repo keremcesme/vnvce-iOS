@@ -2,12 +2,9 @@
 import SwiftUI
 import CoreMedia
 import Photos
+import VNVCECore
 
-enum AudienceType {
-    case friendsOnly
-    case friendsOfFriends
-    case nearby
-    
+extension MomentAudience {
     var title: String {
         switch self {
         case .friendsOnly: return "Friends Only"
@@ -35,7 +32,12 @@ enum AudienceType {
 
 @MainActor
 class ShareMomentViewModel: ObservableObject {
+    private let momentAPI = MomentAPI()
+    private let storageAPI = StorageAPI()
+    
     @Published public var view = ViewStatus()
+    
+    @Published public var capturedPhoto: CapturedPhoto
     
     @Published public var animationDuration: Double = 0.21
     
@@ -45,13 +47,13 @@ class ShareMomentViewModel: ObservableObject {
     @Published private(set) public var imageIsSaving: Bool = false
     @Published private(set) public var imageDidSaved: Bool = false
     
-    @Published private(set) public var animationRect: CGRect = .zero
-    
     @Published public var showAudienceSheet: Bool = false
-    @Published public var selectedAudience: AudienceType = .friendsOnly
+    @Published public var selectedAudience: MomentAudience = .friendsOnly
     
-    public func setAnimationRect(_ rect: CGRect) {
-        self.animationRect = rect
+    @Published public var showLocationAlert: Bool = false
+    
+    init(_ capturedPhoto: CapturedPhoto) {
+        self.capturedPhoto = capturedPhoto
     }
     
     public func setAnimation(condition: Bool = true) -> Animation? {
@@ -62,10 +64,8 @@ class ShareMomentViewModel: ObservableObject {
         }
     }
     
-    @Sendable
-    public func initView() async {
+    public func initView() {
         viewWillAppear = true
-        
     }
     
     public func deinitView(_ onSharing: Bool = true) async {
@@ -79,17 +79,43 @@ class ShareMomentViewModel: ObservableObject {
     }
     
     public func reset() {
-//        bgImageAnimation = true
-//        viewDidAppear = false
         viewWillAppear = false
         viewWillDisappear = false
     }
     
-    
 }
 
 extension ShareMomentViewModel {
-    public func saveImage(_ capturedPhoto: CapturedPhoto) async {
+    public func upload(location: MomentLocation?, message: String) async {
+    
+        do {
+            
+            guard let id = try await momentAPI.requestID() else {
+                print("error")
+                return
+            }
+            
+            let url = try await storageAPI.uploadImageMoment(image: resizeImage(capturedPhoto.image), momentID: id)
+            
+            
+            let payload: VNVCECore.UploadMomentPayload.V1 = .init(
+                id: id, message: message == "" ? nil : message,
+                media: .init(
+                    mediaType: .image,
+                    url: url,
+                    thumbnailURL: nil),
+                audience: selectedAudience,
+                location: location)
+            print(payload)
+            try await momentAPI.uploadMoment(payload)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+}
+
+extension ShareMomentViewModel {
+    public func saveImage() async {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         imageIsSaving = true
         try? await Task.sleep(seconds: 0.5)

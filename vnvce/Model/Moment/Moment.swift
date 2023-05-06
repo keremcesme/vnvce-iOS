@@ -8,48 +8,15 @@
 import Foundation
 import SwiftUI
 import PureSwiftUIDesign
+import VNVCECore
 
-struct Moments: Identifiable, Hashable {
-    var id = UUID()
-    let day: String
-    var count: Int
-    
-    var currentIndex: Int
-    var thumbnailImage: CodableImage?
-    
-    var moments: [Moment] {
-        didSet {
-            if count != moments.count {
-                self.count = moments.count
-            }
-        }
-    }
-    
-    init(day: String, moments: [Moment]) {
-        self.day = day
-        self.moments = moments
-        self.count = moments.count
-        self.currentIndex = 0
-    }
-}
 
 struct Moment: Decodable, Hashable {
-    let id: UUID
-    let ownerID:  UUID
-    let sensitiveContent: Bool
-    let name: String
-    let url: String
-    let createdAt: TimeInterval
-    var date: Int?
-    
     var thumbnailImage: CodableImage?
     var downloadedImage: CodableImage?
-}
-
-extension Moment {
-    var returnURL: URL {
-        return URL(string: url)!
-    }
+    
+    typealias Public = VNVCECore.Moment.V1.Public
+    typealias Private = VNVCECore.Moment.V1.Private
 }
 
 
