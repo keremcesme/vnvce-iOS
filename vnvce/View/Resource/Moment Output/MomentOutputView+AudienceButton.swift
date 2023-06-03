@@ -81,21 +81,29 @@ extension MomentOutputView {
                             Text(shareMomentVM.selectedAudience.title)
                         }
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(.primary)
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .lineLimit(1)
-                    .transition(.scale(scale: 0).combined(with: .opacity))
+                    .transition(.scale(scale: 0.000001).combined(with: .opacity))
                     
                     Image(systemName: "chevron.down")
-                        .foregroundColor(.white).opacity(0.65)
+                        .foregroundColor(.primary).opacity(0.65)
                         .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .rotationEffect(.degrees(shareMomentVM.showAudienceSheet ? 180 : 0))
+                        .rotationEffect(.degrees(shareMomentVM.showAudienceSheet ? 180 : 0.000001))
                 }
                 .padding(.horizontal, 12.5)
                 .background {
-                    Capsule()
-                        .fill(.ultraThinMaterial)
-                        .frame(height: height)
+                    Group {
+                        switch UIDevice.current.hasNotch() {
+                        case true:
+                            Capsule()
+                                .fill(.primary.opacity(0.1))
+                        case false:
+                            Capsule()
+                                .fill(.ultraThinMaterial)
+                        }
+                    }
+                    .frame(height: height)
                 }
                 .frame(height: height)
             }
@@ -126,10 +134,9 @@ extension MomentOutputView {
                 AudienceDescription
             }
             .background(.thinMaterial)
-            .preferredColorScheme(.dark)
             .cornerRadius(31)
         }
-        .transition(.scale(scale: 0, anchor: .top).combined(with: .opacity))
+        .transition(.scale(scale: 0.00001, anchor: .top).combined(with: .opacity))
         .alert("Need Permission", isPresented: $shareMomentVM.showLocationAlert) {
             Button("Cancel") {
                 shareMomentVM.selectedAudience = .friendsOnly
@@ -140,8 +147,6 @@ extension MomentOutputView {
         } message: {
             Text("Open settings. Tap the location. Select 'While Using the App' and turn on 'Percise Location'.")
         }
-        .preferredColorScheme(.dark)
-
     }
     
     @ViewBuilder
@@ -152,11 +157,10 @@ extension MomentOutputView {
             HStack(spacing: 12.5){
                 Circle()
                     .fill(.white.opacity(0.1))
-                    .colorScheme(.dark)
                     .frame(UIDevice.current.navigationBarHeight)
                     .overlay {
                         Image(systemName: type == .nearby && !nearbyIsAvailable ? "location.slash.fill" : type.icon)
-                            .foregroundColor(.white).opacity(returnOpacity(type))
+                            .foregroundColor(.primary).opacity(returnOpacity(type))
                             .font(.system(size: 18, weight: .medium, design: .default))
                     }
                 VStack(alignment: .leading) {
@@ -169,7 +173,7 @@ extension MomentOutputView {
                             .fixedSize(horizontal: true, vertical: false)
                     }
                 }
-                .foregroundColor(.white).opacity(returnOpacity(type))
+                .foregroundColor(.primary).opacity(returnOpacity(type))
                 Spacer()
                 if type == .nearby && (locationManager.authorizationStatus == .notDetermined || showNearbyOpenSettings) {
                     Group {
@@ -179,14 +183,14 @@ extension MomentOutputView {
                             Text("Open Settings")
                         }
                     }
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .font(.system(size: 9, weight: .semibold, design: .default))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 7.5)
-                    .background(Capsule().fill(.white.opacity(0.1)))
+                    .background(Capsule().fill(.primary.opacity(0.1)))
                 } else {
                     Image(systemName: shareMomentVM.selectedAudience == type ? "smallcircle.filled.circle.fill" : "circle")
-                        .foregroundColor(.white).opacity(returnOpacity(type))
+                        .foregroundColor(.primary).opacity(returnOpacity(type))
                         .font(.system(size: 22, weight: .regular, design: .default))
                 }
                 
@@ -195,14 +199,14 @@ extension MomentOutputView {
         }
         .buttonStyle(.scaled)
         .padding(10)
-        .background(.white.opacity(0.1))
+        .background(.primary.opacity(0.1))
         
     }
     
     @ViewBuilder
     private var AudienceDescription: some View {
         Text(shareMomentVM.selectedAudience.description)
-            .foregroundColor(.white).opacity(0.55)
+            .foregroundColor(.primary).opacity(0.55)
             .font(.system(size: 11, weight: .regular, design: .rounded))
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)

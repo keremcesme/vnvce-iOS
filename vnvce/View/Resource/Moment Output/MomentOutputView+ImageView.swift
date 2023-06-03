@@ -5,7 +5,7 @@ import PureSwiftUI
 
 extension MomentOutputView {
     func keyboardOffset() -> CGFloat {
-        let safeArea = UIScreen.main.bounds.height - keyboardController.height - momentsStore.momentSize.height / 2 - 15
+        let safeArea = UIScreen.main.bounds.height - keyboardController.height - homeVM.contentSize.height / 2 - 15
         return safeArea
     }
     
@@ -22,9 +22,9 @@ extension MomentOutputView {
         Image(uiImage: shareMomentVM.capturedPhoto.image)
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(momentsStore.momentSize)
+            .frame(homeVM.contentSize)
             .clipped()
-            .cornerRadius(25)
+//            .cornerRadius(25)
             .onTapGesture(perform: hideKeyboard)
             .overlay(alignment: .bottom, content: AddMessageField)
             .scaleEffect(scaleAmount())
@@ -37,8 +37,8 @@ extension MomentOutputView {
     @ViewBuilder
     private var Mask: some View {
         RoundedRectangle(cornerRadius: shareMomentVM.viewWillDisappear ?
-                         100 : 25,
+                         100 : 0,
                          style: .circular)
-        .frame(shareMomentVM.viewWillDisappear ? currentUserVM.myMomentsRect.size : momentsStore.momentSize)
+        .frame(shareMomentVM.viewWillDisappear ? currentUserVM.myMomentsRect.size : homeVM.contentSize)
     }
 }

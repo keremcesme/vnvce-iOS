@@ -13,11 +13,9 @@ extension MomentOutputView {
                 await shareMomentVM.upload(location: nil, message: textHelper.text)
             }
             
-            homeVM.bottomResetScroll(animated: false)
             cameraManager.outputDidShowed = false
             await shareMomentVM.deinitView()
             cameraManager.capturedPhoto = nil
-            momentsStore.currentMoment = nil
             cameraManager.outputWillShowed = false
             
         }
@@ -26,12 +24,12 @@ extension MomentOutputView {
     @ViewBuilder
     public var ShareButton: some View {
         Button(action: shareButtonAction) {
-            BlurView(style: .systemUltraThinMaterialDark)
+            BlurView(style: .systemUltraThinMaterial)
                 .frame(80, 80)
                 .clipShape(Circle())
                 .overlay {
                     Image(systemName: "paperplane")
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                         .font(.system(size: 32, weight: .medium, design: .default))
                 }
         }

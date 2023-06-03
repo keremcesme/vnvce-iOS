@@ -94,7 +94,7 @@ class CameraManager: NSObject, ObservableObject {
         super.init()
         
 #if !targetEnvironment(simulator)
-        self.session.sessionPreset = .photo
+        self.session.sessionPreset = .high
         self.initalizeZoomFactors()
         self.makeReadyPreviewView()
         self.attemtToConfigureSession()
@@ -129,8 +129,8 @@ extension CameraManager {
         self.preview = AVCaptureVideoPreviewLayer(session: self.session)
         self.preview.frame.size = self.previewViewFrame()
         if UIDevice.current.hasNotch() {
-            self.preview.cornerRadius = 25
-            self.preview.cornerCurve = .continuous
+//            self.preview.cornerRadius = 25
+            self.preview.cornerCurve = .circular
         }
         self.preview.connection?.videoOrientation = .portrait
         self.preview.videoGravity = .resizeAspectFill

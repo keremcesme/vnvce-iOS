@@ -30,18 +30,14 @@ extension MomentOutputView {
         Button {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             Task{
-                homeVM.bottomResetScroll(animated: false)
                 await shareMomentVM.deinitView(false)
                 cameraManager.capturedPhoto = nil
-                momentsStore.currentMoment = nil
                 cameraManager.outputDidShowed = false
                 cameraManager.outputWillShowed = false
             }
-            
-            
         } label: {
             Image(systemName: "xmark")
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
                 .font(.system(size: 24, weight: .medium, design: .default))
                 .frame(width: height, height: height)
                 .contentShape(Rectangle())
@@ -57,7 +53,7 @@ extension MomentOutputView {
             Group {
                 if shareMomentVM.imageDidSaved {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                         .font(.system(size: 20))
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -70,7 +66,7 @@ extension MomentOutputView {
                     Image("save")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                 }
             }
             .frame(26, 26, .center)

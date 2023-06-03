@@ -3,6 +3,7 @@ import SwiftUI
 import AVFoundation
 import Firebase
 import KeychainAccess
+import SDWebImage
 
 class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     
@@ -15,14 +16,19 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
 //#if DEBUG
 //        let providerFactory = AppCheckDebugProviderFactory()
 //#else
-//        let providerFactory = FirebaseAppCheckProviderFactory()
+        let providerFactory = FirebaseAppCheckProviderFactory()
 //#endif
 //        
-//        AppCheck.setAppCheckProviderFactory(providerFactory)
+        AppCheck.setAppCheckProviderFactory(providerFactory)
         
         FirebaseApp.configure()
         
         setup()
+//        SDImageCache.shared.clearMemory()
+        SDImageCache.shared.clearDisk()
+        
+        print(SDImageCache.shared.totalDiskCount())
+        print(SDImageCache.shared.totalDiskSize())
         
         return true
     }

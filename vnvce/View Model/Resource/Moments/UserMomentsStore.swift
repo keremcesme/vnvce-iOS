@@ -9,9 +9,9 @@ class UserMomentsStore: ObservableObject {
     public let navBarHeight: CGFloat = 36
     public let momentSize: CGSize
     
-    @Published public var usersWithMoments: [UserWithMoments.V1] = []
+    @Published public var usersWithMoments: [UserAndTheirMoments] = []
     
-    @Published public var currentMoment: VNVCECore.Moment.V1.Public?
+    @Published public var currentMoment: PublicMoment?
     
     init() {
         let width = screen.width
@@ -19,18 +19,18 @@ class UserMomentsStore: ObservableObject {
         momentSize = CGSize(width, height)
     }
     
-    public func fetchFriendsMoment() async {
-        do {
-            guard let result = try await momentAPI.fetchFriendsMoment() else {
-                return
-            }
-            
-            await MainActor.run {
-                self.usersWithMoments = result
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+//    public func fetchFriendsMoment() async {
+//        do {
+//            guard let result = try await momentAPI.fetchFriendsMoment() else {
+//                return
+//            }
+//
+//            await MainActor.run {
+//                self.usersWithMoments = result
+//            }
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+//    }
     
 }

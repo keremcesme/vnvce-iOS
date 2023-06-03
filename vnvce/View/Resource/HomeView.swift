@@ -5,6 +5,8 @@ import Introspect
 import StoreKit
 
 struct HomeView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Environment(\.viewController) public var viewControllerHolder: ViewControllerHolder
     
     @EnvironmentObject private var notificationController: NotificationController
@@ -12,54 +14,48 @@ struct HomeView: View {
     @StateObject public var keyboardController = KeyboardController()
     
     @StateObject public var currentUserVM = CurrentUserViewModel()
+    
     @StateObject public var homeVM = HomeViewModel()
-    @StateObject public var userMomentsStore = UserMomentsStore()
     @StateObject public var cameraManager = CameraManager()
     @StateObject public var searchVM = SearchViewModel()
     @StateObject public var contactsVM = ContactsViewModel()
-    @StateObject private var storeKit = StoreKitManager()
+    @StateObject public var storeKit = StoreKitManager()
     
-    @State var showSettings = false
-    @State var showPaywall = false
-    @State var isRecordingScreen = false
+//    @State var showSettings = false
+//    @State var showPaywall = false
+//    @State var isRecordingScreen = false
     
     @Sendable
     private func commonInit() async {
+        await homeVM.fetchUsersAndTheirMoments()
         await notificationController.requestAuthorization()
         await currentUserVM.fetchProfile()
-        await homeVM.fetchUsersAndTheirMoments()
+        
     }
     
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
-                Background
-                PageView
-            }
-            .ignoresSafeArea()
+        NavigationView(content: RootView)
+    }
+    
+    @ViewBuilder
+    private func RootView() -> some View {
+        ZStack(alignment: .top, content: ContentView)
+//            .ignoresSafeArea()
             .navigationBarHidden(true)
             .overlay(MomentOutputViewRoot())
-//            .environmentObject(locationManager)
             .environmentObject(keyboardController)
             .environmentObject(currentUserVM)
             .environmentObject(homeVM)
-            .environmentObject(userMomentsStore)
             .environmentObject(cameraManager)
             .environmentObject(contactsVM)
             .environmentObject(storeKit)
-//            .environmentObject(shareMomentVM)
             .taskInit(commonInit)
-
-        }
+    }
+    
+    @ViewBuilder
+    private func ContentView() -> some View {
+        Background
+        MainView()
+//        PageView
     }
 }
-
-
-
-
-//            .onChange(of: cameraManager.image) {
-//                showPaywall = $0 != nil
-//            }
-//            .sheet(isPresented: $showPaywall) {
-//                PurchaseView().environmentObject(storeKit)
-//            }

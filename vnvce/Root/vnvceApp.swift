@@ -26,7 +26,8 @@ struct vnvceApp: App {
     private func RootView() -> some View {
         switch appState.loggedIn {
         case true:
-            HomeView().colorScheme(.dark)
+            HomeView()
+//                .colorScheme(.dark)
         case false:
             AuthView()
         }

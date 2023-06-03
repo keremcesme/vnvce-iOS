@@ -29,10 +29,10 @@ extension CameraViewUI {
         private func setUpPreviewView() {
             view.frame = camera.preview.frame
             view.backgroundColor = .clear
-            if UIDevice.current.hasNotch() {
-                view.layer.cornerRadius = 25
-                view.layer.cornerCurve = .continuous
-            }
+//            if UIDevice.current.hasNotch() {
+//                view.layer.cornerRadius = 25
+//                view.layer.cornerCurve = .continuous
+//            }
             
             view.layer.addSublayer(camera.preview)
         }

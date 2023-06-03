@@ -6,8 +6,9 @@ import Nuke
 import NukeUI
 
 extension HomeView {
+    
     @ViewBuilder
-    public var CameraView: some View {
+    public var CameraVieww: some View {
         GeometryReader(content: _CameraView)
             .tag(homeVM.cameraRaw)
     }
@@ -24,13 +25,13 @@ extension HomeView {
     
     private func getBlurOpacity(_ proxy: GeometryProxy) -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        return  minX / homeVM.contentSize.width * 2
+        return minX / homeVM.contentSize.width * 2
     }
     
     private func getCornerRadius(_ proxy: GeometryProxy)  -> CGFloat {
         let minX = abs(proxy.frame(in: .global).minX)
-        let radius = minX / 12.5
-        return radius >= 25 ? 25 : radius
+        let radius = minX / 15
+        return radius >= 15 ? 15 : radius
     }
     
     @ViewBuilder
@@ -50,13 +51,12 @@ extension HomeView {
                     GradientForNoneNotch
                     CameraNavigationBar
                 }
-                    .opacity(getOpacity(proxy))
+                .opacity(getOpacity(proxy))
             }
-            .cornerRadius(getCornerRadius(proxy), style: .continuous)
+            .cornerRadius(getCornerRadius(proxy))
             .scaleEffect(getScale(proxy))
             .ignoresSafeArea()
         }
-        
     }
     
     @ViewBuilder
@@ -64,8 +64,7 @@ extension HomeView {
         GeometryReader {
             let height = $0.size.height
             HStack(spacing: 15){
-                VNVCELogo.TextAndLogo()
-                    .frame(height: height)
+                VNVCELogo.TextAndLogo().frame(height: height)
                 Spacer()
                 _AddFriendButton(height)
                 _ProfileButton(height)
@@ -87,11 +86,10 @@ extension HomeView {
         } label: {
             Circle()
                 .fill(.ultraThinMaterial)
-                .colorScheme(.dark)
                 .frame(width: height, height: height)
                 .overlay {
                     Image(systemName: "person.badge.plus")
-                        .foregroundColor(.white).opacity(0.65)
+                        .foregroundColor(.primary).opacity(0.65)
                         .font(.system(size: 18, weight: .medium, design: .default))
                 }
         }
@@ -121,7 +119,7 @@ extension HomeView {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: height - 1, height: height - 1)
-                                BlurView(style: .dark)
+                                BlurView(style: .regular)
                                     .frame(width: height, height: height)
                                 Image(uiImage: uiImage)
                                     .resizable()
@@ -153,11 +151,10 @@ extension HomeView {
     private func EmptyProfilePicture(_ height: CGFloat) -> some View {
         Circle()
             .fill(.ultraThinMaterial)
-            .colorScheme(.dark)
             .frame(width: height, height: height)
             .overlay {
                 Image(systemName: "person.crop.circle")
-                    .foregroundColor(.white).opacity(0.65)
+                    .foregroundColor(.primary).opacity(0.65)
                     .font(.system(size: height - 10, weight: .light, design: .default))
             }
     }
@@ -174,7 +171,7 @@ extension HomeView {
             if UIDevice.current.hasNotch() {
                 CameraViewUI()
                     .overlay(BlurLayer(proxy))
-                    .cornerRadius(25, style: .continuous)
+                    .cornerRadius(getCornerRadius(proxy))
             } else {
                 CameraViewUI()
                     .overlay(BlurLayer(proxy))
@@ -182,8 +179,9 @@ extension HomeView {
         }
         .animation(.default, value: homeVM.currentTab)
         .animation(.default, value: cameraManager.sessionIsRunning)
-        .yOffsetToYPositionIf(keyboardController.isShowed, keyboardOffset())
-        .animation(.easeInOut(duration: keyboardController.duration), value: keyboardController.isShowed)
+        .opacity(cameraManager.outputDidShowed ? 0 : 1)
+//        .yOffsetToYPositionIf(keyboardController.isShowed, keyboardOffset())
+//        .animation(.easeInOut(duration: keyboardController.duration), value: keyboardController.isShowed)
     }
     
     func keyboardOffset() -> CGFloat {

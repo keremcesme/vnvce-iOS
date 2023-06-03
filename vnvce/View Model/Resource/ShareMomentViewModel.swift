@@ -106,7 +106,7 @@ extension ShareMomentViewModel {
                     thumbnailURL: nil),
                 audience: selectedAudience,
                 location: location)
-            print(payload)
+            
             try await momentAPI.uploadMoment(payload)
         } catch {
             print(error.localizedDescription)

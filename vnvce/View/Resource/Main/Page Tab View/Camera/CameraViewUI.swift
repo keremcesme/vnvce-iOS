@@ -20,14 +20,45 @@ struct CameraViewUI: View {
             .overlay {
                 Text("Simulator").foregroundColor(.black)
             }
-            .frame(homeVM.momentSize)
+            .frame(homeVM.contentSize)
 #else
         CameraPreviewView()
             .frame(camera.previewViewFrame())
             .overlay(FocusAnimationView)
             .overlay(PermissionLayer)
-            .background(.white.opacity(0.05))
+            .overlay(alignment: .bottom, ShutterButton)
+            .background(.primary.opacity(0.05))
+            .animation(.easeInOut(duration: 0.21), value: camera.outputWillShowed)
 #endif
+    }
+    
+    private func shutterButtonAction() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        if homeVM.currentTab == homeVM.cameraRaw {
+            camera.capturePhoto()
+        }
+    }
+    
+    @ViewBuilder
+    private func ShutterButton() -> some View {
+        if !camera.outputWillShowed {
+            Button(action: shutterButtonAction) {
+                Circle()
+                    .strokeBorder(.white, lineWidth: 6)
+                    .foregroundColor(Color.clear)
+                    .frame(homeVM.cell.size)
+                    .background {
+                        BlurView(style: .systemUltraThinMaterialDark)
+                            .frame(width: 66, height: 66, alignment: .center)
+                            .clipShape(Circle())
+                    }
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.scaled)
+            .padding(.bottom, 15)
+            .transition(.scale.combined(with: .opacity))
+        }
+        
     }
     
     @ViewBuilder

@@ -7,7 +7,7 @@ extension MomentOutputView {
     @ViewBuilder
     public func AddMessageField() -> some View {
         ZStack {
-            BlurView(style: .dark)
+            BlurView(style: .systemUltraThinMaterialDark)
                 .frame(textHelper.bgSize)
                 .clipShape(Capsule())
             

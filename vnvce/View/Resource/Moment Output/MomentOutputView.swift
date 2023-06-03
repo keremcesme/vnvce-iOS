@@ -26,7 +26,6 @@ struct MomentOutputView: View {
     @EnvironmentObject public var homeVM: HomeViewModel
     @EnvironmentObject public var cameraManager: CameraManager
     
-    @EnvironmentObject public var momentsStore: UserMomentsStore
     @EnvironmentObject public var currentUserVM: CurrentUserViewModel
     
     @EnvironmentObject public var keyboardController: KeyboardController

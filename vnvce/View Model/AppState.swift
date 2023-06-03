@@ -22,7 +22,7 @@ class AppState: ObservableObject {
     
     init() {
         if loggedIn {
-            UIDevice.current.setStatusBar(style: .lightContent, animation: false)
+            UIDevice.current.setStatusBar(style: .default, animation: false)
         } else {
             UIDevice.current.setStatusBar(style: .default, animation: false)
         }
@@ -33,9 +33,4 @@ class AppState: ObservableObject {
     public func onChangeScenePhase(_ newPhase: ScenePhase) {
         self.scenePhase = newPhase
     }
-}
-
-
-func test() {
-    
 }
